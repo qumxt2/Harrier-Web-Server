@@ -1,0 +1,139 @@
+//! \file	dvinterface_gcaCommon.h
+//! Copyright 2006-12
+//! Graco Inc., Minneapolis, MN
+//! All Rights Reserved
+//!
+
+#ifndef DVINTERFACE_GCACOMMON_H
+#define DVINTERFACE_GCACOMMON_H
+
+// *** IDENTIFICATION DVARs ***
+typedef struct
+{
+	DistVarType	SerialNumber_STR_3_0;
+	DistVarType	SerialNumber_STR_7_4;
+	DistVarType	SerialNumber_STR_11_8;
+	DistVarType	SerialNumber_STR_15_12;
+
+	DistVarType SoftwarePN_STR_3_0;
+	DistVarType SoftwarePN_STR_7_4;
+	DistVarType SoftwarePN_STR_11_8;
+	DistVarType SoftwarePN_STR_15_12;
+
+	DistVarType Version_unused_u8_build_u8_minor_u8_major_u8;
+
+	DistVarType	SystemConfigurationId_u8_cmp_u16_app_u8_purpose;
+
+    DistVarType TotalRxMessages_u32;
+    DistVarType TotalTxHighPriMessages_u32;
+    DistVarType TotalTxNormalPriMessages_u32;
+    DistVarType MessageTrackingDuration_ms_u32;
+    DistVarType MessageStatsReset_Cmd;
+
+	DistVarType SystemTokenPN_STR_3_0;
+	DistVarType SystemTokenPN_STR_7_4;
+	DistVarType SystemTokenPN_STR_11_8;
+	DistVarType SystemTokenPN_STR_15_12;
+
+	DistVarType SystemTokenVersion_unused_u8_build_u8_minor_u8_major_u8;
+} DVSTRUCT_COMMON_NODE_ID_VARIABLES_t;
+
+// *** GPOD DVARs ***
+typedef struct
+{
+	DistVarType GPOD_RxData;
+	DistVarType GPOD_LinkedAddress;
+} DVSTRUCT_COMMON_NODE_GPOD_VARIABLES_t;
+
+typedef enum
+{
+	// *** IDENTIFICATION DVARS ***
+	DVOFFSET_COMMON_NODE_ID_SEGMENT_BASE 					= 0x0000,
+
+	DVOFFSET_COMMON_NODE_ID_SerNum_STR_3_0					= 0x0000,
+	DVOFFSET_COMMON_NODE_ID_SerNum_STR_7_4	 				= 0x0001,
+	DVOFFSET_COMMON_NODE_ID_SerNum_STR_11_8	 				= 0x0002,
+	DVOFFSET_COMMON_NODE_ID_SerNum_STR_15_12 				= 0x0003,
+
+	DVOFFSET_COMMON_NODE_ID_SoftwarePN_STR_3_0 				= 0x0004,
+	DVOFFSET_COMMON_NODE_ID_SoftwarePN_STR_7_4 				= 0x0005,
+	DVOFFSET_COMMON_NODE_ID_SoftwarePN_STR_11_8 			= 0x0006,
+	DVOFFSET_COMMON_NODE_ID_SoftwarePN_STR_15_12 			= 0x0007,
+
+	DVOFFSET_COMMON_NODE_ID_Version		 					= 0x0008,
+
+	DVOFFSET_COMMON_NODE_ID_SystemConfigurationId			= 0x0009,
+
+    DVOFFSET_COMMON_NODE_ID_TotalRxMessages_u32             = 0x000A,
+    DVOFFSET_COMMON_NODE_ID_TotalTxHighPriMessages_u32      = 0x000B,
+    DVOFFSET_COMMON_NODE_ID_TotalTxNormalPriMessages_u32    = 0x000C,
+    DVOFFSET_COMMON_NODE_ID_MessageTrackingDuration_ms_u32  = 0x000D,
+    DVOFFSET_COMMON_NODE_ID_MessageStatsReset_Cmd           = 0x000E,
+
+	DVOFFSET_COMMON_NODE_ID_SystemTokenPN_STR_3_0			= 0x000F,
+	DVOFFSET_COMMON_NODE_ID_SystemTokenPN_STR_7_4			= 0x0010,
+	DVOFFSET_COMMON_NODE_ID_SystemTokenPN_STR_11_8			= 0x0011,
+	DVOFFSET_COMMON_NODE_ID_SystemTokenPN_STR_15_12			= 0x0012,
+
+	DVOFFSET_COMMON_NODE_ID_SystemTokenVersion   			= 0x0013,
+	
+	// *** GPOD DVARS ***
+	DVOFFSET_COMMON_NODE_GPOD_BASE							= 0x0020,
+	DVOFFSET_COMMON_NODE_GPOD_RxData						= 0x0020,
+	DVOFFSET_COMMON_NODE_GPOD_LinkedAddress					= 0x0021,
+} DVOFFSET_COMMON_NODE_t;
+
+#define DV_NODE_SEGMENT_SIZE								(0x400UL)
+
+#define IS_NOT_POWER_OF_2(v) (((v) & ((v) - 1)) && (v))
+#if IS_NOT_POWER_OF_2(DV_NODE_SEGMENT_SIZE)
+	#error DV_NODE_SEGMENT_SIZE not a power of 2.  Current logic requires this value to be power of 2.
+#endif
+
+#define DVBASE_COMMON										(0x00000000UL)
+#define DVBASE_COMMON_END									(0x0001FFFFUL)
+
+#define	DVBASE_COMMON_NODE(node)							(DVBASE_COMMON + ((uint32)node*DV_NODE_SEGMENT_SIZE))
+
+#define DVBASE_COMMON_NODE_GET_NODE_FROM_DVADDR(dvaddr)		((dvaddr)/DV_NODE_SEGMENT_SIZE)
+#define DVBASE_COMMON_NODE_GET_OFFSET_FROM_DVADDR(dvaddr)	((dvaddr)%DV_NODE_SEGMENT_SIZE)
+
+// *** IDENTIFICATION DVARs ***
+#define DVBASE_COMMON_NODE_ID_SEGMENT(node)					(DVBASE_COMMON_NODE(node) + (uint16)DVOFFSET_COMMON_NODE_ID_SEGMENT_BASE)
+#define DVCOUNT_COMMON_NODE_ID_SEGMENT						(sizeof(DVSTRUCT_COMMON_NODE_ID_VARIABLES_t)/sizeof(DistVarType))
+
+#define DVADDR_COMMON_NODE_ID_SERIAL_NUMBER_STR_3_0(node)	(DVBASE_COMMON_NODE(node) + (uint16)DVOFFSET_COMMON_NODE_ID_SerNum_STR_3_0)
+#define DVADDR_COMMON_NODE_ID_SERIAL_NUMBER_STR_7_4(node)	(DVBASE_COMMON_NODE(node) + (uint16)DVOFFSET_COMMON_NODE_ID_SerNum_STR_7_4)
+#define DVADDR_COMMON_NODE_ID_SERIAL_NUMBER_STR_11_8(node)	(DVBASE_COMMON_NODE(node) + (uint16)DVOFFSET_COMMON_NODE_ID_SerNum_STR_11_8)
+#define DVADDR_COMMON_NODE_ID_SERIAL_NUMBER_STR_15_12(node)	(DVBASE_COMMON_NODE(node) + (uint16)DVOFFSET_COMMON_NODE_ID_SerNum_STR_15_12)
+
+#define DVADDR_COMMON_NODE_ID_SOFTWARE_PN_STR_3_0(node)		(DVBASE_COMMON_NODE(node) + (uint16)DVOFFSET_COMMON_NODE_ID_SoftwarePN_STR_3_0)
+#define DVADDR_COMMON_NODE_ID_SOFTWARE_PN_STR_7_4(node)		(DVBASE_COMMON_NODE(node) + (uint16)DVOFFSET_COMMON_NODE_ID_SoftwarePN_STR_7_4)
+#define DVADDR_COMMON_NODE_ID_SOFTWARE_PN_STR_11_8(node)	(DVBASE_COMMON_NODE(node) + (uint16)DVOFFSET_COMMON_NODE_ID_SoftwarePN_STR_11_8)
+#define DVADDR_COMMON_NODE_ID_SOFTWARE_PN_STR_15_12(node)	(DVBASE_COMMON_NODE(node) + (uint16)DVOFFSET_COMMON_NODE_ID_SoftwarePN_STR_15_12)
+
+#define DVADDR_COMMON_NODE_ID_VERSION(node)					(DVBASE_COMMON_NODE(node) + (uint16)DVOFFSET_COMMON_NODE_ID_Version)
+
+#define DVADDR_COMMON_NODE_ID_SYSTEM_CONFIGURATION_ID(node)	(DVBASE_COMMON_NODE(node) + (uint16)DVOFFSET_COMMON_NODE_ID_SystemConfigurationId)
+
+#define DVADDR_COMMON_NODE_ID_TOTAL_RX_MSGS(node)           (DVBASE_COMMON_NODE(node) + (uint16)DVOFFSET_COMMON_NODE_ID_TotalRxMessages_u32)
+#define DVADDR_COMMON_NODE_ID_TOTAL_TX_HIGH_PRI_MSGS(node)	(DVBASE_COMMON_NODE(node) + (uint16)DVOFFSET_COMMON_NODE_ID_TotalTxHighPriMessages_u32)
+#define DVADDR_COMMON_NODE_ID_TOTAL_TX_NORM_PRI_MSGS(node)	(DVBASE_COMMON_NODE(node) + (uint16)DVOFFSET_COMMON_NODE_ID_TotalTxNormalPriMessages_u32)
+#define DVADDR_COMMON_NODE_ID_MSG_TRACK_DURATION(node)      (DVBASE_COMMON_NODE(node) + (uint16)DVOFFSET_COMMON_NODE_ID_MessageTrackingDuration_ms_u32)
+#define DVADDR_COMMON_NODE_ID_MSG_STATS_RESET(node)         (DVBASE_COMMON_NODE(node) + (uint16)DVOFFSET_COMMON_NODE_ID_MessageStatsReset_Cmd)
+
+#define DVADDR_COMMON_NODE_ID_SYSTEM_TOKEN_PN_STR_3_0(node)		(DVBASE_COMMON_NODE(node) + (uint16)DVOFFSET_COMMON_NODE_ID_SystemTokenPN_STR_3_0)
+#define DVADDR_COMMON_NODE_ID_SYSTEM_TOKEN_PN_STR_7_4(node)		(DVBASE_COMMON_NODE(node) + (uint16)DVOFFSET_COMMON_NODE_ID_SystemTokenPN_STR_7_4)
+#define DVADDR_COMMON_NODE_ID_SYSTEM_TOKEN_PN_STR_11_8(node)	(DVBASE_COMMON_NODE(node) + (uint16)DVOFFSET_COMMON_NODE_ID_SystemTokenPN_STR_11_8)
+#define DVADDR_COMMON_NODE_ID_SYSTEM_TOKEN_PN_STR_15_12(node)	(DVBASE_COMMON_NODE(node) + (uint16)DVOFFSET_COMMON_NODE_ID_SystemTokenPN_STR_15_12)
+
+#define DVADDR_COMMON_NODE_ID_SYSTEM_TOKEN_VERSION(node)		(DVBASE_COMMON_NODE(node) + (uint16)DVOFFSET_COMMON_NODE_ID_SystemTokenVersion)
+
+// *** GPOD DVARs ***
+#define DVBASE_COMMON_NODE_GPOD_SEGMENT(node)				(DVBASE_COMMON_NODE(node) + (uint16)DVOFFSET_COMMON_NODE_GPOD_BASE)
+#define DVCOUNT_COMMON_NODE_GPOD_SEGMENT					(sizeof(DVSTRUCT_COMMON_NODE_GPOD_VARIABLES_t)/sizeof(DistVarType))
+
+#define DVADDR_COMMON_NODE_GPOD_RX_DATA(node)				(DVBASE_COMMON_NODE(node) + (uint16)DVOFFSET_COMMON_NODE_GPOD_RxData)
+#define DVADDR_COMMON_NODE_GPOD_LINKED_ADDRESS(node)		(DVBASE_COMMON_NODE(node) + (uint16)DVOFFSET_COMMON_NODE_GPOD_LinkedAddress)
+
+#endif // DVINTERFACE_GCACOMMON_H

@@ -1,0 +1,584 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="62">
+  <logicalFolder name="root" displayName="root" projectFiles="true">
+    <logicalFolder name="f11" displayName="Lib_bitmaps" projectFiles="true">
+      <itemPath>LIB_bitmaps/src/screen_bitmaps.c</itemPath>
+    </logicalFolder>
+    <logicalFolder name="f13" displayName="LIB_bootload_host" projectFiles="true">
+      <itemPath>LIB_bootload_host/src/bootload_host.c</itemPath>
+      <itemPath>LIB_bootload_host/src/bootload_host.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="f3" displayName="LIB_button_interface" projectFiles="true">
+      <itemPath>LIB_button_interface/src/button_interface.c</itemPath>
+      <itemPath>LIB_button_interface/src/button_interface.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="f4" displayName="LIB_component_init" projectFiles="true">
+      <itemPath>LIB_component_init/src/component.c</itemPath>
+      <itemPath>LIB_component_init/src/component.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="f20" displayName="LIB_d2a" projectFiles="true">
+      <itemPath>LIB_d2a/src/d2a.c</itemPath>
+      <itemPath>LIB_d2a/src/d2a.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="f2" displayName="LIB_datastore_PIC32" projectFiles="true">
+      <itemPath>LIB_datastore_PIC32/src/datastore.c</itemPath>
+    </logicalFolder>
+    <logicalFolder name="f12" displayName="LIB_datetime" projectFiles="true">
+      <itemPath>LIB_datetime/src/datetime.c</itemPath>
+      <itemPath>LIB_datetime/src/datetime.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="f21"
+                   displayName="LIB_event_handler_PIC32"
+                   projectFiles="true">
+      <itemPath>LIB_event_handler_PIC32/src/event_defs.c</itemPath>
+      <itemPath>LIB_event_handler_PIC32/src/event_handler.c</itemPath>
+    </logicalFolder>
+    <logicalFolder name="f5" displayName="LIB_fonts" projectFiles="true">
+      <itemPath>LIB_fonts/src/font_Totalizer.c</itemPath>
+      <itemPath>LIB_fonts/src/font_Xtreme.c</itemPath>
+      <itemPath>LIB_fonts/src/fonts.h</itemPath>
+      <itemPath>LIB_fonts/src/font_Legacy.c</itemPath>
+    </logicalFolder>
+    <logicalFolder name="f10"
+                   displayName="LIB_gcaPortal_component"
+                   projectFiles="true">
+      <itemPath>LIB_gcaPortal_component/src/gcaPortal_component.c</itemPath>
+      <itemPath>LIB_gcaPortal_component/src/gcaPortal_component.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="f1" displayName="LIB_graphics_driver" projectFiles="true">
+      <itemPath>LIB_graphics_driver/src/bussim.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/bussim.d</itemPath>
+      <itemPath>LIB_graphics_driver/src/bussim.h</itemPath>
+      <itemPath>LIB_graphics_driver/src/bussim.o</itemPath>
+      <itemPath>LIB_graphics_driver/src/gcarc.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gcarc.d</itemPath>
+      <itemPath>LIB_graphics_driver/src/gcgetbak.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gcgetfor.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gchlnsp.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gcpsel.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gcsetbak.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gcsetfor.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gdisp.h</itemPath>
+      <itemPath>LIB_graphics_driver/src/gdispcfg.h</itemPath>
+      <itemPath>LIB_graphics_driver/src/gdisphw.h</itemPath>
+      <itemPath>LIB_graphics_driver/src/gfcursor.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gfgetcxp.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gfgetcyp.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gfgeth.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gfgetw.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gfputch.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gfsel.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gfsetcp.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gfsetp.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gfsymw.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gftabs.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/ggcircle.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/ggetfsym.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/ggetmbc.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/ggetmode.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gggetxyp.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/ggline.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/ggpixel.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/ggrect.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/ghwblkrw.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/ghwbuf.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/ghwfill.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/ghwgscrl.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/ghwinit.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/ghwinv.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/ghwioini.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/ghwpixel.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/ghwretgl.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/ghwsymrd.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/ghwsymwr.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gi_disp.h</itemPath>
+      <itemPath>LIB_graphics_driver/src/gi_fonts.h</itemPath>
+      <itemPath>LIB_graphics_driver/src/giputsym.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gmbcpyw.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gmstrcpy.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gmstrlen.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gpstrh.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/groundrec.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gscreen.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gsetcpy.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gslen.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gsputs.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gstrln.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gsymcput.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gsymfill.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gsymget.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gsymput.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gvpapp.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gvpclr.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gvpcset.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gvpfill.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gvpget.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gvpinit.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gvpinv.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gvpmode.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gvpreset.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gvpscrol.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gvpsel.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gvpset.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gvpvph.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gvpvpw.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gvpxl.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gvpxr.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gvpyb.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gvpyt.c</itemPath>
+      <itemPath>LIB_graphics_driver/src/gvpyt.d</itemPath>
+      <itemPath>LIB_graphics_driver/src/sfst7528.sym</itemPath>
+      <itemPath>LIB_graphics_driver/src/sgio.h</itemPath>
+      <itemPath>LIB_graphics_driver/src/sgio_ta.h</itemPath>
+      <itemPath>LIB_graphics_driver/src/sgtypes.h</itemPath>
+      <itemPath>LIB_graphics_driver/src/st7528.h</itemPath>
+      <itemPath>LIB_graphics_driver/src/typedef.h</itemPath>
+      <itemPath>LIB_graphics_driver/src/yvals.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="f6"
+                   displayName="LIB_graphics_interface"
+                   projectFiles="true">
+      <itemPath>LIB_graphics_interface/src/BMPfile.h</itemPath>
+      <itemPath>LIB_graphics_interface/src/adjustContrast.c</itemPath>
+      <itemPath>LIB_graphics_interface/src/backlightInit.c</itemPath>
+      <itemPath>LIB_graphics_interface/src/backlightOnOff.c</itemPath>
+      <itemPath>LIB_graphics_interface/src/clearArea.c</itemPath>
+      <itemPath>LIB_graphics_interface/src/displayOnOff.c</itemPath>
+      <itemPath>LIB_graphics_interface/src/ditherArea.c</itemPath>
+      <itemPath>LIB_graphics_interface/src/drawLine.c</itemPath>
+      <itemPath>LIB_graphics_interface/src/drawRectangle.c</itemPath>
+      <itemPath>LIB_graphics_interface/src/dumpBitmap.c</itemPath>
+      <itemPath>LIB_graphics_interface/src/fillArea.c</itemPath>
+      <itemPath>LIB_graphics_interface/src/graphics_interface.h</itemPath>
+      <itemPath>LIB_graphics_interface/src/invertArea.c</itemPath>
+      <itemPath>LIB_graphics_interface/src/lcdInit.c</itemPath>
+      <itemPath>LIB_graphics_interface/src/maxim_MAX8647.c</itemPath>
+      <itemPath>LIB_graphics_interface/src/maxim_MAX8647.h</itemPath>
+      <itemPath>LIB_graphics_interface/src/placeBitmap.c</itemPath>
+      <itemPath>LIB_graphics_interface/src/setAbsoluteContrast.c</itemPath>
+    </logicalFolder>
+    <logicalFolder name="f7" displayName="LIB_i2c" projectFiles="true">
+      <itemPath>LIB_i2c/src/i2c_channel2.c</itemPath>
+      <itemPath>LIB_i2c/src/i2c_channel2.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="f15" displayName="LIB_in_digital" projectFiles="true">
+      <itemPath>LIB_in_digital/src/in_digital.c</itemPath>
+      <itemPath>LIB_in_digital/src/in_digital.h</itemPath>
+      <itemPath>LIB_in_digital/src/in_digital_comp.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="f22" displayName="LIB_in_pressure" projectFiles="true">
+      <itemPath>LIB_in_pressure/src/in_pressure.c</itemPath>
+    </logicalFolder>
+    <logicalFolder name="f18" displayName="LIB_in_voltage" projectFiles="true">
+      <itemPath>LIB_in_voltage/src/in_voltage.c</itemPath>
+    </logicalFolder>
+    <logicalFolder name="f14" displayName="LIB_io_pin" projectFiles="true">
+      <itemPath>LIB_io_pin/src/io_pin.c</itemPath>
+      <itemPath>LIB_io_pin/src/io_pin.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="f17" displayName="LIB_modbus" projectFiles="true">
+      <itemPath>LIB_modbus/src/mb.c</itemPath>
+      <itemPath>LIB_modbus/src/mb.h</itemPath>
+      <itemPath>LIB_modbus/src/mbascii.c</itemPath>
+      <itemPath>LIB_modbus/src/mbascii.h</itemPath>
+      <itemPath>LIB_modbus/src/mbconfig.h</itemPath>
+      <itemPath>LIB_modbus/src/mbcrc.c</itemPath>
+      <itemPath>LIB_modbus/src/mbcrc.h</itemPath>
+      <itemPath>LIB_modbus/src/mbframe.h</itemPath>
+      <itemPath>LIB_modbus/src/mbfunc.h</itemPath>
+      <itemPath>LIB_modbus/src/mbfunccoils.c</itemPath>
+      <itemPath>LIB_modbus/src/mbfuncdiag.c</itemPath>
+      <itemPath>LIB_modbus/src/mbfuncdisc.c</itemPath>
+      <itemPath>LIB_modbus/src/mbfuncholding.c</itemPath>
+      <itemPath>LIB_modbus/src/mbfuncinput.c</itemPath>
+      <itemPath>LIB_modbus/src/mbfuncother.c</itemPath>
+      <itemPath>LIB_modbus/src/mbport.h</itemPath>
+      <itemPath>LIB_modbus/src/mbproto.h</itemPath>
+      <itemPath>LIB_modbus/src/mbrtu.c</itemPath>
+      <itemPath>LIB_modbus/src/mbrtu.h</itemPath>
+      <itemPath>LIB_modbus/src/mbtcp.c</itemPath>
+      <itemPath>LIB_modbus/src/mbtcp.h</itemPath>
+      <itemPath>LIB_modbus/src/mbutils.c</itemPath>
+      <itemPath>LIB_modbus/src/mbutils.h</itemPath>
+      <itemPath>LIB_modbus/src/modbus.c</itemPath>
+      <itemPath>LIB_modbus/src/modbus.h</itemPath>
+      <itemPath>LIB_modbus/src/modbus_task.c</itemPath>
+      <itemPath>LIB_modbus/src/modbus_task.h</itemPath>
+      <itemPath>LIB_modbus/src/port.h</itemPath>
+      <itemPath>LIB_modbus/src/portevent.c</itemPath>
+      <itemPath>LIB_modbus/src/portserial.c</itemPath>
+      <itemPath>LIB_modbus/src/porttimer.c</itemPath>
+    </logicalFolder>
+    <logicalFolder name="f9" displayName="LIB_mqtt" projectFiles="true">
+      <itemPath>LIB_mqtt/src/MQTTConnect.h</itemPath>
+      <itemPath>LIB_mqtt/src/MQTTConnectClient.c</itemPath>
+      <itemPath>LIB_mqtt/src/MQTTConnectServer.c</itemPath>
+      <itemPath>LIB_mqtt/src/MQTTDeserializePublish.c</itemPath>
+      <itemPath>LIB_mqtt/src/MQTTPacket.c</itemPath>
+      <itemPath>LIB_mqtt/src/MQTTPacket.h</itemPath>
+      <itemPath>LIB_mqtt/src/MQTTPublish.h</itemPath>
+      <itemPath>LIB_mqtt/src/MQTTSerializePublish.c</itemPath>
+      <itemPath>LIB_mqtt/src/MQTTSubscribe.h</itemPath>
+      <itemPath>LIB_mqtt/src/MQTTSubscribeClient.c</itemPath>
+      <itemPath>LIB_mqtt/src/MQTTSubscribeServer.c</itemPath>
+      <itemPath>LIB_mqtt/src/MQTTUnsubscribe.h</itemPath>
+      <itemPath>LIB_mqtt/src/MQTTUnsubscribeClient.c</itemPath>
+      <itemPath>LIB_mqtt/src/MQTTUnsubscribeServer.c</itemPath>
+    </logicalFolder>
+    <logicalFolder name="f16" displayName="LIB_out_digital" projectFiles="true">
+      <itemPath>LIB_out_digital/src/out_digital.c</itemPath>
+      <itemPath>LIB_out_digital/src/out_digital.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="f19" displayName="LIB_serial_uart" projectFiles="true">
+      <itemPath>LIB_serial_uart/INTERFACE_serial_uart/serial_common.h</itemPath>
+      <itemPath>LIB_serial_uart/src/serial_uart_u1a.c</itemPath>
+      <itemPath>LIB_serial_uart/INTERFACE_serial_uart/serial_uart_u1a.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="f24" displayName="LIB_temperature" projectFiles="true">
+      <itemPath>LIB_temperature/src/temperature.c</itemPath>
+      <itemPath>LIB_temperature/INTERFACE_temperature/temperature.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="f26" displayName="LIB_timebase" projectFiles="true">
+      <itemPath>LIB_timebase/src/timebase32_count_get.c</itemPath>
+      <itemPath>LIB_timebase/src/timebase32_count_set.c</itemPath>
+      <itemPath>LIB_timebase/src/timebase32_mode_get.c</itemPath>
+      <itemPath>LIB_timebase/src/timebase32_mode_set.c</itemPath>
+      <itemPath>LIB_timebase/src/timebase32_period_get.c</itemPath>
+      <itemPath>LIB_timebase/src/timebase32_period_set.c</itemPath>
+      <itemPath>LIB_timebase/src/timebase32_prescale_get.c</itemPath>
+      <itemPath>LIB_timebase/src/timebase32_prescale_set.c</itemPath>
+      <itemPath>LIB_timebase/src/timebase_2_event.c</itemPath>
+      <itemPath>LIB_timebase/src/timebase_3_event.c</itemPath>
+      <itemPath>LIB_timebase/src/timebase_clkin.c</itemPath>
+      <itemPath>LIB_timebase/src/timebase_clkout.c</itemPath>
+      <itemPath>LIB_timebase/src/timebase_count_get.c</itemPath>
+      <itemPath>LIB_timebase/src/timebase_count_set.c</itemPath>
+      <itemPath>LIB_timebase/src/timebase_init.c</itemPath>
+      <itemPath>LIB_timebase/src/timebase_period_get.c</itemPath>
+      <itemPath>LIB_timebase/src/timebase_period_set.c</itemPath>
+      <itemPath>LIB_timebase/src/timebase_prescale_get.c</itemPath>
+      <itemPath>LIB_timebase/src/timebase_prescale_set.c</itemPath>
+      <itemPath>LIB_timebase/src/timebase_state_get.c</itemPath>
+      <itemPath>LIB_timebase/src/timebase_state_set.c</itemPath>
+      <itemPath>LIB_timebase/src/timebase_to_ms_u16d16.c</itemPath>
+      <itemPath>LIB_timebase/src/timebase_to_ms_u32d0.c</itemPath>
+      <itemPath>LIB_timebase/src/timebase_to_ns_u32d0.c</itemPath>
+      <itemPath>LIB_timebase/src/timebase_to_us_u32d0.c</itemPath>
+      <itemPath>LIB_timebase/INTERFACE_timebase/timebase.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="f23"
+                   displayName="LIB_units_pressure_PIC32"
+                   projectFiles="true">
+      <itemPath>LIB_units_pressure_PIC32/src/bar_s16d16_to_mbar_s32d0.c</itemPath>
+      <itemPath>LIB_units_pressure_PIC32/src/bar_s16d16_to_mpa_s16d16.c</itemPath>
+      <itemPath>LIB_units_pressure_PIC32/src/bar_s16d16_to_psi_s16d16.c</itemPath>
+      <itemPath>LIB_units_pressure_PIC32/src/mbar_s32d0_to_bar_s16d16.c</itemPath>
+      <itemPath>LIB_units_pressure_PIC32/src/mpa_s16d16_to_bar_s16d16.c</itemPath>
+      <itemPath>LIB_units_pressure_PIC32/src/psi_s16d16_to_bar_s16d16.c</itemPath>
+    </logicalFolder>
+    <logicalFolder name="f8"
+                   displayName="SRC_uC_Peripheral_Map"
+                   projectFiles="true">
+      <itemPath>SRC_uC_Peripheral_Map/uC_peripheral_map.h</itemPath>
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <sourceRootList>
+    <Elem>LIB_graphics_driver/src</Elem>
+    <Elem>LIB_graphics_driver/INTERFACE_graphics_driver</Elem>
+    <Elem>INTERFACE_COM_PIC32MX795F512L_STD</Elem>
+    <Elem>LIB_i2c/src</Elem>
+    <Elem>LIB_graphics_interface/src</Elem>
+    <Elem>LIB_fonts/src</Elem>
+    <Elem>LIB_button_interface/src</Elem>
+    <Elem>LIB_component_init/src</Elem>
+    <Elem>SRC_uC_Peripheral_Map</Elem>
+    <Elem>LIB_bootload_host/src</Elem>
+    <Elem>LIB_gcaPortal_component/src</Elem>
+    <Elem>LIB_user_interface/src</Elem>
+    <Elem>LIB_bitmaps/src</Elem>
+    <Elem>LIB_datetime/src</Elem>
+    <Elem>LIB_io_pin/src</Elem>
+    <Elem>LIB_in_digital/src</Elem>
+    <Elem>LIB_out_digital/src</Elem>
+    <Elem>LIB_eeprom</Elem>
+    <Elem>LIB_dvar/src</Elem>
+    <Elem>LIB_app_builder/src</Elem>
+    <Elem>LIB_uart1a/INTERFACE_uart1a</Elem>
+    <Elem>LIB_uart1a/src</Elem>
+    <Elem>LIB_serial_uart/INTERFACE_serial_uart</Elem>
+    <Elem>LIB_serial_uart/src</Elem>
+    <Elem>LIB_d2a/src</Elem>
+    <Elem>LIB_mqtt/src</Elem>
+    <Elem>LIB_in_voltage/src</Elem>
+    <Elem>LIB_event_handler_PIC32/src</Elem>
+    <Elem>LIB_in_pressure/src</Elem>
+    <Elem>LIB_units_pressure_PIC32/src</Elem>
+    <Elem>LIB_temperature/INTERFACE_temperature</Elem>
+    <Elem>LIB_temperature/src</Elem>
+    <Elem>wolfssl-3.4.0/ctaocrypt</Elem>
+    <Elem>wolfssl-3.4.0/cyassl</Elem>
+    <Elem>wolfssl-3.4.0/mcapi</Elem>
+    <Elem>wolfssl-3.4.0/src</Elem>
+    <Elem>wolfssl-3.4.0/wolfcrypt</Elem>
+    <Elem>wolfssl-3.4.0/wolfssl</Elem>
+    <Elem>LIB_wolfSSL/src</Elem>
+    <Elem>LIB_wolfSSL/wolfcrypt/src</Elem>
+    <Elem>LIB_wolfSSL/wc/src</Elem>
+    <Elem>LIB_modbus/src</Elem>
+    <Elem>LIB_timebase/src</Elem>
+    <Elem>LIB_timebase/INTERFACE_timebase</Elem>
+    <Elem>LIB_datastore_PIC32/src</Elem>
+  </sourceRootList>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="default" type="3">
+      <toolsSet>
+        <developmentServer>localhost</developmentServer>
+        <targetDevice>PIC32MX795F512L</targetDevice>
+        <targetHeader></targetHeader>
+        <targetPluginBoard></targetPluginBoard>
+        <platformTool>ICD3PlatformTool</platformTool>
+        <languageToolchain>XC32</languageToolchain>
+        <languageToolchainVersion>1.22</languageToolchainVersion>
+        <platform>3</platform>
+      </toolsSet>
+      <compileType>
+        <linkerTool>
+          <linkerLibItems>
+          </linkerLibItems>
+        </linkerTool>
+        <archiverTool>
+        </archiverTool>
+        <loading>
+          <useAlternateLoadableFile>false</useAlternateLoadableFile>
+          <parseOnProdLoad>false</parseOnProdLoad>
+          <alternateLoadableFile></alternateLoadableFile>
+        </loading>
+      </compileType>
+      <makeCustomizationType>
+        <makeCustomizationPreStepEnabled>false</makeCustomizationPreStepEnabled>
+        <makeCustomizationPreStep></makeCustomizationPreStep>
+        <makeCustomizationPostStepEnabled>false</makeCustomizationPostStepEnabled>
+        <makeCustomizationPostStep></makeCustomizationPostStep>
+        <makeCustomizationPutChecksumInUserID>false</makeCustomizationPutChecksumInUserID>
+        <makeCustomizationEnableLongLines>false</makeCustomizationEnableLongLines>
+        <makeCustomizationNormalizeHexFile>false</makeCustomizationNormalizeHexFile>
+      </makeCustomizationType>
+      <C32>
+        <property key="additional-warnings" value="false"/>
+        <property key="addresss-attribute-use" value="false"/>
+        <property key="enable-app-io" value="false"/>
+        <property key="enable-omit-frame-pointer" value="false"/>
+        <property key="enable-symbols" value="true"/>
+        <property key="enable-unroll-loops" value="false"/>
+        <property key="exclude-floating-point" value="false"/>
+        <property key="extra-include-directories"
+                  value="INTERFACE_COM_PIC32MX795F512L_STD;INTERFACE_COM_PIC32MX795F512L_STD\machine;INTERFACE_COM_PIC32MX795F512L_STD\mips;INTERFACE_COM_PIC32MX795F512L_STD\pthread;INTERFACE_COM_PIC32MX795F512L_STD\sys;LIB_graphics_driver\src;LIB_i2c\src;LIB_graphics_interface\src;LIB_fonts\src;LIB_fonts\src\SRC_ramtex_output\fonts;LIB_button_interface\src;LIB_component_init\src;SRC_uC_Peripheral_Map;LIB_gcaPortal_component\src;LIB_bitmaps\src;LIB_bitmaps\src\SRC_ramtex_output\bmp;LIB_bitmaps\src\SRC_ramtex_output\fonts;LIB_bitmaps\src\SRC_ramtex_output;LIB_datetime\src;LIB_bootload_host\src;INTERFACE_TCBL_update_defs_PIC32;LIB_io_pin\src;LIB_in_digital\src;LIB_out_digital\src;SRC_io_typedef;LIB_serial_uart\src\SRC_uC_Peripheral_Map;LIB_d2a\src;LIB_in_voltage\src;LIB_event_handler_PIC32\INTERFACE_event_defs_PIC32;LIB_event_handler_PIC32\INTERFACE_event_handler_PIC32;LIB_in_voltage\INTERFACE_in_voltage;LIB_units_pressure_PIC32\INTERFACE_units_pressure_PIC32;LIB_in_pressure\INTERFACE_in_pressure;LIB_temperature\src;LIB_temperature\INTERFACE_temperature;LIB_serial_uart\INTERFACE_serial_uart;LIB_bitmaps\INTERFACE_bitmaps;LIB_timebase\INTERFACE_timebase;..\src;LIB_datastore_PIC32\INTERFACE_datastore_PIC32"/>
+        <property key="generate-16-bit-code" value="true"/>
+        <property key="generate-micro-compressed-code" value="false"/>
+        <property key="isolate-each-function" value="false"/>
+        <property key="make-warnings-into-errors" value="false"/>
+        <property key="optimization-level" value="-Os"/>
+        <property key="place-data-into-section" value="false"/>
+        <property key="post-instruction-scheduling" value="default"/>
+        <property key="pre-instruction-scheduling" value="default"/>
+        <property key="preprocessor-macros" value="GHW_SINGLE_CHIP"/>
+        <property key="strict-ansi" value="false"/>
+        <property key="support-ansi" value="false"/>
+        <property key="toplevel-reordering" value=""/>
+        <property key="use-cci" value="false"/>
+        <property key="use-iar" value="false"/>
+        <property key="use-indirect-calls" value="false"/>
+      </C32>
+      <C32-AR>
+        <property key="additional-options-chop-files" value="false"/>
+      </C32-AR>
+      <C32-AS>
+        <property key="assembler-symbols" value=""/>
+        <property key="enable-symbols" value="true"/>
+        <property key="exclude-floating-point-library" value="false"/>
+        <property key="expand-macros" value="false"/>
+        <property key="extra-include-directories-for-assembler" value=""/>
+        <property key="extra-include-directories-for-preprocessor" value=""/>
+        <property key="false-conditionals" value="false"/>
+        <property key="generate-16-bit-code" value="false"/>
+        <property key="generate-micro-compressed-code" value="false"/>
+        <property key="keep-locals" value="false"/>
+        <property key="list-assembly" value="false"/>
+        <property key="list-source" value="false"/>
+        <property key="list-symbols" value="false"/>
+        <property key="oXC32asm-list-to-file" value="false"/>
+        <property key="omit-debug-dirs" value="false"/>
+        <property key="omit-forms" value="false"/>
+        <property key="preprocessor-macros" value=""/>
+        <property key="warning-level" value=""/>
+      </C32-AS>
+      <C32-LD>
+        <property key="additional-options-use-response-files" value="false"/>
+        <property key="allocate-dinit" value="false"/>
+        <property key="code-dinit" value="false"/>
+        <property key="ebase-addr" value=""/>
+        <property key="enable-check-sections" value="false"/>
+        <property key="exclude-floating-point-library" value="false"/>
+        <property key="exclude-standard-libraries" value="false"/>
+        <property key="extra-lib-directories" value=""/>
+        <property key="fill-flash-options-addr" value=""/>
+        <property key="fill-flash-options-const" value=""/>
+        <property key="fill-flash-options-how" value="0"/>
+        <property key="fill-flash-options-inc-const" value="1"/>
+        <property key="fill-flash-options-increment" value=""/>
+        <property key="fill-flash-options-seq" value=""/>
+        <property key="fill-flash-options-what" value="0"/>
+        <property key="generate-16-bit-code" value="true"/>
+        <property key="generate-cross-reference-file" value="false"/>
+        <property key="generate-micro-compressed-code" value="false"/>
+        <property key="heap-size" value=""/>
+        <property key="input-libraries" value=""/>
+        <property key="kseg-length" value=""/>
+        <property key="kseg-origin" value=""/>
+        <property key="linker-symbols" value=""/>
+        <property key="map-file" value="${DISTDIR}/${PROJECTNAME}.${IMAGE_TYPE}.map"/>
+        <property key="no-startup-files" value="false"/>
+        <property key="oXC32ld-extra-opts" value=""/>
+        <property key="optimization-level" value=""/>
+        <property key="preprocessor-macros" value=""/>
+        <property key="remove-unused-sections" value="false"/>
+        <property key="report-memory-usage" value="false"/>
+        <property key="serial-length" value=""/>
+        <property key="serial-origin" value=""/>
+        <property key="stack-size" value=""/>
+        <property key="symbol-stripping" value=""/>
+        <property key="trace-symbols" value=""/>
+        <property key="warn-section-align" value="false"/>
+      </C32-LD>
+      <C32CPP>
+        <property key="additional-warnings" value="false"/>
+        <property key="addresss-attribute-use" value="false"/>
+        <property key="check-new" value="false"/>
+        <property key="eh-specs" value="true"/>
+        <property key="enable-app-io" value="false"/>
+        <property key="enable-omit-frame-pointer" value="false"/>
+        <property key="enable-symbols" value="true"/>
+        <property key="enable-unroll-loops" value="false"/>
+        <property key="exceptions" value="true"/>
+        <property key="exclude-floating-point" value="false"/>
+        <property key="extra-include-directories" value=""/>
+        <property key="generate-16-bit-code" value="false"/>
+        <property key="generate-micro-compressed-code" value="false"/>
+        <property key="isolate-each-function" value="false"/>
+        <property key="make-warnings-into-errors" value="false"/>
+        <property key="optimization-level" value=""/>
+        <property key="place-data-into-section" value="false"/>
+        <property key="post-instruction-scheduling" value="default"/>
+        <property key="pre-instruction-scheduling" value="default"/>
+        <property key="preprocessor-macros" value=""/>
+        <property key="rtti" value="true"/>
+        <property key="strict-ansi" value="false"/>
+        <property key="toplevel-reordering" value=""/>
+        <property key="use-cci" value="false"/>
+        <property key="use-iar" value="false"/>
+        <property key="use-indirect-calls" value="false"/>
+      </C32CPP>
+      <C32Global>
+        <property key="common-include-directories" value=""/>
+        <property key="gp-relative-option" value=""/>
+        <property key="legacy-libc" value="false"/>
+        <property key="relaxed-math" value="false"/>
+        <property key="save-temps" value="false"/>
+        <property key="wpo-lto" value="false"/>
+      </C32Global>
+      <ICD3PlatformTool>
+        <property key="ADC 1" value="true"/>
+        <property key="AutoSelectMemRanges" value="auto"/>
+        <property key="CAN1" value="true"/>
+        <property key="CAN2" value="true"/>
+        <property key="CHANGE NOTICE" value="true"/>
+        <property key="COMPARATOR" value="true"/>
+        <property key="DMA" value="true"/>
+        <property key="ETHERNET CONTROLLER" value="true"/>
+        <property key="Freeze All Other Peripherals" value="true"/>
+        <property key="I2C1" value="true"/>
+        <property key="I2C2" value="true"/>
+        <property key="I2C3" value="true"/>
+        <property key="I2C4" value="true"/>
+        <property key="I2C5" value="true"/>
+        <property key="INPUT CAPTURE 1" value="true"/>
+        <property key="INPUT CAPTURE 2" value="true"/>
+        <property key="INPUT CAPTURE 3" value="true"/>
+        <property key="INPUT CAPTURE 4" value="true"/>
+        <property key="INPUT CAPTURE 5" value="true"/>
+        <property key="INTERRUPT CONTROL" value="true"/>
+        <property key="OUTPUT COMPARE 1" value="true"/>
+        <property key="OUTPUT COMPARE 2" value="true"/>
+        <property key="OUTPUT COMPARE 3" value="true"/>
+        <property key="OUTPUT COMPARE 4" value="true"/>
+        <property key="OUTPUT COMPARE 5" value="true"/>
+        <property key="PARALLEL MASTER/SLAVE PORT" value="true"/>
+        <property key="REAL TIME CLOCK" value="true"/>
+        <property key="SPI 1" value="true"/>
+        <property key="SPI 2" value="true"/>
+        <property key="SPI 3" value="true"/>
+        <property key="SPI 4" value="true"/>
+        <property key="SecureSegment.SegmentProgramming" value="FullChipProgramming"/>
+        <property key="TIMER1" value="true"/>
+        <property key="TIMER2" value="true"/>
+        <property key="TIMER3" value="true"/>
+        <property key="TIMER4" value="true"/>
+        <property key="TIMER5" value="true"/>
+        <property key="ToolFirmwareFilePath"
+                  value="Press to browse for a specific firmware version"/>
+        <property key="ToolFirmwareOption.UseLatestFirmware" value="true"/>
+        <property key="UART1" value="true"/>
+        <property key="UART2" value="true"/>
+        <property key="UART3" value="true"/>
+        <property key="UART4" value="true"/>
+        <property key="UART5" value="true"/>
+        <property key="UART6" value="true"/>
+        <property key="USB" value="true"/>
+        <property key="debugoptions.useswbreakpoints" value="false"/>
+        <property key="hwtoolclock.frcindebug" value="false"/>
+        <property key="memories.aux" value="false"/>
+        <property key="memories.bootflash" value="false"/>
+        <property key="memories.configurationmemory" value="true"/>
+        <property key="memories.configurationmemory2" value="true"/>
+        <property key="memories.dataflash" value="true"/>
+        <property key="memories.eeprom" value="true"/>
+        <property key="memories.flashdata" value="true"/>
+        <property key="memories.id" value="true"/>
+        <property key="memories.instruction.ram" value="true"/>
+        <property key="memories.instruction.ram.end"
+                  value="${memories.instruction.ram.end.value}"/>
+        <property key="memories.instruction.ram.start"
+                  value="${memories.instruction.ram.start.value}"/>
+        <property key="memories.programmemory" value="true"/>
+        <property key="memories.programmemory.end" value="0x1d07ffff"/>
+        <property key="memories.programmemory.partition2" value="true"/>
+        <property key="memories.programmemory.partition2.end"
+                  value="${memories.programmemory.partition2.end.value}"/>
+        <property key="memories.programmemory.partition2.start"
+                  value="${memories.programmemory.partition2.start.value}"/>
+        <property key="memories.programmemory.start" value="0x1d000000"/>
+        <property key="poweroptions.powerenable" value="false"/>
+        <property key="programoptions.donoteraseauxmem" value="false"/>
+        <property key="programoptions.eraseb4program" value="true"/>
+        <property key="programoptions.preservedataflash" value="false"/>
+        <property key="programoptions.preserveeeprom" value="false"/>
+        <property key="programoptions.preserveprogramrange" value="false"/>
+        <property key="programoptions.preserveprogramrange.end" value="0x1d07ffff"/>
+        <property key="programoptions.preserveprogramrange.start" value="0x1d000000"/>
+        <property key="programoptions.preserveuserid" value="false"/>
+        <property key="programoptions.programcalmem" value="false"/>
+        <property key="programoptions.programuserotp" value="false"/>
+        <property key="programoptions.testmodeentrymethod" value="VPPFirst"/>
+        <property key="programoptions.usehighvoltageonmclr" value="false"/>
+        <property key="programoptions.uselvpprogramming" value="false"/>
+        <property key="voltagevalue" value="3.25"/>
+      </ICD3PlatformTool>
+    </conf>
+  </confs>
+</configurationDescriptor>

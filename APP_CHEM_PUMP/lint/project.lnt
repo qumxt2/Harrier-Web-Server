@@ -1,0 +1,85 @@
+// PIC32 Library includes
+-i%PIC32_LIBS_PATH%
+
+// Project includes
+-i%PROJECT_PATH%"\src"
+-i%PROJECT_PATH%"\libraries\INTERFACE_COM_PIC32MX795F512L_STD"
+-i%PROJECT_PATH%"\libraries\INTERFACE_COM_PIC32MX795F512L_STD\machine"
+-i%PROJECT_PATH%"\libraries\INTERFACE_COM_PIC32MX795F512L_STD\mips"
+-i%PROJECT_PATH%"\libraries\INTERFACE_COM_PIC32MX795F512L_STD\pthread"
+-i%PROJECT_PATH%"\libraries\INTERFACE_COM_PIC32MX795F512L_STD\sys"
+-i%PROJECT_PATH%"\libraries\LIB_component_init\INTERFACE_component_init"
+-i%PROJECT_PATH%"\libraries\INTERFACE_TCBL_update_defs_PIC32"
+-i%PROJECT_PATH%"\libraries\LIB_bitmaps\INTERFACE_bitmaps"
+-i%PROJECT_PATH%"\libraries\LIB_bootload_host\INTERFACE_bootload_host"
+-i%PROJECT_PATH%"\libraries\LIB_button_interface\INTERFACE_button_interface"
+-i%PROJECT_PATH%"\libraries\LIB_datetime\INTERFACE_datetime"
+-i%PROJECT_PATH%"\libraries\LIB_gcaPortal_component\INTERFACE_gcaPortal_component"
+-i%PROJECT_PATH%"\libraries\LIB_graphics_interface\INTERFACE_graphics_interface"
+-i%PROJECT_PATH%"\libraries\LIB_i2c\INTERFACE_i2c;libraries\SRC_uC_Peripheral_Map"
+-i%PROJECT_PATH%"\libraries\LIB_out_digital\INTERFACE_out_digital;libraries\SRC_io_typedef"
+-i%PROJECT_PATH%"\libraries\LIB_io_pin\INTERFACE_io_pin"
+-i%PROJECT_PATH%"\libraries\LIB_dvar\INTERFACE_dvar"
+-i%PROJECT_PATH%"\libraries\LIB_fonts\INTERFACE_fonts"
+-i%PROJECT_PATH%"\libraries\LIB_in_digital\INTERFACE_in_digital"
+-i%PROJECT_PATH%"\libraries\LIB_serial_uart\INTERFACE_serial_uart"
+-i%PROJECT_PATH%"\libraries\LIB_d2a\INTERFACE_d2a"
+-i%PROJECT_PATH%"\libraries\LIB_mqtt\src"
+-i%PROJECT_PATH%"\libraries\LIB_in_voltage\INTERFACE_in_voltage"
+-i%PROJECT_PATH%"\libraries\LIB_event_handler_PIC32\INTERFACE_event_defs_PIC32"
+-i%PROJECT_PATH%"\libraries\LIB_event_handler_PIC32\INTERFACE_event_handler_PIC32"
+-i%PROJECT_PATH%"\libraries\LIB_in_pressure\INTERFACE_in_pressure"
+-i%PROJECT_PATH%"\libraries\LIB_temperature\INTERFACE_temperature"
+-i%PROJECT_PATH%"\src\LIB_wolfSSL"
+-i%PROJECT_PATH%"\libraries\LIB_units_pressure_PIC32\INTERFACE_units_pressure_PIC32"
+-i%PROJECT_PATH%"\libraries\SRC_io_typedef"
+-i%PROJECT_PATH%"\libraries\SRC_uC_Peripheral_Map"
+-i%PROJECT_PATH%"\libraries\LIB_bitmaps\src\SRC_ramtex_output"
+-i%PROJECT_PATH%"\libraries\LIB_bitmaps\src\SRC_ramtex_output\fonts"
+-i%PROJECT_PATH%"\libraries\LIB_graphics_driver\INTERFACE_graphics_driver"
+-i%PROJECT_PATH%"\libraries\LIB_graphics_driver\src"
+-i%PROJECT_PATH%"\libraries\LIB_modbus\src"
+-i%PROJECT_PATH%"\libraries\LIB_timebase\INTERFACE_timebase"
+
+
+// Include the XC32 options file
+co-xc32.lnt
+
+// Options from GCA_Options_PIC32.lnt
+-w2
++e766  // Check for unused headers
++e750  // Check for unused macros
+-width(0) // Don't break lines
+-hF1        // always supply a File name
++e900       // always produce at least one line of output
+-t4 // A leading tab is 4 spaces
++libh(p32mx795f512l.h)
+-e46  // C32 allows non-int types as a bitfield structure. Supress error message 46
+-e146 // C32 supports binary constants (eg. 0b11010001). Suppress error message 146
+
+// Project lint exceptions
++linebuf
++dNop()=                            //Ignore Nop()
++fie                                // Treat enums as ints
++fan                                // Allow anonymous unions
++fas                                // Allow anonymous structures
+-e537                               // Ignore warning about repeated include files
+-e526                               // Ignore missing symbols
+-esym(534, gselvp)                  // Ignore errors in library file gdisp.h
+-e18                                // Ignore repeated symbol definitions
+-estring(617, *misc.c*)             // Ignore use of misc.c as a header file in wolf ssl library
+-esym(123, asm)                     // Ignore error related to asm macro
+-e39                                // Allow symbol redefinition
+-e115                               // Allow missing structure definitions
+
+// Library folders to ignore
++libm(*Lib_wolfSSL*)
++libm(*LIB_bitmaps*)
++libm(*LIB_fonts*)
++libm(*LIB_mqtt*)
++libm(*LIB_graphics*)
++libm(*LIB_serial_uart*)
++libm(*LIB_dvar*)
++libm(*LIB_modbus*)
++libm(*LIB_timebase*)
++libm(*INTERFACE_COM_PIC32MX795F512L_STD*)

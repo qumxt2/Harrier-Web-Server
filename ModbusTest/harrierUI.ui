@@ -1,0 +1,746 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>739</width>
+    <height>901</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QScrollArea" name="scrollArea">
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOn</enum>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOn</enum>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>-3</y>
+         <width>492</width>
+         <height>835</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="1">
+         <widget class="QPushButton" name="ConnectButton">
+          <property name="text">
+           <string>Connect</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QPushButton" name="UpdateButton">
+          <property name="text">
+           <string>Update</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <layout class="QGridLayout" name="gridLayout_3" rowstretch="0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0">
+          <item row="8" column="1">
+           <widget class="QLineEdit" name="KFactorField">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="20" column="0">
+           <widget class="QLabel" name="label_21">
+            <property name="text">
+             <string>Input 1</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Flow Rate</string>
+            </property>
+           </widget>
+          </item>
+          <item row="12" column="0">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Totalizer</string>
+            </property>
+           </widget>
+          </item>
+          <item row="17" column="1">
+           <widget class="QLineEdit" name="LowPressureTriggerField">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="19" column="2">
+           <widget class="QSpinBox" name="LowBatteryTriggerSpinBox">
+            <property name="keyboardTracking">
+             <bool>false</bool>
+            </property>
+            <property name="maximum">
+             <number>99999</number>
+            </property>
+           </widget>
+          </item>
+          <item row="16" column="0">
+           <widget class="QLabel" name="label_10">
+            <property name="text">
+             <string>High pressure Trigger</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>Status</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_14">
+            <property name="text">
+             <string>Slave ID</string>
+            </property>
+           </widget>
+          </item>
+          <item row="19" column="0">
+           <widget class="QLabel" name="label_12">
+            <property name="text">
+             <string>Battery Shutoff</string>
+            </property>
+           </widget>
+          </item>
+          <item row="17" column="2">
+           <widget class="QSpinBox" name="LowPressureTriggerSpinBox">
+            <property name="keyboardTracking">
+             <bool>false</bool>
+            </property>
+            <property name="maximum">
+             <number>99999</number>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="MeteringModeField">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QPushButton" name="PumpStatusButton">
+            <property name="text">
+             <string>Pump On</string>
+            </property>
+           </widget>
+          </item>
+          <item row="16" column="2">
+           <widget class="QSpinBox" name="HighPressureTriggerSpinBox">
+            <property name="keyboardTracking">
+             <bool>false</bool>
+            </property>
+            <property name="maximum">
+             <number>99999</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="SlaveIDField">
+            <property name="text">
+             <string>1</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="2">
+           <widget class="QSpinBox" name="FlowRateSpinBox">
+            <property name="buttonSymbols">
+             <enum>QAbstractSpinBox::UpDownArrows</enum>
+            </property>
+            <property name="keyboardTracking">
+             <bool>false</bool>
+            </property>
+            <property name="maximum">
+             <number>99999</number>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="AlarmActiveField">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_15">
+            <property name="text">
+             <string>Com Port</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>Alarm Active</string>
+            </property>
+           </widget>
+          </item>
+          <item row="19" column="1">
+           <widget class="QLineEdit" name="LowBatteryTriggerField">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1">
+           <widget class="QLineEdit" name="FlowRateField">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="15" column="0">
+           <widget class="QLabel" name="label_9">
+            <property name="text">
+             <string>Pressure</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="ComPortField">
+            <property name="text">
+             <string>COM1</string>
+            </property>
+           </widget>
+          </item>
+          <item row="17" column="0">
+           <widget class="QLabel" name="label_11">
+            <property name="text">
+             <string>Low Pressure Trigger</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="StatusField">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="13" column="0">
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>Grand Totalizer</string>
+            </property>
+           </widget>
+          </item>
+          <item row="14" column="1">
+           <widget class="QLineEdit" name="BatteryVoltageField">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="15" column="1">
+           <widget class="QLineEdit" name="PressureField">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>Metering Mode</string>
+            </property>
+           </widget>
+          </item>
+          <item row="16" column="1">
+           <widget class="QLineEdit" name="HighPressureTriggerField">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="14" column="0">
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>Battery Voltage</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="2">
+           <widget class="QComboBox" name="MeteringModeSelectBox">
+            <item>
+             <property name="text">
+              <string>Flow</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Time</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Cycle</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="13" column="1">
+           <widget class="QLineEdit" name="GrandTotalizerField">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="24" column="0">
+           <widget class="QLabel" name="label_24">
+            <property name="text">
+             <string>Power Savings</string>
+            </property>
+           </widget>
+          </item>
+          <item row="22" column="0">
+           <widget class="QLabel" name="label_23">
+            <property name="text">
+             <string>Remote Off</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="2">
+           <widget class="QTimeEdit" name="OnTimeEditBox">
+            <property name="keyboardTracking">
+             <bool>false</bool>
+            </property>
+            <property name="dateTime">
+             <datetime>
+              <hour>0</hour>
+              <minute>0</minute>
+              <second>0</second>
+              <year>2000</year>
+              <month>1</month>
+              <day>1</day>
+             </datetime>
+            </property>
+            <property name="time">
+             <time>
+              <hour>0</hour>
+              <minute>0</minute>
+              <second>0</second>
+             </time>
+            </property>
+            <property name="displayFormat">
+             <string>h:mm:ss</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="QLineEdit" name="OnCyclesField"/>
+          </item>
+          <item row="11" column="0">
+           <widget class="QLabel" name="label_17">
+            <property name="text">
+             <string>On Timeout</string>
+            </property>
+           </widget>
+          </item>
+          <item row="24" column="1">
+           <widget class="QLineEdit" name="PowerSavingsField"/>
+          </item>
+          <item row="22" column="1">
+           <widget class="QLineEdit" name="RemoteOffField"/>
+          </item>
+          <item row="23" column="0">
+           <widget class="QLabel" name="label_13">
+            <property name="text">
+             <string>Firmware Version</string>
+            </property>
+           </widget>
+          </item>
+          <item row="12" column="2">
+           <widget class="QPushButton" name="ResetTotalizerButton">
+            <property name="text">
+             <string>Reset</string>
+            </property>
+           </widget>
+          </item>
+          <item row="21" column="0">
+           <widget class="QLabel" name="label_22">
+            <property name="text">
+             <string>Input 2</string>
+            </property>
+           </widget>
+          </item>
+          <item row="8" column="0">
+           <widget class="QLabel" name="label_18">
+            <property name="text">
+             <string>KFactor</string>
+            </property>
+           </widget>
+          </item>
+          <item row="9" column="1">
+           <widget class="QLineEdit" name="OnTimeField"/>
+          </item>
+          <item row="20" column="1">
+           <widget class="QLineEdit" name="Input1Field"/>
+          </item>
+          <item row="6" column="0">
+           <widget class="QLabel" name="label_19">
+            <property name="text">
+             <string>On Cycles</string>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="1">
+           <widget class="QLineEdit" name="OffTimeField"/>
+          </item>
+          <item row="9" column="0">
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>On Time</string>
+            </property>
+           </widget>
+          </item>
+          <item row="21" column="1">
+           <widget class="QLineEdit" name="Input2Field"/>
+          </item>
+          <item row="10" column="2">
+           <widget class="QTimeEdit" name="OffTimeEditBox">
+            <property name="keyboardTracking">
+             <bool>false</bool>
+            </property>
+            <property name="displayFormat">
+             <string>h:mm:ss</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="1">
+           <widget class="QLineEdit" name="IntervalField">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLabel" name="label_16">
+            <property name="text">
+             <string>Interval</string>
+            </property>
+           </widget>
+          </item>
+          <item row="10" column="0">
+           <widget class="QLabel" name="label_20">
+            <property name="text">
+             <string>Off Time</string>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="2">
+           <widget class="QTimeEdit" name="OnTimeoutEditBox">
+            <property name="keyboardTracking">
+             <bool>false</bool>
+            </property>
+            <property name="displayFormat">
+             <string>h:mm:ss</string>
+            </property>
+           </widget>
+          </item>
+          <item row="22" column="2">
+           <widget class="QComboBox" name="RemoteOffSelectBox">
+            <item>
+             <property name="text">
+              <string>Disabled</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Nor Closed</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Nor Open</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="25" column="1">
+           <widget class="QLineEdit" name="UnitsField"/>
+          </item>
+          <item row="8" column="2">
+           <widget class="QSpinBox" name="KFactorSpinBox">
+            <property name="keyboardTracking">
+             <bool>false</bool>
+            </property>
+            <property name="minimum">
+             <number>1</number>
+            </property>
+            <property name="maximum">
+             <number>9999</number>
+            </property>
+           </widget>
+          </item>
+          <item row="11" column="1">
+           <widget class="QLineEdit" name="OnTimeoutField"/>
+          </item>
+          <item row="20" column="2">
+           <widget class="QComboBox" name="Input1SelectBox">
+            <item>
+             <property name="text">
+              <string>Disabled</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Nor Closed</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Nor Open</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="24" column="2">
+           <widget class="QComboBox" name="PowerSavingsSelectBox">
+            <item>
+             <property name="text">
+              <string>Off</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Notify</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Min</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Normal</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Max</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="25" column="2">
+           <widget class="QComboBox" name="UnitsSelectBox">
+            <item>
+             <property name="text">
+              <string>US</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Metric</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="21" column="2">
+           <widget class="QComboBox" name="Input2SelectBox">
+            <item>
+             <property name="text">
+              <string>Disabled</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Nor Closed</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Nor Open</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="25" column="0">
+           <widget class="QLabel" name="label_25">
+            <property name="text">
+             <string>Units</string>
+            </property>
+           </widget>
+          </item>
+          <item row="28" column="1">
+           <widget class="QLineEdit" name="PressureSensitivityField"/>
+          </item>
+          <item row="23" column="1">
+           <widget class="QLineEdit" name="FirmwareVersionField">
+            <property name="text">
+             <string/>
+            </property>
+           </widget>
+          </item>
+          <item row="26" column="1">
+           <widget class="QLineEdit" name="PressureOffsetField"/>
+          </item>
+          <item row="26" column="0">
+           <widget class="QLabel" name="label_26">
+            <property name="text">
+             <string>Pressure Offset</string>
+            </property>
+           </widget>
+          </item>
+          <item row="26" column="2">
+           <widget class="QSpinBox" name="PressureOffsetSpinBox">
+            <property name="keyboardTracking">
+             <bool>false</bool>
+            </property>
+            <property name="maximum">
+             <number>9999</number>
+            </property>
+           </widget>
+          </item>
+          <item row="28" column="2">
+           <widget class="QSpinBox" name="PressureSensitivitySpinBox">
+            <property name="keyboardTracking">
+             <bool>false</bool>
+            </property>
+            <property name="maximum">
+             <number>9999</number>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="2">
+           <widget class="QComboBox" name="IntervalSelectBox">
+            <item>
+             <property name="text">
+              <string>Short</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Medium</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Long</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="28" column="0">
+           <widget class="QLabel" name="label_27">
+            <property name="text">
+             <string>Pressure Sensitivity</string>
+            </property>
+           </widget>
+          </item>
+          <item row="18" column="0">
+           <widget class="QLabel" name="label_28">
+            <property name="text">
+             <string>Power Save On</string>
+            </property>
+           </widget>
+          </item>
+          <item row="18" column="1">
+           <widget class="QLineEdit" name="PowerSaveOnTriggerField"/>
+          </item>
+          <item row="18" column="2">
+           <widget class="QSpinBox" name="PowerSaveOnTriggerSpinBox">
+            <property name="keyboardTracking">
+             <bool>false</bool>
+            </property>
+            <property name="maximum">
+             <number>99999</number>
+            </property>
+           </widget>
+          </item>
+          <item row="29" column="0">
+           <widget class="QLabel" name="label_58">
+            <property name="text">
+             <string>Alarm Action</string>
+            </property>
+           </widget>
+          </item>
+          <item row="29" column="2">
+           <widget class="QComboBox" name="AlarmActionSelectBox">
+            <item>
+             <property name="text">
+              <string>Stop</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Notify</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="29" column="1">
+           <widget class="QLineEdit" name="AlarmActionField"/>
+          </item>
+          <item row="12" column="1">
+           <widget class="QLineEdit" name="TotalizerField"/>
+          </item>
+          <item row="3" column="2">
+           <widget class="QPushButton" name="ClearAlarmButton">
+            <property name="text">
+             <string>Clear</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="2">
+           <widget class="QSpinBox" name="OnCyclesSpinBox">
+            <property name="keyboardTracking">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>739</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuHarrier">
+    <property name="title">
+     <string>harrier</string>
+    </property>
+   </widget>
+   <addaction name="menuHarrier"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
