@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load pump_layout_extras %}
+
+{% block head_data %}
+{% endblock %}
+
+{% block title %}
+Settings | Group
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title"><a href="{% url 'customer_list' %}">Groups</a> <small>&raquo; <span id="heading_subtext"></span></small></h3>
+
+<div id="loading_mask">
+<p>Loading...</p>
+</div>
+<div class="details-container">
+
+{% if not is_none_customer and is_manager %}
+{% row_standard 'organization_name' pretty_name='Name' edit_type='text' %}
+{% else %}
+{% row_standard 'organization_name' pretty_name='Name' %}
+{% endif %}
+
+{% if not is_none_customer %}
+    {% if is_manager %}
+        {% row_standard 'manager_name' pretty_name='Manager' edit_type='text' %}
+    {% else %}
+        {% row_standard 'manager_name' pretty_name='Manager' %}
+    {% endif %}
+{% endif %}
+
+{% if not is_none_customer and is_manager %}
+  {% url 'customer_subscription' customer_id as customer_subscription_url %}
+  {% row_standard 'subscription' button_type='hyperlink' button_icon='fa-clock-o' hyperlink_url='customer_subscription_url' %}
+  {% if is_admin and not subscription_global_override %}
+    {% row_standard 'override_subscription' button_type='toggle' mode='create' default='0' %}
+  {% endif %} 
+{% endif %}
+
+{% url 'customer_users' customer_id as customer_users_url %}
+{% row_standard 'users' button_type='hyperlink' button_icon='fa-users' hyperlink_url='customer_users_url' %} 
+
+{% url 'customer_pumps' customer_id as customer_pumps_url %}
+{% row_standard 'pumps' button_type='hyperlink' button_icon='fa-cubes' hyperlink_url='customer_pumps_url' %} 
+
+
+</div>
+
+{% if is_admin and not is_none_customer %}
+<div class="float-left">
+    {% delete_button 'group' %}
+</div>
+{% endif %}
+
+{% if is_admin %}
+    {% modal_delete_dialog 'group' %}
+{% endif %}
+
+
+<script>
+var BUTTON_LIST= [];
+
+{% if not is_none_customer %}
+  BUTTON_LIST.push('organization_name');
+  BUTTON_LIST.push('manager_name');
+{% endif %}
+
+// Populate the page with the AJAX data
+function pageSpecificPopulate(data) {
+  var simple_fields = ['organization_name',
+                      ];
+  var fields_to_pulse = ['organization_name', 'manager_name',];
+  
+  {% if is_admin %}
+    fields_to_pulse.push('override_subscription');
+  {% endif %}
+  
+  // Update the fields that need no special formatting or handling
+  // Use jQuery's each instead of forEach because IE8 doesn't support forEach
+  jQuery.each(simple_fields, function(index, element){
+    var field_name = element + '_value';
+    $('#' + field_name).html(data[element]);
+  });
+  
+  $('#heading_subtext').html(data['organization_name']);
+  changeIfNotFocused('organization_name_edit', data['organization_name']);
+  
+  if (data.show_subscription_link) {
+    $('#subscription_row_outer').show();
+  }
+  else {
+    $('#subscription_row_outer').hide();
+  }
+  
+  
+  // Make the manager field a link
+{% if is_admin %}
+  var MANAGER_LINK_TEMPLATE = '<a href="{% url 'user_settings_default' %}%ID%">%NAME%</a>';
+{% else %}
+  var MANAGER_LINK_TEMPLATE = '%NAME%';
+{% endif %}
+  if (data.manager_name && data.manager_name.length > 0) {
+    var manager_link = MANAGER_LINK_TEMPLATE;
+    manager_link = manager_link.replace(/%ID%/g, data.manager_id);
+    manager_link = manager_link.replace(/%NAME%/g, data.manager_name);
+    $('#manager_name_value').html(manager_link);
+  } 
+  else {
+    $('#manager_name_value').html('&lt;Not set>');
+  }
+  changeIfNotFocused('manager_name_edit', data.manager_name);
+
+{% if is_admin %}
+  toggleUpdate(data, 'override_subscription', ['No', 'Yes']);  
+{% endif %}
+    
+  tigerStripe();
+  
+  // Make text pulse when the value changes
+  if (PREVIOUS_JSON) {
+    jQuery.each(fields_to_pulse, function(index, element) {
+      pulseIf(element, PREVIOUS_JSON['data'], data);
+    });
+  }
+}
+
+// Some setup needs to wait until support JS has loaded
+function pageSetup() {
+  // URL for getting and posting pump data
+  AJAX_URL = '{% url 'customers_spec_api_1_0' customer_id %}';
+  
+  // Enable automatic updates of the page
+  POLL_PERIOD_SHORT_SEC = 1;
+  POLL_PERIOD_LONG_SEC = 60;
+  POLL_COUNT_FOR_LONG = 2;
+  poll(); 
+}
+
+
+{% if is_admin %}
+function successfulDelete(data) {
+  // Redirect in such a manner that reposting is not going to be an issue
+  var url = "{% url 'customer_list' %}";
+  location.replace(url);
+}
+{% endif %}
+
+</script>
+
+
+{% endblock %}

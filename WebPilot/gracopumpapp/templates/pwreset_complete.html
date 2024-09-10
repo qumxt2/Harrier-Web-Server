@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Password reset complete{% endblock %}
+
+{% block content %}
+
+<h3 class="pump-title">Password reset complete</h3>
+
+<p>Your password has been set.  You may log in now.</p>
+
+<p><a href="{{ login_url }}">Return to login page</a></p>
+
+{% endblock %}

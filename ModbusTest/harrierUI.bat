@@ -1,1 +1,0 @@
-C:\Python34\Scripts\pyside-uic harrierUI.ui -o harrierUI.py

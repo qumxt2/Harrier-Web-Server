@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Error {{ error_number }}
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title">Error: {{ error_number }}<small><span id="heading_subtext"></span></small></h3>
+<h4>Oops!</h4>
+<p>{{ error_explanation }}</p> 
+{% endblock %}

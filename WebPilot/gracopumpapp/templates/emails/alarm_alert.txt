@@ -1,0 +1,39 @@
+{% if first_name|length > 0 %}
+Hello {{ first_name }},
+{% else %}
+Hello,
+{% endif %}
+A pump in your group "{{ group_name }}" called "{{ pump_name }}" just had the following alarm occur:
+
+{{ alarm_name }}
+
+{% if alarm_name == 'Flow Accuracy' %}
+Possible causes include:
+1. Unintended flow
+Root Causes:
+Leak
+Theft
+2. No flow detected
+Root Causes:
+Pump lost prime
+Shutoff valve closed
+Plugged lines
+3. Efficiency loss - tank does not match pump totalizer
+Root Causes:
+Inaccurate calibration of pump or tank level sensor
+Pump seal leak
+Check valve seal leak
+{% endif %}
+Additional information might be available on that pump's page:
+
+{{ pump_details_url }}
+
+You are receiving this message because you have alarm alerts enabled. If you no longer wish to receive these alerts, you can disable them on your settings page at:
+
+{{ user_settings_url }}
+
+Thanks!
+
+Graco
+
+(This is an automated email. For support, please email oilandgas@graco.com )

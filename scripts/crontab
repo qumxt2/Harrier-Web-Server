@@ -1,0 +1,3 @@
+# 0 10 * * * /home/graco/pump/scripts/graco_backup.sh
+* * * * * curl --interface 127.0.0.1 https://graco-dev.graniteriver.com/cron/ > /dev/null
+* * * * * ping -c 1 -W 2 www.m2mweb.net > /dev/null 2> /dev/null

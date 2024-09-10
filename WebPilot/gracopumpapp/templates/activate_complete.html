@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}Account active{% endblock %}
+
+{% block content %}
+
+<h3 class="pump-title">Activation complete</h3>
+
+<p>Your account is now active.  You may log in now.</p>
+
+<p><a href="{{ login_url }}">Return to login page</a></p>
+
+{% endblock %}

@@ -1,0 +1,18 @@
+{% autoescape off %}
+{% if first_name|length > 0 %}
+Hi {{ first_name }},
+{% else %}
+Hi,
+{% endif %}
+
+You recently changed your email address. In order to ensure that you can still receive important emails from Graco, please confirm your new email address by clicking the following link:
+
+{{ confirmation_url }}
+
+Thanks!
+
+Graco
+
+(This is an automated email. For support, please email oilandgas@graco.com )
+
+{% endautoescape %}

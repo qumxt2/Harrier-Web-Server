@@ -1,0 +1,208 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load pump_layout_extras %}
+
+{% block head_data %}
+{% endblock %}
+
+{% block title %}
+Settings | User
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title">{% if is_admin %}<a href="{% url 'user_list' %}">{% endif %}Users{% if is_admin %}</a>{%endif%} <small>&raquo; <span id="heading_subtext"><span id="username_header"></span></span></small></h3>
+
+<div id="loading_mask">
+<p>Loading...</p>
+</div>
+<div class="details-container">
+
+{% row_standard 'email' edit_type='text' %}
+{% row_standard 'password' edit_type='password' %}
+{% row_standard 'first_name' edit_type='text' %}
+{% row_standard 'last_name' edit_type='text' %}
+
+{% row_divider %}
+
+{% load tz %}
+{% row_standard 'time_zone' edit_type='dropdown' dropdown_options_name='timezones' dropdown_selected=TIME_ZONE %}
+
+{% row_standard 'display_units' edit_type='dropdown' dropdown_options_name='unit_options' %}
+
+{% row_standard 'show_disconnected_pumps' button_type='toggle' %}
+
+{% row_divider %}
+
+{% row_standard 'enable_notifications' pretty_name='Enable email reminders' button_type='toggle' %}
+
+{% url 'notification_user' user_id as notifications_config_url %}
+{% row_standard 'maintenance_reminders' button_type='hyperlink' button_icon='fa-envelope' hyperlink_url='notifications_config_url' %} 
+
+{% row_standard 'enable_alarm_alerts' pretty_name='Enable email alarm alerts' button_type='toggle' %}
+
+{% url 'user_alarm_prefs' user_id as alarm_prefs_url %}
+{% row_standard 'alarm_preferences' button_type='hyperlink' button_icon='fa-envelope' hyperlink_url='alarm_prefs_url' %} 
+
+{% row_divider %}
+
+{% comment "Non-admins should not be able to see the list of customers or change their customer without being invited to a new customer" %}{% endcomment %}
+{% row_standard 'customer' pretty_name='Groups' %}
+
+{% if is_admin %}
+  
+  {% if is_self %}
+    {% row_standard 'is_active' pretty_name='Account active' %}
+  {% else %}
+    {% row_standard 'is_active' pretty_name='Account active' button_type='toggle' %}
+  {% endif %}
+  
+  {% row_standard 'email_confirmed' %}
+
+  {% if is_self %}
+    {% row_standard 'is_admin'%}
+  {% else %}
+    {% row_standard 'is_admin' button_type='toggle' %}
+  {% endif %}
+  
+  {% row_standard 'is_distributor' button_type='toggle' %}
+  
+{% endif %} 
+
+</div>
+{% if is_self %}
+<div class="float-right">
+    <a href="{% url 'logout' %}" type="button" class="btn btn-default pull-right lone-button">Log out</a>
+</div>
+{% else %}
+{% if is_admin %}
+    {% delete_button 'user' %}
+{% endif %}
+{% endif %}
+
+{% if is_admin %}
+    {% modal_delete_dialog 'user' %}
+{% endif %}
+
+
+<script>
+// Connect the edit buttons
+var BUTTON_LIST = ['email',
+               'password',
+               'first_name',
+               'last_name',
+               'time_zone',
+               'display_units',
+                ];
+                    
+// Populate the page with the AJAX data
+function pageSpecificPopulate(data) {
+  var simple_fields = ['email',
+			           'first_name',
+			           'last_name',
+                       'time_zone',
+                       'display_units',
+                       ];
+                       
+{% if is_admin %}
+  simple_fields.push('email_confirmed');
+{% endif %}
+                       
+  var fields_to_pulse = ['email',
+                         'first_name',
+                         'last_name',
+                         'time_zone',
+                         'display_units',
+                         'show_disconnected_pumps',
+                         'enable_notifications',
+                         'enable_alarm_alerts',
+                         'customer',
+                         ];
+{% if is_admin %}
+  fields_to_pulse.push('is_admin');
+  fields_to_pulse.push('is_distributor');
+  fields_to_pulse.push('is_active');
+  fields_to_pulse.push('email_confirmed');
+{% endif %}
+  
+  // Update the fields that need no special formatting or handling
+  // Use jQuery's each instead of forEach because IE8 doesn't support forEach
+  jQuery.each(simple_fields, function(index, element){
+    var field_name = element + '_value';
+    if (data[element].length <= 0 || parseFloat(data[element]) < 0) {
+      $('#' + field_name).html('&lt;Not set>');
+    }
+    else {
+      $('#' + field_name).html(data[element]);
+    }
+  });
+
+  $('#username_header').html(data['username']);
+
+  var first_element = true;
+  var customer_string = '';
+  jQuery.each(data.user_customers, function(index, element) {
+    if (!first_element) {
+      customer_string += ', ';
+    }
+    customer_string += '<a href="{% url 'customer_settings_default' %}' + element.unique_id + '/">' + element.name + '</a>';  
+    first_element = false;
+  });
+  $('#customer_value').html(customer_string);
+  
+  // Special handling of blanks
+  if (data['email'].length == 0) {  
+    $('#email_value').html('&lt;Not set>');
+  }
+
+  changeIfNotFocused('time_zone_combo', data['time_zone']);
+  changeIfNotFocused('display_units_combo', data['display_units_id']);
+  changeIfNotFocused('email_edit', data.email);
+  changeIfNotFocused('first_name_edit', data.first_name);
+  changeIfNotFocused('last_name_edit', data.last_name);
+
+  toggleUpdate(data, 'show_disconnected_pumps', ['No', 'Yes']);
+  toggleUpdate(data, 'enable_notifications', ['No', 'Yes']);
+  toggleUpdate(data, 'enable_alarm_alerts', ['No', 'Yes']);
+  
+{% if is_admin %}
+  toggleUpdate(data, 'is_admin', ['No', 'Yes']);
+  toggleUpdate(data, 'is_distributor', ['No', 'Yes']);  
+  toggleUpdate(data, 'is_active', ['No', 'Yes']);
+{% endif %}
+  
+  tigerStripe();
+  
+  // Make text pulse when the value changes
+  if (PREVIOUS_JSON) {
+    jQuery.each(fields_to_pulse, function(index, element) {
+      pulseIf(element, PREVIOUS_JSON['data'], data);
+    });
+  }
+}
+
+
+{% if is_admin %}
+function successfulDelete(data) {
+  // Redirect in such a manner that reposting is not going to be an issue
+  var url = "{% url 'user_list' %}";
+  location.replace(url);
+}
+{% endif %}
+
+
+// Some setup needs to wait until support JS has loaded
+function pageSetup() {
+  // URL for getting and posting pump data
+  AJAX_URL = '{% url 'users_spec_api_1_0' user_id %}';
+  
+  // Enable automatic updates of the page
+  POLL_PERIOD_SHORT_SEC = 1;
+  POLL_PERIOD_LONG_SEC = 60;
+  POLL_COUNT_FOR_LONG = 2;
+  poll(); 
+}
+
+</script>
+
+
+{% endblock %}

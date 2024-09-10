@@ -1,0 +1,351 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block head_data %}
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+{% endblock %}
+
+{% block title %}
+History | Pumps
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title"><a href="{% url 'pump_list' %}">Pumps</a> <small>&raquo; <span id="heading_subtext"><a href="{% url 'pump_details' pump_obj.unique_id %}">{% if pump_obj.pretty_name %}{{pump_obj.pretty_name}}{% else %}{{ pump_obj.unique_id }}{%endif%}</a> &raquo; History</span></small></h3>
+      
+<div id="details-container">
+  <form class="form-horizontal" role="form">
+    <div class="form-group" style="margin-right:0;">
+      <label for="chart_y" class="col-sm-2 control-label">Chart data</label>
+      <div class="col-sm-4">
+        <select class="form-control dropdown-text" id="chart_type">
+          {% if pump_obj.multiwell_enable > 0 %}
+          	<option value="totalizer_grand" selected="selected">Wellsite total per day</option>
+			
+  		    {% if point_names.custom_injection_point_names.point_0_custom %}
+			  <option value="totalizer_grand_well_1">1. {{ point_names.custom_injection_point_names.point_0_custom }} total per day</option>
+		    {% else %}
+			  <option value="totalizer_grand_well_1">1. Well total per day</option>
+		    {% endif %}
+			
+			{% if point_names.custom_injection_point_names.point_1_custom %}
+			  <option value="totalizer_grand_well_2">2. {{ point_names.custom_injection_point_names.point_1_custom }} total per day</option>
+			{% else %}
+              <option value="totalizer_grand_well_2">2. Well total per day</option>
+			{% endif %}
+			
+			{% if point_names.custom_injection_point_names.point_2_custom %}
+			  <option value="totalizer_grand_well_3">3. {{ point_names.custom_injection_point_names.point_2_custom }} total per day</option>
+			{% else %}
+              <option value="totalizer_grand_well_3">3. Well total per day</option>
+            {% endif %}
+			
+			{% if point_names.custom_injection_point_names.point_3_custom %}
+			  <option value="totalizer_grand_well_4">4. {{ point_names.custom_injection_point_names.point_3_custom }} total per day</option>
+			{% else %}			
+              <option value="totalizer_grand_well_4">4. Well total per day</option>
+			{% endif %}
+			
+			{% if point_names.custom_injection_point_names.point_4_custom %}
+			  <option value="totalizer_grand_well_5">5. {{ point_names.custom_injection_point_names.point_4_custom }} total per day</option>
+			{% else %}			
+              <option value="totalizer_grand_well_5">5. Well total per day</option>
+			{% endif %}
+			
+			{% if point_names.custom_injection_point_names.point_5_custom %}
+			  <option value="totalizer_grand_well_6">6. {{ point_names.custom_injection_point_names.point_5_custom }} total per day</option>
+			{% else %}			
+              <option value="totalizer_grand_well_6">6. Well total per day</option>
+			{% endif %}
+			
+			{% if point_names.custom_injection_point_names.point_6_custom %}
+			  <option value="totalizer_grand_well_7">7. {{ point_names.custom_injection_point_names.point_6_custom }} total per day</option>
+			{% else %}			
+              <option value="totalizer_grand_well_7">7. Well total per day</option>
+			{% endif %}
+			
+			{% if point_names.custom_injection_point_names.point_7_custom %}
+			   <option value="totalizer_grand_well_8">8. {{ point_names.custom_injection_point_names.point_7_custom }} total per day</option>
+			{% else %}
+              <option value="totalizer_grand_well_8">8. Well total per day</option>
+			{% endif %}
+			
+          {% else %}
+            <option value="totalizer_grand" selected="selected">Total pumped per day</option>
+          {% endif %}
+          <option value="battery_voltage">Battery voltage</option>
+          <option value="pressure_level">Fluid pressure</option>
+          <option value="monthly_report">Monthly report</option>
+          {% if pump_obj.tank_type > 0 or pump_obj.sensor_type > 1 %} 
+            <option value="tank_level">Tank level</option>
+          {% endif %}
+          {% if pump_obj.temperature_control > 1 %}
+          	<option value="temperature">Temperature</option>
+          {% endif %}
+        </select>
+      </div>
+      <div class="col-sm-6 hidden-xs"></div>
+    </div>
+    <div class="form-group" style="margin-right:0;" id="days_container">
+      <label for="chart_period" class="col-sm-2 control-label">Days to show</label>
+      <div class="col-sm-4">
+        <select class="form-control dropdown-text" id="chart_days">
+          <option value="1">1</option>
+          <option value="7">7</option>
+          <option value="14">14</option>
+          <option value="30" selected="selected">30</option>
+          <option value="90">90</option>
+        </select>
+      </div>
+      <div class="col-sm-6 hidden-xs"></div>
+    </div>
+  </form>
+  <div id="history_chart" style="width:100%;"></div>
+</div>
+
+<div id="loading_mask">
+<p>Loading chart data...</p>
+</div>
+
+<div id="no_data_mask" class="initially-hidden">
+<p>No data for selected period.</p>
+</div>
+
+<script>
+
+var PERCENT_UNITS = 2
+var units_decode = {{ units_decode|safe }}; 
+var tank_units = units_decode.tank[UNITS];
+
+// Google charts for historical data
+google.charts.load('current', {packages:["corechart"]});
+
+function drawChart(history_data, history_type) {
+  
+  var volume_units = units_decode.volume[UNITS];
+  var pressure_units = units_decode.pressure[UNITS];
+  var temperature_units = units_decode.temperature[UNITS];
+
+  var CHART_TYPES = {
+    totalizer_grand: 	   {   units: volume_units, 
+                        	   title: 'Total pumped per day (' + volume_units + ')', 
+                        	   number_format: '0.0', 
+                        	   cadence: 'discrete', 
+                        	   chart_type: 'line'},
+    battery_voltage: 	   {   units: 'Volts', 
+                        	   title: 'Battery (Volts)', 
+                        	   number_format: '0.0', 
+                        	   cadence: 'continuous', 
+                        	   chart_type: 'line'},
+    pressure_level: 	   {   units: pressure_units, 
+                        	   title: 'Fluid pressure (' + pressure_units + ')', 
+                        	   number_format: '0.0', 
+                        	   cadence: 'continuous', 
+                        	   chart_type: 'line'},
+    monthly_report: 	   {   units: volume_units, 
+                        	   title: 'Total pumped per month (' + volume_units + ')', 
+                        	   number_format: '0.0', 
+                        	   cadence: 'discrete', 
+                        	   chart_type: 'bar'},
+    tank_level:			   {   units: tank_units, 
+                        	   title: 'Tank Level (' + tank_units + ')', 
+                        	   number_format: '0.0', 
+                        	   cadence: 'continuous', 
+                        	   chart_type: 'line'},
+    temperature:		   {   units: temperature_units, 
+                        	   title: 'Temperature (' + temperature_units + ')', 
+                        	   number_format: '0', 
+                        	   cadence: 'continuous',
+                        	   chart_type: 'line'},
+    totalizer_grand_well_1:{   units: volume_units, 
+                        	   title: 'Total pumped per day (' + volume_units + ')', 
+                        	   number_format: '0.0', 
+                        	   cadence: 'discrete', 
+                        	   chart_type: 'line'},
+    totalizer_grand_well_2:{   units: volume_units, 
+                        	   title: 'Total pumped per day (' + volume_units + ')', 
+                        	   number_format: '0.0', 
+                        	   cadence: 'discrete', 
+                        	   chart_type: 'line'},
+    totalizer_grand_well_3:{   units: volume_units, 
+                        	   title: 'Total pumped per day (' + volume_units + ')', 
+                        	   number_format: '0.0', 
+                        	   cadence: 'discrete', 
+                        	   chart_type: 'line'},
+    totalizer_grand_well_4:{   units: volume_units, 
+                        	   title: 'Total pumped per day (' + volume_units + ')', 
+                        	   number_format: '0.0', 
+                        	   cadence: 'discrete', 
+                        	   chart_type: 'line'},
+    totalizer_grand_well_5:{   units: volume_units, 
+                        	   title: 'Total pumped per day (' + volume_units + ')', 
+                        	   number_format: '0.0', 
+                        	   cadence: 'discrete', 
+                        	   chart_type: 'line'},
+    totalizer_grand_well_6:{   units: volume_units, 
+                        	   title: 'Total pumped per day (' + volume_units + ')', 
+                        	   number_format: '0.0', 
+                        	   cadence: 'discrete', 
+                        	   chart_type: 'line'},
+    totalizer_grand_well_7:{   units: volume_units, 
+                        	   title: 'Total pumped per day (' + volume_units + ')', 
+                        	   number_format: '0.0', 
+                        	   cadence: 'discrete', 
+                        	   chart_type: 'line'},
+    totalizer_grand_well_8:{   units: volume_units, 
+                        	   title: 'Total pumped per day (' + volume_units + ')', 
+                        	   number_format: '0.0', 
+                        	   cadence: 'discrete', 
+                        	   chart_type: 'line'},
+  };
+
+  var chart_key = CHART_TYPES[history_type];
+  
+  if (chart_key.cadence == 'continuous') {
+    var history_processed = []
+    jQuery.each(history_data, function(index, element){
+      history_processed.push([new Date(element[0]), element[1]]);
+    });
+  }
+  else {
+    var history_processed = history_data;
+  }
+    
+  if (chart_key.chart_type == 'line') {
+    var data = google.visualization.arrayToDataTable(
+	  [['Date', chart_key.units]].concat(history_processed)
+	);
+    var chart = new google.visualization.LineChart(document.getElementById('history_chart'));
+  }
+  else {
+    var data = google.visualization.arrayToDataTable(
+      [['Month', chart_key.units]].concat(history_processed)
+    );
+    var chart = new google.visualization.ColumnChart(document.getElementById('history_chart'));
+  }
+  
+  // Make floating-point values not ugly
+  var format_floats = new google.visualization.NumberFormat({pattern: chart_key.number_format});
+  format_floats.format(data, 1);
+  
+  var options = {
+    title: chart_key.title,
+    fontName: 'Helvetica',
+    chartArea: {width: '100%', height: '80%'},
+    legend: {position: 'none'},
+    titlePosition: 'in', axisTitlesPosition: 'in',
+    hAxis: {textPosition: 'out', gridlines: {count: -1}, format: 'M/d', slantedText: false, maxTextLine: 1, textStyle: {fontSize: 10}}, 
+    vAxis: {textPosition: 'in', textStyle: {fontSize: 10}, viewWindow: { min:0 }},
+    backgroundColor: { stroke: '#DDD', strokeWidth: 2, fill: '#FFF' }
+  };
+
+  var options_temperature = {
+    title: chart_key.title,
+    fontName: 'Helvetica',
+    chartArea: {width: '100%', height: '80%'},
+    legend: {position: 'none'},
+    titlePosition: 'in', axisTitlesPosition: 'in',
+    hAxis: {textPosition: 'out', gridlines: {count: -1}, format: 'M/d', slantedText: false, maxTextLine: 1, textStyle: {fontSize: 10}}, 
+    vAxis: {textPosition: 'in', textStyle: {fontSize: 10}, minValue: 0},
+    backgroundColor: { stroke: '#DDD', strokeWidth: 2, fill: '#FFF' }
+  };
+  
+  if (history_type == 'temperature') {
+  	chart.draw(data, options_temperature);
+  }
+  else {
+  	chart.draw(data, options);
+  }
+  
+};
+
+function pageSetup() {
+  // Detect chart settings selection changes
+  $('#chart_days').change(reloadChart);
+  $('#chart_type').change(reloadChart);
+}
+
+function reloadChart() {
+  
+  // Monthy reports don't have day durations
+  if ($('#chart_type').val() == 'monthly_report') {
+    $('#days_container').hide();
+  }
+  else {
+    $('#days_container').show();
+  }
+  
+  $('#no_data_mask').hide();
+  $('#history_chart').hide();
+  $('.details-container').hide();  
+  $('#loading_mask').show();
+  refreshChart();
+}
+
+// Populate the page with the AJAX data
+function pageSpecificPopulate(data) {
+  var history_type = $("#chart_type").val();
+  var error = false;
+  
+  hideNotice();
+
+  if (data.prefs) {
+    UNITS = data.prefs.display_units;
+  }
+  else
+  {
+    error = true;
+  }
+  
+  if (data['pump_obj']['tank_type'] > 0 || data['pump_obj']['sensor_type'] > 2) {
+    tank_units = units_decode.tank[UNITS];
+  } else if (data['pump_obj']['sensor_type'] == 2) {
+    tank_units = units_decode.tank[PERCENT_UNITS];
+  } else {
+    tank_units = units_decode.tank[UNITS];
+  }
+
+  if (data.history.length > 0) {
+    $('#no_data_mask').hide();
+    $('#history_chart').show();
+    drawChart(data['history'], history_type);
+  }
+  else
+  {
+    error = true;
+  }
+  
+  if (error) {
+    $('#no_data_mask').show();
+    $('#history_chart').hide();
+  }
+}
+
+function refreshChart(){
+  var days_to_load = $("#chart_days").val();
+  var history_type = $("#chart_type").val();
+  
+  // Updated here because the URL varies depending on the configuration options currently selected
+  AJAX_URL = '{% url 'pumps_history_api_1_0' pump_id %}?chart_type=' + history_type + '&chart_days=' + days_to_load;
+  
+  $.ajax({ url: AJAX_URL, 
+    success: function(data) {
+      populateData(data);
+    }, 
+    dataType: "json", 
+    error: function(data) {
+      showNotice('Error loading data');
+    },
+  });
+};
+
+// Load data on initial load, but only after the charts library is loaded
+google.charts.setOnLoadCallback(refreshChart);
+
+// The chart needs to be redrawn if the screen size changes
+$(window).resize(function() {
+    populateData();
+  }
+);
+
+</script>
+{% endblock %}

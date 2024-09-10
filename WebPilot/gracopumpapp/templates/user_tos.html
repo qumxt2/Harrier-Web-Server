@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load pump_layout_extras %}
+
+{% block head_data %}
+{% endblock %}
+
+{% block title %}
+Terms of Service
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title">Terms of service<small><span id="heading_subtext"></span></small></h3>
+
+<div class="details-container">
+
+{% if already_agreed %}
+<p>You have already agreed to the Terms of Service shown below.</p>
+{% else %}
+<p>You must read and agree to the updated Terms of Service shown below to continue using this site.</p>
+{% endif %}
+
+<textarea name="tos" class="tos-content" rows="14" readonly>{{ tos.content }}
+</textarea>
+</div>
+
+{% if not already_agreed %}
+<div class="float-left">
+    <a href="{% url 'logout' %}" type="button" class="btn btn-default pull-right lone-button">I don't agree</a>
+</div>
+<div class="float-right">
+    <button type="button" class="btn btn-primary pull-right lone-button" id="agree-submit">I agree</button>
+</div>
+{% endif %}
+
+<script>
+
+function submitAgree(obj) {
+  // Submit the user's agreement to the TOS
+  submitSimple(obj, 'tos_agreed', '{{ tos.id }}');
+}
+
+function simpleSubmitSuccess(data) {
+  // Redirect in such a manner that reposting is not going to be an issue
+  var url = "{% url 'index' %}";
+  location.replace(url);
+}
+
+// Some setup needs to wait until support JS has loaded
+function pageSetup() {
+  // URL for getting and posting pump data
+  AJAX_URL = '{% url 'users_spec_api_1_0' user_id %}';
+  
+  $('.details-container').show();
+    
+  $('#agree-submit').attr('onClick', 'submitAgree(this); return false;');  
+}
+
+</script>
+
+
+{% endblock %}

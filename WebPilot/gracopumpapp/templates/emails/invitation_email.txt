@@ -1,0 +1,25 @@
+{% autoescape off %}
+Hi,
+
+You have been invited to join a Graco pump control group by {{ invite_from }}. The group name is "{{ customer_name }}." This will allow you to remotely observe and control all pumps associated with that group.
+{% if has_account %}
+To accept this invitation, go to the following link:
+
+{{ invitation_url }}
+{% else %}
+To join the group, you must have an account set up. To set up your account, go to the following link:
+
+{{ invitation_url }}
+
+If you already have an account set up under a different email address, you will be given the option to join this group using your existing account when you visit the above page. 
+{% endif %}
+
+If this was unexpected, you can ask {{ invite_from }} for more information.
+
+Thanks!
+
+Graco
+
+(This is an automated email. For support, please email oilandgas@graco.com )
+
+{% endautoescape %}

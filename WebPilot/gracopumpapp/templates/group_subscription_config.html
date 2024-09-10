@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load pump_layout_extras %}
+
+{% block head_data %}
+{% endblock %}
+
+{% block tail_data %}
+<script src="https://js.recurly.com/v3/recurly.js"></script>
+{% endblock %}
+
+{% block title %}
+Config | Subscription | Group
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title"><a href="{% url 'customer_list' %}">Groups</a> <small>
+&raquo; <a href="{% url 'customer_settings_default' %}{{ customer.id }}/">{{ customer.organization_name }}</a> 
+&raquo; <a href="{% url 'customer_subscription' customer.id %}">Subscription</a> 
+&raquo; Config</small></h3>
+
+<div class="details-container">
+
+{% if valid_subscription %}
+  {% row_description 'Plans will automatically renew until canceled. You can change the payment information that will be used when your subscription renews.' %}
+{% endif %}
+
+{% row_standard 'plan' edit_type='dropdown' dropdown_options_name='plan_list' dropdown_selected=current_plan_code mode='create' %}
+
+{% row_divider %}
+
+{% row_standard 'payment_card' pretty_name='Select payment card' edit_type='dropdown' dropdown_options_name='payment_cards' mode='create' %}
+
+<div id="new_payment_card_block" class="initially-hidden">
+	{% row_standard 'first_name' edit_type='text' mode='create' %}
+	
+	{% row_standard 'last_name' edit_type='text' mode='create' %}
+	
+	{% row_standard 'company_name' edit_type='text' mode='create' %}
+	
+	{% row_standard 'address' edit_type='text' mode='create' %}
+	
+	{% row_standard 'city' edit_type='text' mode='create' %}
+	
+	{% row_standard 'state' edit_type='text' mode='create' %}
+	
+	{% row_standard 'postal_code' edit_type='text' mode='create' %}
+	
+	{% row_standard 'country' edit_type='dropdown' dropdown_options_name='country_list' mode='create' %}
+	
+	{% row_standard 'phone' edit_type='text' mode='create' %}
+	
+	{% row_divider %}
+	
+	{% row_standard 'card_number' edit_type='text' mode='create' size=19 %}
+	
+	{% row_standard 'cvv' pretty_name='CVV' edit_type='text' mode='create' size=4 extra_class='reset-input-width' %}
+	
+	{% row_standard 'expiration_date' edit_type='expiration_date' mode='create' %}
+	 
+</div>
+
+</div>
+
+<div class="float-right">
+  <button type="button" id="purchase_button" class="btn btn-primary pull-right lone-button create-submit">{{ purchase_button_text }}</button>
+</div>
+
+{% if valid_subscription %}
+	<div class="float-left">
+	    {% generic_button 'Cancel subscription' 'cancel_subscription' %}
+	</div>
+	
+	{% modal_generic_dialog 'cancel_subscription' 'Cancel subscription' 'Are you sure you want to cancel your subscription? You will no longer be able to remotely access or control your pumps and pump data if you cancel' 'Yes, cancel me' 'No, stay subscribed' 'submitCancelation();'  %}
+{% endif %}
+
+<script>
+
+function pageSpecificPopulate() {
+
+}
+
+// Attempt to do billing using the information in the form
+function tryBill(obj) {
+  saveLabel(obj);
+  $(obj).html('Wait...');
+
+  var payment_info = {
+    number: $('#card_number_edit').val(),
+    month: $('#expiration_date_month_combo').val(),
+    year: $('#expiration_date_year_combo').val(),
+    first_name: $('#first_name_edit').val(),
+    last_name: $('#last_name_edit').val(),
+    company_name: $('#company_name_edit').val(),
+    address1: $('#address_edit').val(),
+    city: $('#city_edit').val(),
+    state: $('#state_edit').val(),
+    postal_code: $('#postal_code_edit').val(),
+    country: $('#country_combo').val(),
+  };
+  
+  if ($('#payment_card_combo').val() != "{{ use_existing_card_magic }}") {
+    recurly.token(payment_info, tokenHandler);
+  }
+  else {
+    // Use existing card, so don't need new billing token
+    tokenHandler(false, {id: {{ use_existing_card_magic }} });
+  }
+}
+
+// Some setup needs to wait until support JS has loaded
+function pageSetup() {
+  {% if valid_subscription %}
+    AJAX_URL = '{% url 'payments_spec_api_1_0' subscription.recurly_uuid %}';
+  {% endif %}
+
+  recurly.configure('{{ recurly_api_public_key }}');
+  
+  // Hide the elements meant for updates pages
+  $('.read-container').hide();
+  $('.not-for-create').hide();
+  $('.ok-button').hide();
+  
+  $('.write-container').show();
+  
+  // Unlink the code meant for update pages instead of create pages
+  $('.ajax_submit').attr('onClick', 'return false;');
+  $('.ajax_submit').addClass("ajax_field");
+  $('.ajax_submit').removeClass("ajax_submit");
+  
+  $('.toggle-button').attr('onClick', 'toggleClick(this);return false;');
+  
+  $('.create-submit').attr('onClick', 'tryBill(this); return false;');  
+
+  // Clean up the rightmost column for the text rows
+  $('.edit_row_text_right').css('min-width', 'inherit');
+  $('.edit_row_text_write').css('padding-right', 0);
+  $('.edit_row_dropdown_right').css('min-width', 'inherit');
+  $('.edit_row_dropdown_write').css('padding-right', 0);
+  $('.edit_row_expiration_date_right').css('min-width', 'inherit');
+  $('.edit_row_expiration_date_write').css('padding-right', 0);
+  $('#plan_row_outer .row-right-content').css('min-width', 'inherit');
+  $('#plan_row_outer .row-right-content').css('padding-right', 0);
+  
+  // Hook up detection of payment card changes
+  $('#payment_card_combo').attr('onChange', 'return paymentChangeCallback(this);');
+
+  {% if payment_cards|length == 1 %}
+    // For new accounts without saved cards
+    $('#new_payment_card_block').show();
+  {% endif %}
+  
+  $('.details-container').show();  
+}
+
+function paymentChangeCallback(obj) {
+  if ($(obj).val() == {{ use_existing_card_magic }}) {
+    $('#new_payment_card_block').hide();
+  }
+  else {
+    $('#new_payment_card_block').show();
+  }
+  
+  return false;
+}
+
+// Recurly token callback
+function tokenHandler(err, token) {
+  if (err) {
+    // Pop message
+    var button = $('#purchase_button');
+    showNotice('Error: ' + err);
+    restoreLabel(button);
+    button.removeClass('disabled');
+    window.scrollTo(0,0);
+  }
+  else {
+    var url = '{% url 'payments_api_1_0' %}';
+    var submit_data = { 'token_id': token.id,
+                        'plan_code': $('#plan_combo').val(),
+                        'customer_id': {{ customer.id }},
+                        };
+    
+    submitObjAsCreate($('#purchase_button'), submit_data, url);
+  }
+}
+
+//For submissions of lists of things
+function submitObjAsCreate(obj, submit_data, url ) {
+	// Prevent double-clicks
+	if ($(obj).hasClass('disabled')) {
+	 return;
+	}
+	$(obj).addClass('disabled');
+	
+	NOTICE_WAITING_FOR_PUMP = true
+	showNotice('Sending...');
+	NOTICE_WAITING_FOR_PUMP = false  
+		
+	$.ajax({
+	 url: url,
+	 data: submit_data,
+	 timeout: CONNECTION_TIMEOUT,
+	 error: function(data) { 
+	     NOTICE_WAITING_FOR_PUMP = false;
+	     if (data.status == 500 || data.status == 403) {
+	       showNotice('Error: server error');
+	     } else if (data.responseJSON && 'message' in data.responseJSON) {
+	       showNotice(data.responseJSON['message']);
+	     } else {
+	       showNotice('Error: connection failed or unknown error.');
+	     }
+           restoreLabel(obj);
+    	   $(obj).removeClass('disabled'); 
+	   },
+	 success: function(data) { 
+	     showNotice(data['message']);
+	     if (typeof successfulPaymentCreate == 'function') {
+	       successfulPaymentCreate(data);
+	     }
+	   },
+	 type: 'PUT',
+	 });
+}
+
+
+// Send the cancelation request for the current account to the server
+function submitCancelation(obj) {
+  // Don't want anybody clicking while we're processing
+  $('#purchase_button').addClass('disabled');
+  $('#generic-button').addClass('disabled');
+  
+  return submitSimple(obj, 'subscription', 'cancel');
+}
+
+function simpleSubmitError(data, obj) {
+  $('#generic-button').removeClass('disabled');
+  $('#purchase_button').removeClass('disabled');
+}
+
+function simpleSubmitSuccess(data, obj) {
+  successfulPaymentCreate(data);
+}
+
+function successfulPaymentCreate(data) {
+  // Redirect in such a manner that reposting is not going to be an issue
+  var url = "{% url 'customer_subscription' customer.id %}";
+  location.replace(url);
+}
+
+</script>
+
+
+{% endblock %}

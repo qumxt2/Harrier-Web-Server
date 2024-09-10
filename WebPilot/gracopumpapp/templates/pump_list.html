@@ -1,0 +1,375 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load pump_layout_extras %}
+
+{% block head_data %}
+{% endblock %}
+
+{% block title %}
+{% if mode and mode == 'customer' %}
+Pumps | Group
+{% else %}
+Pumps
+{% endif %}
+{% endblock %}
+
+{% block content %}
+{% if mode and mode == 'customer' %}
+<h3 class="pump-title"><a href="{% url 'customer_list' %}">Groups</a> <small>&raquo; <span id="heading_subtext"><a href="{% url 'customer_settings' customer_id %}">{{ customer_name }}</a></span> &raquo; Pumps</small></h3>
+{% else %}
+<h3 class="pump-title">Pumps</h3>
+{% endif %}
+<div id="loading_mask">
+<p>Loading...</p>
+</div>
+<div class="details-container">
+  <table id="pump_list_table" class="table list-table pump-list-table">
+    <thead>
+      <tr>
+        <th ><span onclick="sortby('pump_name');" class="sortable-header">Name&nbsp;<i class="fa fa-sort"></i></span></th>
+        {% if not mode or mode != 'customer' %}
+          <th style="width:30%;"><span onclick="sortby('group_name');" class="sortable-header">Group&nbsp;<i class="fa fa-sort"></i></span></th>
+        {% endif %}
+        <th class="truncate align-center" style="width:20%;"><span onclick="sortby('status');" class="sortable-header">Status&nbsp;<i class="fa fa-sort"></i></span></th>
+        {% if not is_none_customer and mode and mode == 'customer' %}
+          {% if is_manager or is_admin %}
+            <th class="align-center" style="width:20%;">Remove</th>
+          {% endif %}
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+</div>
+<div class="float-left">
+	<form>
+	  <div id="pumps_hidden" style="display:none;">
+	    <p><small><span id="inactive_pump_count_value">0</span> disconnected pump<span class="pumps-plural"></span> hidden. <a href="#" id="show_hide" onclick="show_disc_pumps(true);return false;">Show <span class="pumps-pronoun"></span></a></small></p>
+	  </div>
+	  <div id="pumps_not_hidden" style="display:none;">
+	    <p><small><a href="#" onclick="show_disc_pumps(false);return false;">Hide disconnected pump<span class="pumps-plural"></span></a></small></p>
+	  </div>
+	  <input type="hidden" id="show_disconnected_pumps_peer" name="show_disconnected_pumps" />
+	  <input type="hidden" id="show_disconnected_pumps_edit" name="new_value" value="" />
+	</form>
+	{% if is_admin %}
+	  {% if not mode or mode != 'customer' %}
+    <form>
+      <div id="unassigned_pumps_hidden" style="display:none;">
+        <p><small><a href="#" id="show_hide_unassigned" onclick="show_unassigned_pumps_func(true);return false;">Show unassigned pumps</a></small></p>
+      </div>
+      <div id="unassigned_pumps_not_hidden" style="display:none;">
+        <p><small><a href="#" onclick="show_unassigned_pumps_func(false);return false;">Hide unassigned pumps</a></small></p>
+      </div>
+      <input type="hidden" id="show_unassigned_pumps_peer" name="show_unassigned_pumps" />
+      <input type="hidden" id="show_unassigned_pumps_edit" name="new_value" value="" />
+    </form>
+      {% endif %} 	
+	{% endif %}
+	<div id="pump_list_empty" style="display:none;">
+	  <p><small>No pumps available</small></p>
+	</div>
+</div>
+
+{% if mode and mode == 'customer' and not is_none_customer %}
+	{% if is_manager or is_admin %}
+	
+		<div class="float-right">
+		    <a href="{% url 'customer_pump_add' customer_id %}" type="button" class="btn btn-primary btn-a pull-right">Add pump to group</a>
+		</div>
+        
+        {% modal_remove_dialog 'pump' 'removePump(this)' %}
+        
+	{% endif %}
+{% endif %}
+
+
+<script>
+
+// Show or hide disconnected pumps
+function show_disc_pumps(show) {
+  var url = '{% url 'users_spec_api_1_0' user_id %}';
+
+  var new_val = (show) ? '1' : '0';
+  $('#show_disconnected_pumps_edit').val(new_val);
+  
+  submitChange($('#show_disconnected_pumps_peer'), url);
+}
+
+{% if is_admin %}
+function show_unassigned_pumps_func(show) {
+  var url = '{% url 'users_spec_api_1_0' user_id %}';
+
+  var new_val = (show) ? '1' : '0';
+  $('#show_unassigned_pumps_edit').val(new_val);
+  
+  submitChange($('#show_unassigned_pumps_peer'), url);
+}
+{% endif %}
+
+
+var ROW_TEMPLATE = '<tr id="row_%UNIQUE_ID%">' +
+'<td class="truncate align-middle">%PUMP_LINK%</td>' + 
+{% if not mode or mode != 'customer' %}
+'<td class="truncate align-middle">%CUSTOMER_LINK%</td>' +
+{% endif %}
+'<td class="truncate align-center align-middle">%STATUS%</td>' +
+{% if not is_none_customer and mode and mode == 'customer' %}
+  {% if is_manager or is_admin %}
+    '<td class="align-middle align-center">%REMOVE_BUTTON%</td>' +
+  {% endif %}
+{% endif %} 
+'</tr>';
+
+var PUMP_LINK_TEMPLATE = '<a href="{% url 'pump_details_default' %}%UNIQUE_ID%/">%PUMP_NAME%</a>';
+var CUSTOMER_LINK_TEMPLATE = '<a href="{% url 'customer_settings_default' %}%CUSTOMER_ID%/">%CUSTOMER_NAME%</a>';
+var BUTTON_REMOVE_TEMPLATE = '<button class="btn btn-default btn-sm pump-details-button ajax_submit pump_remove" key="%UNIQUE_ID%" id="btn_%UNIQUE_ID%_remove"><i class="fa fa-ban fa-lg"></i></button>';
+
+// Build a row for a pump
+function makeRow(data){
+  var row_html = ROW_TEMPLATE;
+  var name_print = (data.pretty_name.length == 0) ? data.unique_id : data.pretty_name;
+  
+  var pump_link_html = PUMP_LINK_TEMPLATE;
+  pump_link_html = pump_link_html.replace(/%UNIQUE_ID%/g, data.unique_id);
+  pump_link_html = pump_link_html.replace(/%PUMP_NAME%/, name_print);
+  
+  var status_print = ""
+  if {% if is_admin %}(1){% else %}(data.group_subscription_valid == 1){% endif %} 
+  {
+    if (!data.connection) {
+      status_print = '<span class="status-offline">Offline</span>';    
+    }
+    else {
+      status_print = (data.status == 1 || data.status == 4) ? '<span class="run-label">Run</span>' : '<span class="standby-label">Standby</span>';
+    }    
+  }
+  else {
+    status_print = '<span class="alert-label">????</span>';
+  }
+  
+  
+  row_html = row_html.replace(/%UNIQUE_ID%/g, data.unique_id);
+  row_html = row_html.replace(/%PUMP_LINK%/, pump_link_html);
+  row_html = row_html.replace(/%STATUS%/, status_print);
+  
+  {% if not mode or mode != 'customer' %}
+    var customer_link_html = CUSTOMER_LINK_TEMPLATE;
+    customer_link_html = customer_link_html.replace(/%CUSTOMER_ID%/g, data.customer);
+    customer_link_html = customer_link_html.replace(/%CUSTOMER_NAME%/g, data.customer_name);
+    row_html = row_html.replace(/%CUSTOMER_LINK%/, customer_link_html);
+  {% elif is_manager or is_admin %}
+    var button_remove_html = BUTTON_REMOVE_TEMPLATE;
+    button_remove_html = button_remove_html.replace(/%UNIQUE_ID%/g, data.unique_id);
+    row_html = row_html.replace(/%REMOVE_BUTTON%/, button_remove_html);
+  {% endif %}
+  
+  return row_html;
+}
+
+{% if mode and mode == 'customer' %}
+var LAST_SORT_COLUMN = 'pump_name';
+{% else %}
+var LAST_SORT_COLUMN = 'group_name';
+{% endif %}
+var SORT_FORWARD = true;
+var NEED_REFRESH = false;
+function sortby(column) {
+  SORT_BY = '?sort=' + column;
+  
+  if (column == LAST_SORT_COLUMN) {
+    SORT_FORWARD = !SORT_FORWARD;
+  }
+  
+  if (!SORT_FORWARD)
+  {
+    SORT_BY += '&direction=reverse';
+  }
+  LAST_SORT_COLUMN = column;
+  NEED_REFRESH = true;
+  
+  // Force immediate refresh
+  POLL_PERIOD_MS = 1;
+  poll();
+}
+
+
+// Loop through the new json and regenerate the table
+var LAST_SHOW_INACTIVE_PUMPS = -1;
+var LAST_SHOW_UNASSIGNED_PUMPS = -1;
+function pageSpecificPopulate(data){
+  var inactive_pump_count = 0;
+  var show_inactive = data.prefs.show_inactive_pumps;
+  var show_unassigned = data.prefs.show_unassigned_pumps;
+  var found_rows = [];
+
+  if (show_inactive !== LAST_SHOW_INACTIVE_PUMPS || 
+      show_unassigned !== LAST_SHOW_UNASSIGNED ||
+      NEED_REFRESH) {
+    $('#pump_list_table > tbody').html('');
+  }
+
+  NEED_REFRESH = false;
+
+  jQuery.each(data['pumps'], function(index, element){
+    var unique_id = element['unique_id'];
+    var new_row_html = makeRow(element);
+    var row_name = 'row_' + unique_id;
+    var row_id = '#' + row_name;
+    
+    // Replace the row if it already exists
+    if (element['connection'] || show_inactive) {
+      if ($(row_id).length) {
+        $(row_id).replaceWith(new_row_html);
+      } else {
+        $('#pump_list_table > tbody:last').append(new_row_html);
+      }
+      found_rows.push(row_name);
+    } else {    
+      $(row_id).replaceWith('');
+    }
+    
+    if (!element['connection']) {
+      inactive_pump_count++;
+    }
+    
+    // Hook up the remove button
+{% if mode and mode == 'customer' %}
+  {% if is_manager or is_admin %}
+    var button_name = '#btn_' + unique_id + '_remove';
+    $(button_name).attr('onClick', 'confirmRemove(this); return false;');      
+  {% endif %}
+{% endif %}
+            
+  });
+  
+  // Delete all rows that don't appear in the data
+  $('#pump_list_table > tbody').find('tr').each(function(i, el){
+    var id = $(el).attr('id');
+    // IE8 doesn't support indexOf()
+    if (jQuery.inArray(id, found_rows) < 0) {
+      // Data for row no longer exists
+      $(el).remove();
+    }
+  });
+  
+  if (data.pumps.length > 0) {
+    $('#pump_list_empty').hide();
+{% if is_admin %}
+    if (!show_unassigned) {
+      $('#unassigned_pumps_hidden').show();
+      $('#unassigned_pumps_not_hidden').hide();
+    }
+    else {
+      $('#unassigned_pumps_hidden').hide();
+      $('#unassigned_pumps_not_hidden').show();
+    }  
+{% endif %}
+  }
+  else {
+    $('#pump_list_empty').show();
+  }
+  
+  if (inactive_pump_count > 0) {
+    if (!show_inactive) {
+      $('#inactive_pump_count_value').html(inactive_pump_count);
+      $('#pumps_hidden').show();
+      $('#pumps_not_hidden').hide();
+    } else {
+      $('#pumps_hidden').hide();
+      $('#pumps_not_hidden').show();
+    }
+    if (inactive_pump_count == 1) {
+      $('.pumps-plural').html('');
+      $('.pumps-pronoun').html('it');
+    }
+    else {
+      $('.pumps-plural').html('s');
+      $('.pumps-pronoun').html('them');
+    }
+  }
+  else {
+    $('#pumps_hidden').hide();
+    $('#pumps_not_hidden').hide();
+  }
+  
+  LAST_SHOW_INACTIVE_PUMPS = show_inactive;
+  LAST_SHOW_UNASSIGNED = show_unassigned;
+}
+
+{% if mode and mode == 'customer' %}
+  {% if is_manager or is_admin %}
+// Confirm the removal
+function confirmRemove(obj) {
+  $('#modal_remove_button').data('pump_id', $(obj).attr("key"));
+  $('#removeModal').modal();
+}
+
+function removePump(obj) {
+  // Prevent double-clicks
+  if ($(obj).hasClass('disabled')) {
+    return;
+  }
+  $(obj).addClass('disabled');
+  
+  NOTICE_WAITING_FOR_PUMP = true
+  showNotice('Removing...');
+  NOTICE_WAITING_FOR_PUMP = false
+  
+  var obj_to_remove = $(obj).data('pump_id');
+  var submit_data = {attr_name: 'customer', 
+                     new_value: '{{ none_customer_id }}',
+                     units: UNITS};
+    
+  $.ajax({
+    url: '{% url 'pumps_api_1_0' %}' + obj_to_remove + '/',
+    data: submit_data,
+    timeout: CONNECTION_TIMEOUT,
+    error: function(data) { 
+        NOTICE_WAITING_FOR_PUMP = false;
+        if (data.status == 500) {
+          showNotice('Error: server error');
+        } else if (data.responseJSON['message']) {
+          showNotice(data.responseJSON['message']);
+        } else {
+          showNotice('Error: removal failed');
+        }
+        $(obj).removeClass('disabled'); 
+      },
+    success: function(data) { 
+        showNotice(data.message);
+        $(obj).removeClass('disabled'); // to allow next removal
+        if (typeof successfulRemove == 'function') {
+          successfulRemove(data);
+        }
+      },
+    type: 'POST',
+    });
+}
+
+function successfulRemove(data) {
+  REFRESH_COUNTER = 0;
+  POLL_PERIOD_MS = 1;
+  poll();
+}
+
+  {% endif %}
+{% endif %}
+
+function pageSetup() {
+{% if mode and mode == 'customer' %}
+  AJAX_URL = '{% url 'pumps_customer_api_1_0' customer_id %}';
+{% else %}
+  AJAX_URL = '{% url 'pumps_api_1_0' %}';
+{% endif %}
+
+  // Always slow polling on this page
+  POLL_COUNT_FOR_LONG = 0;
+  POLL_PERIOD_LONG_SEC = 15;
+  
+  poll();
+}
+
+</script>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block head_data %}
+{% endblock %}
+
+{% block title %}
+Groups
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title">Groups</h3>
+<div id="loading_mask">
+<p>Loading...</p>
+</div>
+<div class="details-container">
+  <table id="customer_list_table" class="table list-table pump-list-table">
+    <thead>
+      <tr>
+        <th >Name</th>
+        <th class="align-center" style="width:20%;">Pump count</th>
+        <th class="align-center" style="width:20%;">User count</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+</div>
+
+{% if is_admin or is_distributor %}
+  <div class="float-right">
+    <a href="{% url 'customer_create' %}" type="button" class="btn btn-default pull-right">Create group</a>
+  </div>
+{% endif %}
+
+<script>
+
+// Build a row for a customer
+function makeRow(unique_id, name, pump_count, user_count) {
+  var row_template = '<tr id="row_%UNIQUE_ID%">' +
+  '<td class="truncate"><a href="{% url 'customer_settings_default' %}%UNIQUE_ID%/">%NAME%</a></td>' +
+  '<td class="truncate align-center">%PUMP_COUNT%</td>' +
+  '<td class="truncate align-center">%USER_COUNT%</td>' +
+  '</tr>';
+  var row_html = row_template;
+  
+  row_html = row_html.replace(/%UNIQUE_ID%/g, unique_id);
+  row_html = row_html.replace(/%NAME%/, name);
+  row_html = row_html.replace(/%PUMP_COUNT%/, pump_count);
+  row_html = row_html.replace(/%USER_COUNT%/, user_count);
+  
+  return row_html;
+}
+
+// Loop through the new json and regenerate the table
+function pageSpecificPopulate(data){
+  var customers = data.customers;
+  var num_customers = customers.length;
+  var unique_id, name, pump_count, user_count, new_row_html, row_id;
+  
+  for (var i = 0; i < num_customers; i++) { 
+    unique_id = customers[i].unique_id;
+    name = customers[i].name;
+    pump_count = customers[i].pump_count;
+    user_count = customers[i].user_count;
+    
+    new_row_html = makeRow(unique_id, name, pump_count, user_count);
+    
+    // Replace the row if it already exists
+    row_id = '#row_' + unique_id;
+    if ($(row_id).length) {
+      $(row_id).replaceWith(new_row_html);
+    } else {
+      $('#customer_list_table > tbody:last').append(new_row_html);
+    }
+  }
+}
+
+// Some setup needs to wait until support JS has loaded
+function pageSetup() {
+  // URL for getting and posting pump data
+  AJAX_URL = '{% url 'customers_api_1_0' %}';
+  
+  // Enable automatic updates of the page, but very slowly
+  POLL_PERIOD_SHORT_SEC = 1;
+  POLL_PERIOD_LONG_SEC = 600;
+  POLL_COUNT_FOR_LONG = 0;
+  poll(); 
+}
+
+</script>
+{% endblock %}

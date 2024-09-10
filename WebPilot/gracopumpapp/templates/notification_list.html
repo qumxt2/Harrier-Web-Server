@@ -1,0 +1,216 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load pump_layout_extras %}
+
+{% block head_data %}
+{% endblock %}
+
+{% block title %}
+Maintenance Reminders
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title">
+{% if pump_id %}
+<a href="{% url 'pump_list' %}">Pumps</a> <small>&raquo; <a href="{% url 'pump_details' pump_id %}">{{ page_subject }}</a> &raquo; <span id="heading_subtext">Maintenance Reminders</span></small>
+{% elif user_id %}
+<h3 class="pump-title">{% if is_admin %}<a href="{% url 'user_list' %}">{% endif %}Users{% if is_admin %}</a>{%endif%} <small>&raquo; <a href="{% url 'user_settings' user_id %}">{{ page_subject }}</a> &raquo; <span id="heading_subtext">Maintenance Reminders</span></small></h3>
+{% else %}
+Maintenance reminders {% if page_type and page_subject %}<small>&raquo; <span id="heading_subtext"></span></small>{% endif %}
+{% endif %}
+</h3>
+<div id="loading_mask">
+<p>Loading...</p>
+</div>
+<div class="details-container">
+  <div id="table-container">
+    <div class="visible-xs">
+      <p class="text-center"><strong><em>Scroll left or right in the table to see full rows</em></strong>
+      </p>
+    </div>
+    <div class="table-responsive">
+      <table id="notifications_list_table" class="table list-table notification-list-table">
+        <thead>
+          <tr>
+  {% if not pump_id %}
+            <th>Pump</th>
+  {% endif %}
+  {% if is_admin and not user_id %}
+            <th>User</th>
+  {% endif %}
+            <th style="width:30%;">Subject</th>
+            <th>Period</th>
+            <th>Next due</th>
+            <th >Delete</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div id="no_data_message">
+    <p>No reminders matching criteria.</p>
+  </div>
+</div>
+{% if pump_id %}
+  <a href="{% url 'notification_create' pump_id %}" type="button" class="btn btn-primary pull-right link-white">Add Maintenance Reminder</a>
+{% endif %}
+
+{% modal_delete_dialog 'reminder' 'deleteNotification(this)' %}
+
+<script>
+
+// Build a row for a notification
+function makeRow(notification) {
+  var row_template = '<tr id="row_%UNIQUE_ID%">' +
+
+{% if not pump_id %}
+  '<td class="truncate align-middle"><a href="{% url 'pump_details_default' %}%PUMP_ID%/">%PUMP_NAME%</a></td>' +
+{% endif %}
+{% if is_admin and not user_id %}
+  '<td class="truncate align-middle"><a href="{% url 'user_settings_default' %}%USER_ID%/">%USER_NAME%</a></td>' + 
+{% endif %}
+  '<td class="align-middle"><div class="list-table-cell-container"><div class="list-table-cell-content">%SUBJECT%</div><div class="list-table-cell-spacer">%SUBJECT%</div><span>&nbsp;</span></div></td>' +
+  '<td class="truncate align-middle">%PERIOD% %TIME_UNITS%</td>' + 
+  '<td class="truncate align-middle">%NEXT_DUE%</td>' +
+  '<td class="align-middle"><button class="btn btn-default btn-sm pump-details-button ajax_submit notification_delete" key="%UNIQUE_ID%" id="btn_%UNIQUE_ID%_delete"><i class="fa fa-trash-o fa-lg"></i></button></td>' +
+  '</tr>';
+  
+  var time_units = (notification.period == 1) ? 'month' : 'months';
+  
+  var row_html = row_template;
+  
+  row_html = row_html.replace(/%UNIQUE_ID%/g, notification.id);
+  row_html = row_html.replace(/%PUMP_NAME%/, notification.pump_name);
+  row_html = row_html.replace(/%PUMP_ID%/, notification.pump_id);
+  row_html = row_html.replace(/%USER_NAME%/, notification.user_name);
+  row_html = row_html.replace(/%USER_ID%/, notification.user_id);
+  row_html = row_html.replace(/%PERIOD%/, notification.period);
+  row_html = row_html.replace(/%SUBJECT%/g, notification.subject_text);
+  row_html = row_html.replace(/%NEXT_DUE%/, notification.time_next_due_fmt);
+
+  row_html = row_html.replace(/%TIME_UNITS%/, time_units);
+  
+  return row_html;
+}
+
+// Loop through the new json and regenerate the table
+function pageSpecificPopulate(data){
+  var notifications = data.notifications;
+  var num_notif = notifications.length;
+  var notification_id;
+  
+  if (num_notif == 0) {
+    $('#table-container').hide();
+    $('#no_data_message').show();
+  }
+  else {
+    $('#table-container').show();
+    $('#no_data_message').hide();
+  
+    var found_rows = [];
+  
+    for (var i = 0; i < num_notif; i++) { 
+      notification_id = notifications[i].id;
+      
+      new_row_html = makeRow(notifications[i])
+      
+      // Replace the row if it already exists
+      var row_name = 'row_' + notification_id;
+      found_rows.push(row_name);
+      
+      row_id = '#' + row_name;
+      if ($(row_id).length) {
+        $(row_id).replaceWith(new_row_html);
+      } else {
+        $('#notifications_list_table > tbody:last').append(new_row_html);
+      }
+      
+      // Hook up the delete button
+      var button_name = '#btn_' + notification_id + '_delete';
+      $(button_name).attr('onClick', 'confirmDelete(this); return false;');      
+    }
+    
+    // Delete all rows that don't appear in the data
+    $('#notifications_list_table > tbody').find('tr').each(function(i, el){
+      var id = $(el).attr('id');
+      // IE8 doesn't support indexOf()
+      if (jQuery.inArray(id, found_rows) < 0) {
+        // Data for row no longer exists
+        $(el).remove();
+      }
+    });
+  }
+}
+
+// Confirm the deletion of the notification associated with the just-pressed delete button
+function confirmDelete(obj) {
+  $('#modal_delete_button').data('notification_id', $(obj).attr("key"));
+  $('#deleteModal').modal();
+}
+
+function deleteNotification(obj) {
+  // Prevent double-clicks
+  if ($(obj).hasClass('disabled')) {
+    return;
+  }
+  $(obj).addClass('disabled');
+  
+  NOTICE_WAITING_FOR_PUMP = true
+  showNotice('Deleting...');
+  NOTICE_WAITING_FOR_PUMP = false
+  
+  var notif_to_delete = $(obj).data('notification_id');
+    
+  $.ajax({
+    url: '{% url 'notifications_api_1_0' %}' + notif_to_delete + '/',
+    timeout: CONNECTION_TIMEOUT,
+    error: function(data) { 
+        NOTICE_WAITING_FOR_PUMP = false;
+        if (data.status == 500) {
+          showNotice('Error: server error');
+        } else if (data.responseJSON['message']) {
+          showNotice(data.responseJSON['message']);
+        } else {
+          showNotice('Error: delete failed');
+        }
+        $(obj).removeClass('disabled'); 
+      },
+    success: function(data) { 
+        showNotice(data.message);
+        $(obj).removeClass('disabled'); // to allow deletion of next reminder
+        if (typeof successfulDelete == 'function') {
+          successfulDelete(data);
+        }
+      },
+    type: 'DELETE',
+    });
+}
+
+function successfulDelete(data) {
+  REFRESH_COUNTER = 0;
+  POLL_PERIOD_MS = 1;
+  poll();
+}
+
+// Some setup needs to wait until support JS has loaded
+function pageSetup() {
+  // URL notification updates
+  {% if pump_id %}
+    AJAX_URL = '{% url 'notifications_spec_pump_api_1_0' pump_id %}';
+  {% elif user_id %}
+    AJAX_URL = '{% url 'notifications_spec_user_api_1_0' user_id %}';
+  {% else %}
+    AJAX_URL = '{% url 'notifications_api_1_0' %}';
+  {% endif %}
+  
+  // Enable automatic updates of the page
+  POLL_PERIOD_SHORT_SEC = 1;
+  POLL_PERIOD_LONG_SEC = 30;
+  POLL_COUNT_FOR_LONG = 0;
+  poll(); 
+}
+
+</script>
+{% endblock %}

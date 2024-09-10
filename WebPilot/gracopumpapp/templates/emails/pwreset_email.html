@@ -1,0 +1,17 @@
+{% autoescape off %}
+<p>Hi,</p>
+<p>You're receiving this email because you requested a password reset for your Graco Harrier user account.</p>
+<p>Please go to the following page and choose a new password:</p>
+<p>{% block reset_link %}
+{{ protocol }}://{{ domain }}{% url 'pw_reset_confirm' uidb64=uid token=token %}
+{% endblock %}</p>
+
+<p>If you did not request this password reset, don't worry, and feel free to disregard this message. Your account is still secure, and nobody else can access it.</p>
+
+<p>Thanks!</p>
+
+<p>Graco</p>
+
+<p><small>(This is an automated email. For support, please email <a href="mailto:oilandgas@graco.com">oilandgas@graco.com</a>.)</small></p>
+
+{% endautoescape %}

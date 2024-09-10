@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load pump_layout_extras %}
+
+{% block head_data %}
+{% endblock %}
+
+{% block title %}
+Invite | User | Group
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title"><a href="{% url 'customer_list' %}">Groups</a> <small>
+&raquo; <a href="{% url 'customer_settings_default' %}{{ customer.id }}/">{{ customer.organization_name }}</a> 
+&raquo; <a href="{% url 'customer_users' customer.id %}">Users</a>
+&raquo; <span id="heading_subtext">Invite</span></small></h3>
+
+<div class="details-container">
+<p>Invite people to join this group. If they do not yet have an account, they will be given the opportunity to create one.</p>
+<p>The invited user will be sent an email containing a link to use to accept the invitation.</p>
+<p>Users are not formally part of the group until they accept the invitation.</p>
+
+{% row_standard 'user_invite' pretty_name='User email' edit_type='text' mode='create' %}
+
+</div>
+<div class="float-right">
+    <button type="button" class="btn btn-primary pull-right lone-button create-submit">Send invitation</button>
+</div>
+
+<script>
+
+// What to do if the user invitation succeeded
+function simpleSubmitSuccess(data) {
+  // Redirect in such a manner that reposting is not going to be an issue
+  var url = "{% url 'customer_users' customer.id%}";
+  location.replace(url);
+}
+
+// Some setup needs to wait until support JS has loaded
+function pageSetup() {
+  // URL for getting and posting pump data
+  AJAX_URL = '{% url 'customers_spec_api_1_0' customer.id %}';
+  $('.details-container').show();
+  
+  // Hide the elements meant for updates pages
+  $('.read-container').hide();
+  $('.not-for-create').hide();
+  $('.ok-button').hide();
+  
+  $('.write-container').show();
+  
+  // Unlink the code meant for update pages instead of create pages
+  $('.ajax_submit').attr('onClick', 'return false;');
+  $('.ajax_submit').addClass("ajax_field");
+  $('.ajax_submit').removeClass("ajax_submit");
+  
+  $('.toggle-button').attr('onClick', 'toggleClick(this);return false;');
+  
+  $('.create-submit').attr('onClick', 'submitSimple(this, $(".accept-button").attr("name"), $("#user_invite_edit").val()); return false;');  
+  
+  // Clean up the rightmost column for the text rows
+  $('.edit_row_text_right').css('min-width', 'inherit');
+  $('.edit_row_text_write').css('padding-right', 0);
+  $('.edit_row_dropdown_right').css('min-width', 'inherit');
+  $('.edit_row_dropdown_write').css('padding-right', 0);
+  
+}
+
+</script>
+
+
+{% endblock %}

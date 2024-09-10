@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load pump_layout_extras %}
+
+{% block head_data %}
+{% endblock %}
+
+{% block title %}
+Subscription | Group
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title"><a href="{% url 'customer_list' %}">Groups</a> <small>
+&raquo; <a href="{% url 'customer_settings_default' %}{{ customer.id }}/">{{ customer.organization_name }}</a> 
+&raquo; Subscription</small></h3>
+
+<div class="details-container">
+
+{% row_display "Status" status_text %}
+
+{% if valid_subscription %}
+  {% row_display "Next renewal date" expiration_text %}
+  {% row_display "Plan" plan_text %}
+  {% row_display "Active pumps" active_pump_count %}
+  {% row_display "Suspended pumps" suspended_pump_count %}
+  {% row_display "Charge per pump" charge_per_pump %}
+  {% row_display "Total charge" total_charge %}
+{% endif %}
+
+{% if account_balance %}
+  {% row_display "Account balance" account_balance %}
+{% endif %}
+
+{% if valid_subscription %}
+  {% if trial_days_remaining %}
+    {% row_display "Trial days remaining" trial_days_remaining %}
+  {% endif %}
+{% endif %}
+
+{% if at_least_one_pump %}
+  {% url 'customer_subscription_config' customer.id as customer_subscription_config_url %}
+  {% row_standard 'change_plan' pretty_name=plan_button_text button_type='hyperlink' button_icon='fa-sliders' hyperlink_url=customer_subscription_config_url %} 
+{% endif %}
+
+{% url 'customer_subscription_invoices' customer.id as customer_subscription_invoices_url %}
+{% row_standard 'invoices' button_type='hyperlink' button_icon='fa-book' hyperlink_url=customer_subscription_invoices_url %} 
+</div>
+
+<script>
+
+// Some setup needs to wait until support JS has loaded
+function pageSetup() {
+  $('.details-container').show();
+}
+
+</script>
+
+
+{% endblock %}

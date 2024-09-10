@@ -1,0 +1,98 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load pump_layout_extras %}
+
+{% block head_data %}
+{% endblock %}
+
+{% block title %}
+Analog Input | Pumps
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title"><a href="{% url 'pump_list' %}">Pumps</a> <small>&raquo; <span id="heading_subtext"><a href="{% url 'pump_details' pump_obj.unique_id %}">{% if pump_obj.pretty_name %}{{pump_obj.pretty_name}}{% else %}{{ pump_obj.unique_id }}{%endif%}</a> &raquo; Analog Input</span></small></h3>
+      
+<div id="loading_mask">
+<p>Loading...</p>
+</div>
+<div class="details-container">
+  
+{% row_standard 'analog_input_mode' pretty_name='analog in' edit_type='dropdown' dropdown_options_name='ain_modes_list' %}
+
+{% row_divider %}
+
+{% row_standard 'ain_mA_low' pretty_name='low setpoint' edit_type='text' size=6 units='mA_units' %}
+{% row_standard 'ain_flow_rate_low' pretty_name='low mA flow' edit_type='text' size=6 units='flow_units,flow_units_time' %}
+
+{% row_divider %}
+
+{% row_standard 'ain_mA_high' pretty_name='high setpoint' edit_type='text' size=6 units='mA_units' %}
+{% row_standard 'ain_flow_rate_high' pretty_name='high mA flow' edit_type='text' size=6 units='flow_units,flow_units_time' %}
+  
+</div>
+
+<script>
+
+// Edit-row buttons
+var PARSED_FIELDS = ['analog_input_mode', 'ain_mA_low', 'ain_mA_high', 'ain_flow_rate_low', 'ain_flow_rate_high'];
+var BUTTON_LIST = ['analog_input_mode', 'ain_mA_low', 'ain_mA_high', 'ain_flow_rate_low', 'ain_flow_rate_high'];
+ 
+// Populate the page with the AJAX data
+function pageSpecificPopulate(data) {
+  NOTICE_WAITING_FOR_PUMP = false;
+  hideNotice();
+  
+  UNITS = data.prefs.display_units;
+  var units_decode = {{ units_decode|safe }};
+
+  // Update the fields that use the parsed forms from the server for display
+  jQuery.each(PARSED_FIELDS, function(index, element){
+    var precision = -1;
+    var field_name;
+    if (element.constructor === Array) {
+      precision = element[1];
+      element = element[0];
+    }
+    field_name = element + '_value';
+    if (data.pump_parsed[element].length <= 0 || parseFloat(data.pump_parsed[element]) < 0) {
+      $('#' + field_name).html('&lt;Not set>');
+    }
+    else {
+      if (precision != -1) {
+        $('#' + field_name).html(data.pump_parsed[element].toFixed(precision));
+      }
+      else {
+        $('#' + field_name).html(data.pump_parsed[element]);
+      }
+    }
+  });  
+    
+  //$('#analog_input_mode_value').html(data.pump_parsed.analog_input_mode);
+  //changeIfNotFocused('temperature_combo', data.pump_parsed.temperature_control);
+	
+  //changeIfNotFocused('analog_input_mode', data['pump_parsed']['analog_input_mode']);
+  //changeIfNotFocused('ain_mA_low', data['pump_obj']['ain_mA_low']);
+  //changeIfNotFocused('ain_mA_high', data['pump_obj']['ain_mA_high']);
+  //changeIfNotFocused('ain_flow_rate_low', data['pump_parsed']['ain_flow_rate_low']);
+  //changeIfNotFocused('ain_flow_rate_high', data['pump_parsed']['ain_flow_rate_high']);
+	
+  // Updates based on class
+  $('.flow_units_value').html(units_decode.volume[UNITS]);
+  $('.flow_units_time_value').html('day');
+  $('.mA_units_value').html('mA'); 
+}
+
+// Some setup needs to wait until support JS has loaded
+function pageSetup() {
+  // URL for getting and posting pump data
+  AJAX_URL = '{% url 'pumps_spec_api_1_0' pump_obj.unique_id %}';
+  
+  POLL_COUNT_FOR_LONG = 2;
+  POLL_PERIOD_LONG_SEC = 15;
+  
+  // Enable automatic updates of the page
+  poll(); 
+}
+
+</script>
+{% endblock %}

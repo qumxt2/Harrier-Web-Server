@@ -1,1 +1,0 @@
-bussim.o: bussim.c

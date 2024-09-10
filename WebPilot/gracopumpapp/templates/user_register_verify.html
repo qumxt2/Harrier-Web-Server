@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}
+{% if activation_success %}
+Account active
+{% else %}
+Account activation error
+{% endif %}
+{% endblock %}
+
+{% block content %}
+{% if activation_success %}
+<h3 class="pump-title">Activation complete</h3>
+
+<p>Thank you for verifying your email address. Your account is now active.</p>
+
+<p>You may log in now using your email address and the password you specified when setting up your account.</p>
+
+<p>If you did not set a password for your account, you can do so by using the <a href="{% url 'password_reset' %}">Forgot Password</a> link on the login page.</p>
+
+<p><a href="{% url 'index' %}">Return to login page</a></p>
+{% else %}
+<h3 class="pump-title">Activation failure</h3>
+
+<p>Sorry, that verification code is either invalid or has expired. Perhaps you've already activated your account? If so, you might want to 
+try <a href="{% url 'index' %}">logging in</a>.</p>
+<p>If you believe you have reached this message in error, please contact us at <a href="mailto:oilandgas@graco.com">oilandgas@graco.com</a>.</p>
+{% endif %}
+{% endblock %}

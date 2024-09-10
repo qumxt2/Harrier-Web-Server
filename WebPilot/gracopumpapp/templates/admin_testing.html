@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% load pump_layout_extras %}
+
+
+{% block title %}
+Testing | Admin
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title"><a href="{% url 'admin' %}">Admin</a> <small>&raquo; <span id="heading_subtext">Testing</span></small></h3>
+
+
+<div>
+    <h4>Simulate incoming Recurly webhook</h4>
+	<form method="POST" target="#">
+		<textarea id="webhook_data" rows="15" cols="80"></textarea>
+		<br />
+		<button type="submit" onClick="recurlyPost(this, 'webhook_data');return false;">Submit</button>
+	</form>
+</div>
+
+<div>
+<h4>Sync the local DB with the plans fetched from Recurly</h4>
+<button type="submit" onClick="submitSimple(this, 'force_payments_sync', 1, '{% url 'admin_api_1_0' %}'); return false;">Force sync</button>
+</div>
+
+
+<script>
+function recurlyPost(obj, text_obj_id) {
+  NOTICE_WAITING_FOR_PUMP = true
+  showNotice('Sending...');
+  NOTICE_WAITING_FOR_PUMP = false
+  
+  var submit_body = $('#' + text_obj_id).val();
+    
+  var url = "{% url 'recurly_webhook' %}"; 
+  
+  $.ajax({
+    url: url,
+    contentType: 'application/xml',
+    data: submit_body,
+    processData: false,
+    timeout: CONNECTION_TIMEOUT,
+    error: function(data) { 
+        NOTICE_WAITING_FOR_PUMP = false;
+        showNotice('Error sending data.');
+    },
+    success: function(data) { 
+      NOTICE_WAITING_FOR_PUMP = false;
+      showNotice('Success');
+    },
+    type: 'POST',
+  });
+}
+
+</script>
+
+{% endblock %}

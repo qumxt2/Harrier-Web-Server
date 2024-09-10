@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load pump_layout_extras %}
+
+{% block head_data %}
+{% endblock %}
+
+{% block title %}
+Wellsite Totalizers | Pumps
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title"><a href="{% url 'pump_list' %}">Pumps</a> <small>&raquo; <span id="heading_subtext"><a href="{% url 'pump_details' pump_obj.unique_id %}">{% if pump_obj.pretty_name %}{{pump_obj.pretty_name}}{% else %}{{ pump_obj.unique_id }}{%endif%}</a> &raquo; Wellsite Totalizers</span></small></h3>
+     
+<div id="loading_mask">
+<p>Loading...</p>
+</div>
+<div class="details-container">
+  
+  <div id="totalizer-1-rows" style="display:none;">
+	{% if point_names.custom_injection_point_names.point_0_custom %}
+	  {% row_standard 'totalizer_well_1' pretty_name=point_names.custom_injection_point_names.point_0_custom|add:' Totalizer' button_type='reset' units='flow_units' %}
+	  {% row_standard 'totalizer_grand_well_1' pretty_name=point_names.custom_injection_point_names.point_0_custom|add:' Grand Totalizer' units='flow_units' %}
+	{% else %}
+      {% row_standard 'totalizer_well_1' pretty_name='1. Totalizer' button_type='reset' units='flow_units' %}
+	  {% row_standard 'totalizer_grand_well_1' pretty_name='1. Grand Totalizer' units='flow_units' %}
+	{% endif %}
+  </div>
+  
+  {% row_divider %}
+
+  <div id="totalizer-2-rows" style="display:none;">
+	{% if point_names.custom_injection_point_names.point_1_custom %}
+	  {% row_standard 'totalizer_well_2' pretty_name=point_names.custom_injection_point_names.point_1_custom|add:' Totalizer' button_type='reset' units='flow_units' %}
+	  {% row_standard 'totalizer_grand_well_2' pretty_name=point_names.custom_injection_point_names.point_1_custom|add:' Grand Totalizer' units='flow_units' %}
+	{% else %}
+	  {% row_standard 'totalizer_well_2' pretty_name='2. Totalizer' button_type='reset' units='flow_units' %}
+	  {% row_standard 'totalizer_grand_well_2' pretty_name='2. Grand Totalizer' units='flow_units' %}
+	{% endif %}
+  </div>
+  
+  {% row_divider %}
+  
+  <div id="totalizer-3-rows" style="display:none;">
+	{% if point_names.custom_injection_point_names.point_2_custom %}
+	  {% row_standard 'totalizer_well_3' pretty_name=point_names.custom_injection_point_names.point_2_custom|add:' Totalizer' button_type='reset' units='flow_units' %}
+	  {% row_standard 'totalizer_grand_well_3' pretty_name=point_names.custom_injection_point_names.point_2_custom|add:' Grand Totalizer' units='flow_units' %}
+	{% else %}
+	  {% row_standard 'totalizer_well_3' pretty_name='3. Totalizer' button_type='reset' units='flow_units' %}	
+	  {% row_standard 'totalizer_grand_well_3' pretty_name='3. Grand Totalizer' units='flow_units' %}
+    {% endif %}
+  </div>
+  
+  {% row_divider %}
+  
+  <div id="totalizer-4-rows" style="display:none;">
+    {% if point_names.custom_injection_point_names.point_3_custom %}
+	  {% row_standard 'totalizer_well_4' pretty_name=point_names.custom_injection_point_names.point_3_custom|add:' Totalizer' button_type='reset' units='flow_units' %}
+	  {% row_standard 'totalizer_grand_well_4' pretty_name=point_names.custom_injection_point_names.point_3_custom|add:' Grand Totalizer' units='flow_units' %}
+    {% else %}
+	  {% row_standard 'totalizer_well_4' pretty_name='4. Totalizer' button_type='reset' units='flow_units' %}
+	  {% row_standard 'totalizer_grand_well_4' pretty_name='4. Grand Totalizer' units='flow_units' %}
+    {% endif %}
+  </div>
+  
+  {% row_divider %}
+  
+  <div id="totalizer-5-rows" style="display:none;">
+    {% if point_names.custom_injection_point_names.point_4_custom %}
+	  {% row_standard 'totalizer_well_5' pretty_name=point_names.custom_injection_point_names.point_4_custom|add:' Totalizer' button_type='reset' units='flow_units' %}
+  	  {% row_standard 'totalizer_grand_well_5' pretty_name=point_names.custom_injection_point_names.point_4_custom|add:' Grand Totalizer' units='flow_units' %}
+    {% else %}
+	  {% row_standard 'totalizer_well_5' pretty_name='5. Totalizer' button_type='reset' units='flow_units' %}
+	  {% row_standard 'totalizer_grand_well_5' pretty_name='5. Grand Totalizer' units='flow_units' %}
+    {% endif %}
+  </div>
+  
+  {% row_divider %}
+  
+  <div id="totalizer-6-rows" style="display:none;">
+    {% if point_names.custom_injection_point_names.point_5_custom %}
+	  {% row_standard 'totalizer_well_6' pretty_name=point_names.custom_injection_point_names.point_5_custom|add:' Totalizer' button_type='reset' units='flow_units' %}
+	  {% row_standard 'totalizer_grand_well_6' pretty_name=point_names.custom_injection_point_names.point_5_custom|add:' Grand Totalizer' units='flow_units' %}
+    {% else %}
+	  {% row_standard 'totalizer_well_6' pretty_name='6. Totalizer' button_type='reset' units='flow_units' %}
+	  {% row_standard 'totalizer_grand_well_6' pretty_name='6. Grand Totalizer' units='flow_units' %}
+    {% endif %}
+  </div>
+  
+  {% row_divider %}
+  
+  <div id="totalizer-7-rows" style="display:none;">
+    {% if point_names.custom_injection_point_names.point_6_custom %}
+	  {% row_standard 'totalizer_well_7' pretty_name=point_names.custom_injection_point_names.point_6_custom|add:' Totalizer' button_type='reset' units='flow_units' %}
+	  {% row_standard 'totalizer_grand_well_7' pretty_name=point_names.custom_injection_point_names.point_6_custom|add:' Grand Totalizer' units='flow_units' %}
+    {% else %}
+	  {% row_standard 'totalizer_well_7' pretty_name='7. Totalizer' button_type='reset' units='flow_units' %}
+	  {% row_standard 'totalizer_grand_well_7' pretty_name='7. Grand Totalizer' units='flow_units' %}
+    {% endif %}
+  </div>
+  
+  {% row_divider %}
+  
+  <div id="totalizer-8-rows" style="display:none;">
+    {% if point_names.custom_injection_point_names.point_7_custom %}
+	  {% row_standard 'totalizer_well_8' pretty_name=point_names.custom_injection_point_names.point_7_custom|add:' Totalizer' button_type='reset' units='flow_units' %}
+	  {% row_standard 'totalizer_grand_well_8' pretty_name=point_names.custom_injection_point_names.point_7_custom|add:' Grand Totalizer' units='flow_units' %}
+    {% else %}
+	  {% row_standard 'totalizer_well_8' pretty_name='8. Totalizer' button_type='reset' units='flow_units' %}	
+	  {% row_standard 'totalizer_grand_well_8' pretty_name='8. Grand Totalizer' units='flow_units' %}
+    {% endif %}
+  </div>
+  
+</div>
+
+<script>
+
+// Edit-row buttons
+var FIELD_LIST = [{% for total in totalizers %}'{{ total.0 }}',{% endfor %}{% for total in GTotalizers %}'{{ total.0 }}',{% endfor %}];
+var BUTTON_LIST = FIELD_LIST;
+ 
+// Populate the page with the AJAX data
+function pageSpecificPopulate(data) {
+  NOTICE_WAITING_FOR_PUMP = false;
+  hideNotice();
+  
+  UNITS = data.prefs.display_units;
+  var units_decode = {{ units_decode|safe }};
+   
+  // Update the fields that need no special formatting or handling
+  // Use jQuery's each instead of forEach because IE8 doesn't support forEach
+  jQuery.each(FIELD_LIST, function(index, element) {
+	var field_name = element + '_value';
+	var new_val = '';
+	    
+    if (data.pump_parsed[element].length <= 0 || parseFloat(data.pump_parsed[element]) < 0) {
+      $('#' + field_name).html('&lt;Not set>');
+    }
+    else {
+      $('#' + field_name).html(data.pump_parsed[element].toFixed(1));
+    }
+    
+    // Update text input fields, but only if the user doesn't appear to be trying to edit them
+    changeIfNotFocused(element + '_edit', data.pump_parsed[element]);    
+  });
+  
+  $('#totalizer-1-rows').show();
+  $('#totalizer-2-rows').show();
+  $('#totalizer-3-rows').show();
+  $('#totalizer-4-rows').show();
+  $('#totalizer-5-rows').show();
+  $('#totalizer-6-rows').show();
+  $('#totalizer-7-rows').show();
+  $('#totalizer-8-rows').show();
+  
+  tigerStripe();
+  
+  // Updates based on class
+  $('.flow_units_value').html(units_decode.volume[UNITS]);
+  $('.flow_units_time_value').html('day');
+
+}
+
+// Some setup needs to wait until support JS has loaded
+function pageSetup() {
+  // URL for getting and posting pump data
+  AJAX_URL = '{% url 'pumps_spec_api_1_0' pump_obj.unique_id %}';
+  
+  POLL_COUNT_FOR_LONG = 2;
+  POLL_PERIOD_LONG_SEC = 15;
+  
+  // Enable automatic updates of the page
+  poll(); 
+}
+
+</script>
+{% endblock %}

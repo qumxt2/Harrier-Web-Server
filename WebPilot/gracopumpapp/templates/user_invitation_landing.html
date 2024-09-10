@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}
+Invitation
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title">Invitation</h3>
+
+{% if invitation %}
+<p>You have been invited to join the group "{{ invitation.customer_invited.organization_name }}."</p>
+
+{% if logged_in %}
+<p>You are currently logged in as {{ username }}. Would you like to accept this invitation?</p>
+
+<div class="center">
+    <button type="button" class="btn btn-primary" id="accept-invite-button">Accept invitation</button>
+</div>
+
+{% else %}
+<p>If you already have an account that you would like to use with this invitation, please <a href="{% url 'index' %}?next={% url 'user_invitation' invitation.code %}">log in</a> and then come back to this page.</p>
+<p>If you do not already have an account, you will need to register for one. Once you <a href="{% url 'user_invitation_register' invitation.code %}">register for an account</a>, you will be automatically added to this group.</p>
+
+{% endif %}
+{% else %}
+<p>Sorry, that invitation is invalid or has already been used.</p>
+<p>If you need assistance, please contact us at <a href="mailto:oilandgas@graco.com">oilandgas@graco.com</a>.</p>
+{% endif %}
+
+
+
+{% if invitation and logged_in %}
+<script>
+
+// What to do if the user invitation succeeded
+function simpleSubmitSuccess(data) {
+  // Redirect in such a manner that reposting is not going to be an issue
+  var url = "{% url 'customer_settings' invitation.customer_invited.id%}";
+  location.replace(url);
+}
+
+// Some setup needs to wait until support JS has loaded
+function pageSetup() {
+  AJAX_URL = '{% url 'users_spec_api_1_0' user_id %}';
+    
+  $('#accept-invite-button').attr('onClick', 'submitSimple(this, "invitation_accept", "{{ invitation.code }}"); return false;');  
+}
+
+</script>
+{% endif %}
+
+
+{% endblock %}

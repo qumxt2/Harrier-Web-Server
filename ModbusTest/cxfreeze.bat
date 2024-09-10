@@ -1,1 +1,0 @@
-C:\Python34\python.exe C:\Python34\Scripts\cxfreeze harrier.py

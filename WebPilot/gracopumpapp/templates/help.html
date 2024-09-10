@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Help
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title">Help<small><span id="heading_subtext"></span></small></h3>
+<h4>Technical support</h4>
+<p>If you have questions or encounter problems while using the web site, please contact us at <a href="mailto:oilandgas@graco.com">oilandgas@graco.com</a>.</p> 
+<h4>Related products</h4>
+<p>Graco offers a wide array of related products and services. For more information, please visit the <a href="http://www.graco.com/">main Graco web site</a>.</p>
+<h4>Patent information</h4>
+<p>For patent information, see <a href="http://www.graco.com/patents">www.graco.com/patents</a>.</p>
+<h4>Terms of Service</h4>
+<p>Use of this site is subject to the <a href="{% url 'user_tos' %}">Terms of Service</a>.</p>
+
+{% endblock %}

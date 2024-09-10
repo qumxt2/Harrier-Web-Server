@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load pump_layout_extras %}
+
+{% block head_data %}
+{% endblock %}
+
+{% block title %}
+Invoices | Subscription | Group
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title"><a href="{% url 'customer_list' %}">Groups</a> <small>
+&raquo; <a href="{% url 'customer_settings_default' %}{{ customer.id }}/">{{ customer.organization_name }}</a> 
+&raquo; <a href="{% url 'customer_subscription' customer.id %}">Subscription</a> 
+&raquo; Invoices</small></h3>
+
+<div class="details-container block">
+{% if invoices %}
+<table id="user_list_table" class="table list-table pump-list-table">
+    <thead>
+      <tr>
+        <th>Invoice number</th>
+        <th>Bill date</th>
+        <th>Amount</th>
+        <th>State</th>
+      </tr>
+    </thead>
+    <tbody class="row-like-link">
+      {% for invoice in invoices %}
+        <tr data-href="{% url 'invoice_pdf' invoice.number %}">
+            <td>{{ invoice.number }}</td>
+            <td>{{ invoice.date }}</td>
+            <td>{{ invoice.amount }}</td>
+            <td>{{ invoice.state|capfirst }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No invoices found.</p>
+{% endif %}
+</div>
+
+<script>
+
+function pageSetup() {
+  // Make rows clickable
+  $('tr[data-href]').on('click', function(obj) {
+    document.location = $(this).data('href');
+  }); 
+}
+
+</script>
+
+{% endblock %}

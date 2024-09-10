@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load pump_layout_extras %}
+
+{% block head_data %}
+{% endblock %}
+
+{% block title %}
+Alarm preferences | Settings | User
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title">{% if is_admin %}<a href="{% url 'user_list' %}">{% endif %}Users{% if is_admin %}</a>{%endif%} <small>&raquo; <span id="heading_subtext"><a href="{% url 'user_settings' user_id %}"><span id="username_header"></span></a></span> &raquo; Alarm preferences</span></small></h3>
+
+<div id="loading_mask">
+<p>Loading...</p>
+</div>
+<div class="details-container">
+
+{% row_description 'You can choose which alarms you would like to receive emails about when they occur on pumps in your groups. Not all alarms can be configured individually. ' %}
+{% row_description 'For these preferences to have an effect, you must have alarm alerts enabled on your settings page.' %}
+
+{% for alarm in configurable_alarms %}
+  {% row_standard alarm.0 pretty_name=alarm.1 button_type='toggle' %}
+{% endfor %}
+  
+</div>
+
+<script>
+
+// Populate the page with the AJAX data
+function pageSpecificPopulate(data) {
+
+  $('#username_header').html(data.username);
+
+  for (var key in data.alarm_prefs) {
+    if (data.alarm_prefs.hasOwnProperty(key)) {
+      toggleUpdate(data.alarm_prefs, key, ['Disabled', 'Enabled']);
+    }
+  }
+    
+  tigerStripe();
+}
+
+
+
+// Some setup needs to wait until support JS has loaded
+function pageSetup() {
+  // URL for getting and posting pump data
+  AJAX_URL = '{% url 'users_spec_api_1_0' user_id %}';
+  
+  // Enable automatic updates of the page
+  POLL_PERIOD_SHORT_SEC = 1;
+  POLL_PERIOD_LONG_SEC = 60;
+  POLL_COUNT_FOR_LONG = 2;
+  poll(); 
+}
+
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load pump_layout_extras %}
+
+{% block head_data %}
+{% endblock %}
+
+{% block title %}
+Aeris | Pumps
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title"><a href="{% url 'pump_list' %}">Pumps</a> <small>&raquo; <span id="heading_subtext"><a href="{% url 'pump_details' pump_obj.unique_id %}">{% if pump_obj.pretty_name %}{{pump_obj.pretty_name}}{% else %}{{ pump_obj.unique_id }}{%endif%}</a> &raquo; Aeris</span></small></h3>
+      
+<div id="loading_mask">
+<p>Loading...</p>
+</div>
+<div class="details-container">
+
+  <div class="connected-rows">
+    
+    {% row_standard 'technology' %}
+    
+    {% row_standard 'activation_date' %}
+    
+    {% row_divider %}
+        
+    {% row_standard 'is_registered' pretty_name='Currently registered' %}
+
+    {% row_standard 'registration_date' pretty_name='Last registration' %}
+
+    {% row_standard 'data_inactive_date' pretty_name='Last deregistration' %}
+    
+    {% row_divider %}
+    
+    {% row_standard 'data_start_date' pretty_name='Last data start' %}
+    
+    {% row_standard 'data_stop_date' pretty_name='Last data stop' %}
+    
+    {% row_divider %}
+    
+    {% row_standard 'network_status' %}
+    
+  </div>
+  
+  <div class='disconnected-rows'>
+    {% row_description 'There was a problem retrieving this pump\'s information from Aeris. Please try again in a few minutes.' %}
+  </div> 
+  
+</div>
+
+<div class="initially-hidden" id="clear_reg_container">
+    {% generic_button 'Clear registration' 'clear_reg' style='default' side='right' %}
+    {% modal_generic_dialog 'clear_reg' 'Clear registration' 'Are you sure you want to clear the network registration of this pump? If you clear the registration, the pump might be unavailable for up to an hour.</p><p>THIS COMMAND CAN TAKE SEVERAL MINUTES. Do not click it repeatedly!' 'Yes, clear it' 'No, do nothing' 'submitClearReg(this);'  %}
+</div>
+
+<script>
+
+// Edit-row buttons
+var SIMPLE_FIELDS = [   'technology',
+                        'is_registered',
+                        'activation_date',
+                        'data_start_date',
+                        'data_stop_date',
+                        'data_inactive_date',
+                        'registration_date',
+                        'network_status',
+                    ];
+var FIELDS_TO_PULSE = SIMPLE_FIELDS;
+ 
+// Populate the page with the AJAX data
+function pageSpecificPopulate(data) {
+  if (jQuery.isEmptyObject(data.pump_obj)) {  
+    $('.details-container').hide();
+    $('#heading_subtext').html('{{pump_id}}');
+    return;
+  }
+  else {
+    $('.details-container').show();
+  }
+   
+  if ('aeris' in data && data.aeris.data_retrieved == true) {
+    $('.connected-rows').show();
+    $('.disconnected-rows').hide();
+    $('#clear_reg_container').show();
+  } 
+  else {
+    $('.connected-rows').hide();
+    $('.disconnected-rows').show();
+    $('#clear_reg_container').hide();
+  }
+
+  // Update the fields that need no special formatting or handling
+  // Use jQuery's each instead of forEach because IE8 doesn't support forEach
+  jQuery.each(SIMPLE_FIELDS, function(index, element){
+    var field_name = element + '_value';
+    if (data.aeris[element].length <= 0 || parseFloat(data.aeris[element]) < 0) {
+      $('#' + field_name).html('&lt;Not set>');
+    }
+    else if (typeof(data.aeris[element]) === 'boolean') {
+      var pretty_val = data.aeris[element] ? 'Yes' : 'No'; 
+      $('#' + field_name).html(pretty_val);
+    }
+    else {
+      $('#' + field_name).html(data.aeris[element]);
+    }      
+  });
+  
+  tigerStripe();
+  
+  // Make text pulse when the value changes
+  if (PREVIOUS_JSON) {
+    jQuery.each(FIELDS_TO_PULSE, function(index, element) {
+      pulseIf(element, PREVIOUS_JSON.data.aeris, data.aeris);
+    });
+  }
+
+}
+
+// Clear the registration of the pump
+function submitClearReg(obj) {
+  var new_value = 'true';
+  submitSimple(obj, 'clear_registration', new_value); 
+}
+
+// Force a refresh when the registration has been cleared
+function simpleSubmitSuccess(data) {
+  poll();
+}
+
+// Some setup needs to wait until support JS has loaded
+function pageSetup() {
+  // URL for getting and posting pump data
+  AJAX_URL = '{% url 'aeris_spec_api_1_0' pump_obj.unique_id %}';
+  
+  // The Aeris API is very slow, and the information doesn't change very often, so polling should be infrequent
+  POLL_COUNT_FOR_LONG = 0;
+  POLL_PERIOD_LONG_SEC = 120;
+  
+  CONNECTION_TIMEOUT = 60 * 1000; // ms -- the Aeris API is slow, and SOAP handling is slow, so set a long timeout
+  
+  // Special message
+  $('#loading_mask').html('<p>Retrieving data from Aeris (This can take several minutes)...</p>');
+  
+  // Enable automatic updates of the page
+  poll(); 
+}
+
+</script>
+{% endblock %}

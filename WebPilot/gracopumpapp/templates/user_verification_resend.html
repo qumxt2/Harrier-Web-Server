@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block head_data %}
+{% endblock %}
+
+{% block title %}
+Verification resend | User
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title">{% if is_admin %}<a href="{% url 'user_list' %}">{% endif %}Users{% if is_admin %}</a>{%endif%} 
+<small>&raquo; <a href="{% url 'user_settings_default' %}">{{ username }}</a>
+&raquo; Email verficiation resend</small></h3>
+
+{% if email_confirmed %}
+    <p>Your email address has already been verified. There is no need to resend a verification email to you because
+    there is no action that you need to take.</p>
+{% else %}
+    {% if invalid_email %}
+        <p>We can't send you an email verification message because your current email address appears to be invalid.</p>
+        <p>Please go to <a href="{% url 'user_settings_default' %}">your settings page</a> and set a valid email address for 
+        yourself. When you do that, a new email verification message will be sent to you automatically.</p>
+    {% else %}  
+        <p>Per your request, a new email verification message has been sent to you.</p>
+        
+        <p>If you did not receive it, please check your email spam/junk folder and confirm 
+        that the email address listed on <a href="{% url 'user_settings_default' %}">your settings page</a> is correct.</p>
+    {% endif %}
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,87 @@
+{% load staticfiles %}<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>{% block title %}Pump control{% endblock %} | Graco</title>
+  <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" media="screen" />
+  <link href="{% static 'gracopump.css' %}?{{ software_version }}" rel="stylesheet" media="screen" />
+  <link href="{% static 'font-awesome-4.4.0/css/font-awesome.min.css' %}" rel="stylesheet" />
+  <link rel="shortcut icon" href="{% static 'favicon.ico' %}"/>
+  <link rel="apple-touch-icon" href="{% static 'apple-touch-icon.png' %}"/>
+  <script type="text/javascript" src="{% static 'scripts/jquery-1.11.0.min.js' %}"></script>
+  <script type="text/javascript" src="{% static 'scripts/gracopump.js' %}?{{ software_version }}"></script>  
+  {% block viewport %}
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  {% endblock %}
+  {% block head_data %}{% endblock %}
+</head>
+<body>
+<div class="tile-background">
+<div class="header-background">
+  <div class="header-graco" id="top" role="banner">
+      <div class="header-table-row">
+        <div class="header-left"><a href="/"><img src="{% static 'images/gracologo_flat_small3.png' %}" class="img-responsive" alt="Graco" /></a></div>
+          {% block header_right %}
+	          {% if is_logged_in %}
+		          <div class="header-right">
+		            <div class="btn-group hidden-md hidden-lg">
+		              <button type="button" data-toggle="dropdown" class="btn btn-default pull-right dropdown-toggle"><strong><i class="fa fa-bars fa-2x"></i></strong></button>
+		                <ul class="dropdown-menu pull-right">
+		                  <li><a href="{% url 'pump_list' %}">Pumps</a></li>              
+		                  {% if is_admin %}<li><a href="{% url 'user_list' %}">Users</a></li>{% endif %}
+		                  <li><a href="{% url 'customer_list' %}">Groups</a></li>
+		                  {% if is_admin %}<li><a href="{% url 'admin' %}">Admin</a></li>{% endif %}
+		                  <li role="presentation" class="divider"></li>
+		                  <li><a href="{% url 'user_settings_default' %}">Settings</a></li>
+		                  <li role="presentation" class="divider"></li>
+		                  <li><a href="{% url 'help' %}">Help</a></li>
+		                </ul>
+		            </div>
+		            <div class="visible-md-block visible-lg-block">
+		              <ul class="pull-right list-inline top-menu">
+		                <li><a href="{% url 'pump_list' %}">Pumps</a></li>              
+		                {% if is_admin %}<li><a href="{% url 'user_list' %}">Users</a></li>{% endif %}
+		                <li><a href="{% url 'customer_list' %}">Groups</a></li>
+		                {% if is_admin %}<li><a href="{% url 'admin' %}">Admin</a></li>{% endif %}
+		                <li><a href="{% url 'user_settings_default' %}">Settings</a></li>
+		                <li><a href="{% url 'help' %}">Help</a></li>
+		              </ul>
+		            </div>
+		          </div>
+	          {% endif %}
+          {% endblock %}
+        </div>
+      </div>
+  </div>
+</div>
+<div class="main-body row no-margin">
+  <div class="content-wrapper no-padding {{ extra_content_div_class }}">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.level_tag }}" role="alert">{% if 'safe' in message.tags %}{{ message|safe }}{% else %}{{ message }}{% endif %}</div>
+      {% endfor %}
+    {% endif %}
+    <div id="main-content" class="">
+      {% block content %}{% endblock %}    
+    </div>
+  </div>
+</div>
+<div class="status-footer" id="status-footer">
+<span id="status-text"></span>
+</div>
+<div class="footer">
+<p class="text-center small light-gray">{% block version_info %}Pump Control v{{ software_version }}{% endblock %}</p>
+</div>
+</div>
+<script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  ga('create', 'UA-71980572-1', 'auto');
+  ga('send', 'pageview');
+</script>
+{% block tail_data %}{% endblock %}
+</body>
+</html>

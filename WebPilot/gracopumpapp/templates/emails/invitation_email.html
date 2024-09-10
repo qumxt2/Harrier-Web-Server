@@ -1,0 +1,20 @@
+{% autoescape off %}
+<p>Hi,</p>
+<p>You have been invited to join a Graco pump control group by {{ invite_from }}. The group name is "{{ customer_name }}." This will allow you to remotely observe and control all pumps associated with that group.</p>
+{% if has_account %}
+<p>To accept this invitation, go to the following link:</p>
+<p>{{ invitation_url }}</p>
+{% else %}
+<p>To join the group, you must have an account set up. To set up your account, go to the following link:</p>
+<p>{{ invitation_url }}</p>
+<p>If you already have an account set up under a different email address, you will be given the option to join this group using your existing account when you visit the above page.</p> 
+{% endif %}
+<p>If this was unexpected, you can ask {{ invite_from }} for more information.</p>
+
+<p>Thanks!</p>
+
+<p>Graco</p>
+
+<p><small>(This is an automated email. For support, please email <a href="mailto:oilandgas@graco.com">oilandgas@graco.com</a>.)</small></p>
+
+{% endautoescape %}

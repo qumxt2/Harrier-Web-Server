@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}
+Event logs | Admin
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title"><a href="{% url 'admin' %}">Admin</a> <small>&raquo; <span id="heading_subtext">Event log</span></small></h3>
+
+<h5>Showing last {{ page_size }} entries, <span id='pagination_title'></span>most recent first</h5>
+<div id="loading_mask">
+<p>Loading...</p>
+</div>
+<div class="details-container">
+  <div class="visible-xs">
+    <p class="text-center"><strong><em>Scroll left or right in the table to see full log entries</em></strong>
+    </p>
+  </div>
+  <div class="table-responsive">
+    <table id="event_list_table" class="table list-table event-list-table table-condensed">
+      <thead>
+        <tr>
+          <th>Entry</th>
+          <th>Timestamp</th>
+          <th>Origin</th>
+          <th>IP</th>
+          <th>User</th>
+          <th>Target</th>
+          <th>Target ID</th>
+          <th>Action</th>
+          <th>Attribute</th>
+          <th>New value</th>
+          <th>Success</th>
+          <th>Message</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
+</div>
+<p><a href="{{ log_download_url }}">Download log as .CSV</a></p>
+
+<script>
+
+var ROW_TEMPLATE = '<tr id="row_%ENTRY%">' +
+'<td >%ENTRY%</td>' +
+'<td >%TIMESTAMP%</td>' + 
+'<td >%ORIGIN_TYPE%</td>' + 
+'<td >%ORIGIN_IP%</td>' +
+'<td >%USER%</td>' + 
+'<td >%TARGET_TYPE%</td>' + 
+'<td >%TARGET_ID%</td>' + 
+'<td >%ACTION%</td>' + 
+'<td >%ATTRIBUTE%</td>' + 
+'<td >%NEW_VALUE%</td>' + 
+'<td >%SUCCESS%</td>' + 
+'<td >%MESSAGE%</td>' + 
+'</tr>';
+var PUMP_LINK_TEMPLATE = '<a href="/pump/details/%ID%/">%ID%</a>';
+var USER_LINK_TEMPLATE = '<a href="/user/settings/%ID%/">%ID%</a>';
+var CUSTOMER_LINK_TEMPLATE = '<a href="/group/settings/%ID%/">%ID%</a>';
+
+var EVENT_TYPES = {{ event_types|safe }};
+var ORIGIN_TYPES = {{ origin_types|safe }};
+var TARGET_TYPES = {{ target_types|safe }};
+var STATUS_TYPES = {{ status_types|safe }};
+var ACTION_TYPES = {{ action_types|safe }};
+
+// Build a row for an event
+function makeRow(pk, row_data){
+
+  var TARGET_PUMP = 1;
+  var TARGET_USER = 2;
+  var TARGET_CUSTOMER = 3;
+
+  var row_html = ROW_TEMPLATE;
+  var origin_type = row_data.origin_type;
+  var event_type = row_data.event_type;
+  var action = row_data.action;
+  var status_type = row_data.success;
+  var target_type = row_data.target_type
+  var target_id = row_data.target_id
+  
+  if (ORIGIN_TYPES[origin_type]) {
+    origin_type = ORIGIN_TYPES[origin_type];
+  }
+  
+  if (EVENT_TYPES[event_type]) {
+    event_type = EVENT_TYPES[event_type];
+  }
+  
+  if (TARGET_TYPES[target_type]) {
+    target_type = TARGET_TYPES[target_type];
+  }
+  
+  if (STATUS_TYPES[status_type]) {
+    status_type = STATUS_TYPES[status_type];
+  }
+  
+  if (ACTION_TYPES[action]) {
+    action = ACTION_TYPES[action];
+  }
+  
+  var template = '%ID%';
+  switch (row_data.target_type) {
+    case TARGET_PUMP:
+      template = PUMP_LINK_TEMPLATE;
+      break;
+    case TARGET_USER:
+      template = USER_LINK_TEMPLATE;
+      break;
+    case TARGET_CUSTOMER:
+      template = CUSTOMER_LINK_TEMPLATE;
+      break;
+    default:
+      break;
+  } 
+  target_id = template.replace(/%ID%/g, target_id);
+      
+  row_html = row_html.replace(/%ENTRY%/g, pk);
+  row_html = row_html.replace(/%ORIGIN_TYPE%/, origin_type);
+  row_html = row_html.replace(/%ORIGIN_IP%/, row_data.origin_ip);
+  row_html = row_html.replace(/%USER%/, row_data.username);
+  row_html = row_html.replace(/%TARGET_TYPE%/, target_type);
+  row_html = row_html.replace(/%TARGET_ID%/, target_id);
+  row_html = row_html.replace(/%TIMESTAMP%/, row_data.timestamp);
+  row_html = row_html.replace(/%MESSAGE%/, row_data.message);
+  row_html = row_html.replace(/%ACTION%/, action);
+  row_html = row_html.replace(/%NEW_VALUE%/, row_data.new_value);
+  row_html = row_html.replace(/%SUCCESS%/, status_type);
+  row_html = row_html.replace(/%ATTRIBUTE%/, row_data.attribute);
+  
+  return row_html;
+}
+
+// Loop through the new json and regenerate the table
+function pageSpecificPopulate(data){
+  var events = data['events']
+  var num_events = events.length;
+  var row_data, pk, new_row_output, page_size, row_id;
+  var no_events = '<tr><td colspan="6">No log entries found.</td></tr>';
+  
+  if (num_events == 0) {
+    $('#event_list_table > tbody').html(no_events);
+    return;
+  }
+
+  for (var i = 0; i < num_events; i++){ 
+    row_data = events[i];
+    pk = row_data['id'];
+    new_row_output = makeRow(pk, row_data);
+    page_size  = {{ page_size }};
+    
+    // Replace the row if it already exists
+    row_id = '#row_' + pk;
+    if (!$(row_id).length) {
+      // Limit the table from getting too long
+      if ($('#event_list_table > tbody > tr').length >= page_size) {
+        $('#event_list_table > tbody > tr').eq(-1).remove();
+      }
+    
+      // Special case for empty table (there's probably a more elegant way to do this)
+      if ($('#event_list_table > tbody > tr').length == 0) {
+        $('#event_list_table > tbody:last').append(new_row_output);
+      } else {
+        $('#event_list_table > tbody > tr:first-of-type').before(new_row_output);
+      }
+    }
+  }
+}
+
+// Some setup needs to wait until support JS has loaded
+function pageSetup() {
+  // URL for getting and posting pump data
+  AJAX_URL = '{% url 'events_api_1_0' %}?page_size={{ page_size }}';
+  
+  {% if id_filter %}
+    AJAX_URL += '&id_filter={{ id_filter }}';
+  {% endif %}
+  
+  {% if page %}
+    AJAX_URL += '&page={{ page }}';
+  {% endif %}
+  
+  {% if target_type %}
+    AJAX_URL += '&target_type={{ target_type }}';
+  {% endif %}
+  
+  {% if message_contains %}
+    AJAX_URL += '&message_contains={{ message_contains }}';
+  {% endif %}
+  
+  {% if message_exclude %}
+    AJAX_URL += '&message_exclude={{ message_exclude }}';  
+  {% endif %}
+  
+  {% if exclude_common %}
+    AJAX_URL += '&exclude_common=1';
+  {% endif %}
+  
+  // Enable automatic updates of the page, but very slowly
+  POLL_PERIOD_SHORT_SEC = 1;
+  POLL_PERIOD_LONG_SEC = 10;
+  POLL_COUNT_FOR_LONG = 0;
+  poll(); 
+}
+
+
+</script>
+
+{% endblock %}

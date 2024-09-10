@@ -1,0 +1,753 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load pump_layout_extras %}
+
+{% block head_data %}
+{% endblock %}
+
+{% block title %}
+Details | Pumps
+{% endblock %}
+	
+{% block content %}
+<h3 class="pump-title"><a href="{% url 'pump_list' %}">Pumps</a> <small>&raquo; <span id="heading_subtext"></span></small></h3>
+      
+<div id="loading_mask">
+<p>Loading...</p>
+</div>
+<div class="details-container">
+
+  {% row_standard 'pretty_name' pretty_name='Name' edit_type='text' %}
+  
+  <div class="connected-rows">
+
+    {% row_standard 'status' button_type='toggle' %}
+    {% row_standard 'alarms_status' pretty_name='Alarms Active' button_type='reset' %}
+
+    {% row_divider %}
+ 
+    {% row_standard 'metering_mode' %}
+  
+    <div id="volume-dependent-rows" style="display:none;">
+	  <div id="analog-mode-rows" style="display:none;">
+		{% url 'analog_in_settigs' pump_id as analog_in_settigs_url %}
+		{% row_standard 'analog_input_mode' pretty_name='analog in' edit_type='text' size=6 button_type='hyperlink' hyperlink_url='analog_in_settigs_url' %}
+	  </div>
+	  <div id="flow-rate-rows" style="display:none;">
+	    {% row_standard 'flow_rate' edit_type='text' size=6 units='flow_units,flow_units_time' %}
+	  </div>      
+      <div id="analog-flow-rate-rows" style="display:none;">
+        {% row_standard 'analog_flow_rate' pretty_name='Analog Flow Rate' units='flow_units,flow_units_time' %}
+	  </div>
+	  <div id="wellsite-flow-rate-rows" style="display:none;">
+		{% url 'pump_flow_rates' pump_id as pump_flow_rates_url %}
+        {% row_standard 'wellsite_flow_rate' pretty_name='Wellsite Flow Rate' button_type='hyperlink' hyperlink_url='pump_flow_rates_url' units='flow_units,flow_units_time' %}
+	  </div>
+	  <div id="wellsite-totalizer-rows" style="display:none;">
+		{% row_standard 'totalizer_resetable_wellsite' pretty_name='Wellsite Totalizer' button_type='reset' units='flow_units' %}
+	    {% url 'pump_totalizers' pump_id as pump_totalizers_url %}
+        {% row_standard 'totalizer_grand_wellsite' pretty_name='Wellsite Grand Totalizer' button_type='hyperlink' hyperlink_url='pump_totalizers_url' units='flow_units' %}
+	  </div>
+	  <div id="totalizer-rows" style="display:none;">
+        {% row_standard 'totalizer_resetable' pretty_name='Totalizer' button_type='reset' units='flow_units' %}
+        {% row_standard 'totalizer_grand' pretty_name='Grand Totalizer' units='flow_units' %}
+	  </div>	  
+    </div>
+  
+    <div id="metering-on-time-rows" style="display:none;">
+      {% row_standard 'metering_on_time' pretty_name='On Time' edit_type='time' %}
+    </div>
+  
+    <div id="cycle-count-rows" style="display:none;">  
+      {% row_standard 'metering_on_cycles' pretty_name='On Cycles' edit_type='text' %}
+      {% row_standard 'metering_on_timeout' pretty_name='On Timeout' edit_type='time' %}
+    </div>
+
+    <div id="metering-off-time-rows" style="display:none;">
+      {% row_standard 'metering_off_time' pretty_name='Off Time' edit_type='time' %}
+    </div>    
+
+  </div>
+
+    {% row_divider %}
+
+    {% url 'pump_history' pump_id as historical_chart_url %}
+    {% row_standard 'historical_charts' button_type='hyperlink' button_icon='fa-bar-chart' hyperlink_url='historical_chart_url' %}
+    
+    {% url 'notification_pump' pump_id as notifications_config_url %}
+    {% row_standard 'maintenance_reminders' button_type='hyperlink' button_icon='fa-envelope' hyperlink_url='notifications_config_url' %} 
+  
+  <div class="connected-rows">
+
+    {% row_divider %}
+
+    <div id="power-save-mode-row" style="display:none;">
+        {% row_standard 'power_save_mode' %}
+    </div>
+  
+    <div id="power-save-not-off-rows" style="display:none;">
+	    {% row_standard 'battery_voltage' units='voltage_units' %}
+		<div id="battery-warning-row" style="display:none;">
+			{% row_standard 'battery_warning_trigger' pretty_name='Power save on' edit_type='text' size=6 units='voltage_units' %}
+		</div>
+	    {% row_standard 'low_battery_trigger' pretty_name='Battery shutoff' edit_type='text' size=6 units='voltage_units' %}
+    </div>
+    
+    {% row_divider %}
+    
+    <div id="sensor-type-pressure-rows" style="display:none;">
+    	{% row_standard 'pressure_level' units='pressure_units' %}
+    	{% row_standard 'high_pressure_trigger' pretty_name='High pressure alarm' edit_type='text' size=6 units='pressure_units' %}
+    	{% row_standard 'low_pressure_trigger' pretty_name='Low pressure alarm' edit_type='text' size=6 units='pressure_units' %}
+  	</div>
+    
+    <div id="sensor-type-tank-divider-row" style="display:none;">
+    	{% row_divider %}    
+  	</div>
+    
+    <div id="sensor-type-tank-rows" style="display:none;">
+    	{% row_standard 'tank_level' units='level_units' %}
+    	{% row_standard 'tank_level_notify_trigger' pretty_name='Low tank notify' edit_type='text' size=6 units='level_units' %}    	
+    	{% row_standard 'tank_level_shutoff_trigger' pretty_name='Low tank shutoff' edit_type='text' size=6 units='level_units' %}
+    </div> 
+    
+    <div id="tank-type-tank-rows" style="display:none;">
+    	{% row_standard 'flow_verify_percentage' pretty_name='Flow verify percentage' edit_type='text' size=6 units='percent_units' %}
+    </div>
+    
+    <div id="temperature-rows" style="display:none;">
+    
+        {% row_divider %}
+	    
+	    {% row_standard 'temperature' units='temperature_units' %}
+        {% row_standard 'temperature_control' pretty_name='temp control' edit_type='dropdown' dropdown_options_name='temperature_list' %}        
+	    <div id="temperature-setpoint-rows" style="display:none;">
+	    	{% row_standard 'temperature_setpoint' pretty_name='Temp Setpoint' edit_type='text' size=6 units='temperature_units' %}
+	    </div>
+	</div>
+    
+  </div>
+
+    {% row_divider %}
+
+    {% url 'pump_alarm_custom' pump_id as alarm_custom_url %}
+    {% row_standard 'alarm_customization' button_type='hyperlink' button_icon='fa-cog' hyperlink_url='alarm_custom_url' %}
+    
+	{% url 'pump_injection_point_custom' pump_id as pump_injection_point_custom_url %}
+	<div id="well-custom-rows" style="display:none;">
+	  {% row_standard 'injection_point_customization' pretty_name='Well Customization' button_type='hyperlink' button_icon='fa-cog' hyperlink_url='pump_injection_point_custom_url' %}
+	</div>
+	
+    {% row_divider %}
+
+    {% row_standard 'connection' pretty_name='Network' %}
+    
+  <div class='disconnected-rows'>
+    {% row_standard 'last_seen' pretty_name='Last connected' %}
+  </div>
+    
+  <div class="connected-rows">
+  
+    {% row_standard 'signal_strength' %}
+
+    {% row_standard 'location_name' pretty_name='Location' edit_type='text' %}  
+  
+  </div>
+  
+  <div id="location_reported_container">
+      {% row_standard 'location_marked' edit_type='location' pretty_name='Marked location' %}
+  </div>  
+
+  {% if is_admin or is_manager %}
+    {% row_standard 'customer' pretty_name='group' edit_type='dropdown' dropdown_options_name='customer_list' %}
+    
+    {% if is_admin or is_distributor %}
+        {% row_standard 'activation_key' %}
+    {% endif %}
+  {% else %}
+    {% row_standard 'customer' pretty_name='group' %}
+  {% endif %} 
+  
+  {% row_standard 'unique_id' pretty_name='Pump ID' %}
+  
+  {% url 'pump_history_download' pump_id as history_download_url %}
+  {% row_standard 'download_history' button_type='hyperlink' button_icon='fa-download' hyperlink_url='history_download_url' %}
+  
+  {% if is_admin %}
+    {% row_standard 'view_events' button_type='hyperlink' button_icon='fa-database' hyperlink_url=pump_event_log_url %}
+
+    {% url 'pump_aeris' pump_id as aeris_url %}
+    {% row_standard 'aeris_configuration' button_type='hyperlink' button_icon='fa-wifi' hyperlink_url='aeris_url' %}
+    
+    {% row_standard 'notes_field' pretty_name='Notes' edit_type='text' %}
+
+  {% endif %}
+  
+  <div class="connected-rows">
+
+    {% row_standard 'firmware_version' %}
+  
+  </div>  
+  
+</div>
+
+{% if is_admin %}
+	{% delete_button 'pump' %}
+	{% modal_delete_dialog 'pump' %}
+{% endif %}
+
+{% if is_admin or is_manager %}
+<div class="initially-hidden" id="suspend_pump_container">
+    {% generic_button 'Suspend pump' 'suspend_pump' style='default' side='right' %}
+    {% modal_generic_dialog 'suspend_pump' 'Suspend pump' 'Are you sure you want to suspend control of this pump? If you suspend this pump, you will no longer be able to remotely control it or access its data, but you will not be charged for it. Other pumps in your group will be unaffected.' 'Yes, suspend' 'No, stay active' 'submitSuspend(this);'  %}
+</div>
+{% endif %}
+
+
+<script>
+
+// Edit-row buttons
+var BUTTON_LIST = ['pretty_name',
+                    'location_name',
+                    'flow_rate',
+                    'metering_on_time',
+                    'metering_on_timeout',
+                    'metering_off_time',
+                    'metering_on_cycles',
+                    'high_pressure_trigger',
+                    'low_pressure_trigger',
+                    'low_battery_trigger',
+                    'tank_level_notify_trigger',
+                    'tank_level_shutoff_trigger',                    
+                    'flow_verify_percentage',                    
+                    'battery_warning_trigger',
+                    'location_marked',
+                    'temperature_control',
+                    'temperature_setpoint',
+					'wellsite_flow_rate',
+					'notes_field',];
+{% if is_admin or is_manager %}
+  BUTTON_LIST.push('customer');
+{% endif %}
+
+var SIMPLE_FIELDS = ['firmware_version',
+                     'metering_on_cycles',
+                     'unique_id',
+                     'location_name',
+                     'signal_strength',       
+                     'flow_verify_percentage',
+                     'notes_field',                     
+                     ];
+
+var PARSED_FIELDS = ['metering_mode',
+                     'alarms_status',
+                     'connection',
+                     'flow_rate',
+                     ['high_pressure_trigger', 0],
+                     ['low_pressure_trigger', 0],
+                     ['low_battery_trigger', 1],
+                     ['battery_warning_trigger', 1],
+                     ['totalizer_grand', 1],
+                     ['totalizer_resetable', 1],
+                     'last_seen',
+                     'power_save_mode',
+                     'tank_level',
+                     'tank_level_notify_trigger',
+                     'tank_level_shutoff_trigger',
+                     'analog_flow_rate',
+                     ['temperature', 0],
+                     ['temperature_setpoint', 0],
+					 'wellsite_flow_rate',
+					 ['totalizer_grand_wellsite', 1],
+					 ['totalizer_resetable_wellsite', 1],
+					 'analog_input_mode',
+                     ];                   
+                     
+{% if is_admin or is_distributor %}
+{% if is_manager or is_admin %}
+PARSED_FIELDS.push('activation_key');
+{% endif %}
+{% endif %}                    
+                     
+// Names of fields that should pulse when their values change
+var FIELDS_TO_PULSE = ['firmware_version',
+                       'metering_on_cycles',
+                       'status',
+                       'flow_rate',
+                       'totalizer_resetable',
+                       'totalizer_grand',
+                       'connection',
+                       'metering_on_time',
+                       'metering_off_time',
+                       'metering_on_timeout',
+                       'pretty_name',
+                       'alarms_status',
+                       'battery_voltage',
+                       'pressure_level',
+                       'high_pressure_trigger',
+                       'low_pressure_trigger',
+                       'low_battery_trigger',
+                       'tank_level',
+                       'tank_level_notify_trigger',
+                       'tank_level_shutoff_trigger',                       
+                       'flow_verify_percentage',
+                       'battery_warning_trigger',
+                       'signal_strength',
+                       'last_seen',
+                       'location_marked',
+                       'location_name',
+                       'customer',
+                       'analog_flow_rate',
+                       'temperature',
+                       'temperature_control',
+                       'tempsetpoint',
+					   'wellsite_flow_rate',
+					   'totalizer_grand_wellsite',
+					   'totalizer_resetable_wellsite',
+					   'notes_field',
+					   'analog_input_mode',
+                       ];
+{% if is_admin or is_distributor %}
+{% if is_manager or is_admin %}
+  FIELDS_TO_PULSE.push('activation_key');
+{% endif %}    
+{% endif %}
+
+var POWER_STATUS_OPTIONS = [{% for status_name in status_names %}'{{ status_name }}',{% endfor %}];
+var POWER_STATUS_TRUE_TOGGLE_STATES = [{% for status_true_id in status_true_ids%}{{ status_true_id }},{% endfor %}];
+
+{% if is_admin or is_manager %}
+// Set up the pump-suspension stuff to indicate that the pump can be suspended or not
+function suspendSetup(can_unsuspend, can_suspend) {
+  if (can_unsuspend) {
+    $('#suspend_pump_container').show();
+    $('#generic_button_suspend_pump').text('End suspension');
+    $('#suspend_pump .modal-title').text('End suspension');  
+    $('#suspend_pump .modal-body p').text('Are you sure you want to end the suspension of this pump? Ending the suspension will cause your monthy subscription price to increase. Other pumps in your group will be unaffected.');
+    $('#suspend_pump_button').text('Yes, end suspension');
+    $('#suspend_pump_button').attr('newState', 'false');
+    $('#suspend_pump .btn-primary').text('No, stay suspended');
+  }
+  else if (can_suspend) {
+    $('#suspend_pump_container').show();
+    $('#generic_button_suspend_pump').text('Suspend pump');
+    $('#suspend_pump .modal-title').text('Suspend pump');
+    $('#suspend_pump .modal-body p').text('Are you sure you want to suspend control of this pump? If you suspend this pump, you will no longer be able to remotely control it or access its data, but you will not be charged for it. Other pumps in your group will be unaffected.');
+    $('#suspend_pump_button').text('Yes, suspend');
+    $('#suspend_pump_button').attr('newState', 'true');
+    $('#suspend_pump .btn-primary').text('No, stay active');
+  }
+  else {
+    $('#suspend_pump_container').hide();
+  }
+}
+
+// Change the suspension state of the pump
+function submitSuspend(obj) {
+  var new_value = ($(obj).attr('newState') == 'true');
+  submitSimple(obj, 'suspended', new_value); 
+}
+
+// Force a refresh of the details when the suspension state changes
+function simpleSubmitSuccess(data) {
+  poll();
+}
+{% endif %}
+
+// Populate the page with the AJAX data
+function pageSpecificPopulate(data) {
+  if (jQuery.isEmptyObject(data.pump_obj)) {  
+    $('.details-container').hide();
+    $('#heading_subtext').html('{{pump_id}}');
+    {% if is_admin or is_manager %}
+      if (!jQuery.isEmptyObject(data.pump_parsed)) {
+        suspendSetup(data.pump_parsed.can_unsuspend, data.pump_parsed.can_suspend);
+      }
+    {% endif %}
+    return;
+  }
+  else {
+    $('.details-container').show();
+  }
+
+  UNITS = data.prefs.display_units;
+  PERCENT_UNITS = 2  
+  var units_decode = {{ units_decode|safe }}; 
+  
+  NOTICE_WAITING_FOR_PUMP = false;
+  hideNotice();
+
+{% if is_admin or is_manager %}
+  suspendSetup(data.pump_parsed.can_unsuspend, data.pump_parsed.can_suspend);
+{% endif %}
+   
+  if (data.pump_obj.connection == 1) {
+    $('.connected-rows').show();
+    $('.disconnected-rows').hide();
+  } else {
+    $('.connected-rows').hide();
+    $('.disconnected-rows').show();
+  }
+
+  // Update the fields that need no special formatting or handling
+  // Use jQuery's each instead of forEach because IE8 doesn't support forEach
+  jQuery.each(SIMPLE_FIELDS, function(index, element){
+    var field_name = element + '_value';
+    if (data.pump_obj[element].length <= 0 || parseFloat(data.pump_obj[element]) < 0) {
+      $('#' + field_name).html('&lt;Not set>');
+    }
+    else {
+      $('#' + field_name).html(data.pump_obj[element]);
+    }      
+  });
+  
+  // Update the fields that use the parsed forms from the server for display
+  jQuery.each(PARSED_FIELDS, function(index, element){
+    var precision = -1;
+    var field_name;
+    if (element.constructor === Array) {
+      precision = element[1];
+      element = element[0];
+    }
+    field_name = element + '_value';
+    if (data.pump_parsed[element].length <= 0 || parseFloat(data.pump_parsed[element]) < 0) {
+      $('#' + field_name).html('&lt;Not set>');
+    }
+    else {
+      if (precision != -1) {
+        $('#' + field_name).html(data.pump_parsed[element].toFixed(precision));
+      }
+      else {
+        $('#' + field_name).html(data.pump_parsed[element]);
+      }
+    }
+  });
+
+  // Power save mode = off shown if power save off, and battery stuff shown if power save enabled in some way
+  if (data.pump_obj.power_save_mode == {{ power_save_mode_off }}) {
+    $('#power-save-mode-row').show();
+    $('#power-save-not-off-rows').hide();    
+  }
+  else {
+    $('#power-save-mode-row').hide();
+    $('#power-save-not-off-rows').show();
+	if (data.pump_obj.multiwell_enable > 0) {
+	  $('#battery-warning-row').hide();
+	}
+	else {
+	  $('#battery-warning-row').show();
+	}
+  }
+
+  // Change the toggle state for the pump status, but use the new custom name if one changes or becomes available
+  if (data.pump_parsed.custom_alarm_names) {
+    if ('alarm_{{ power_status_alarm_id }}_custom' in data.pump_parsed.custom_alarm_names) {
+      POWER_STATUS_OPTIONS[{{ power_status_id }}] = data.pump_parsed.custom_alarm_names['alarm_{{ power_status_alarm_id }}_custom'];
+    }
+  }  
+  toggleUpdate(data.pump_obj, 'status', POWER_STATUS_OPTIONS, POWER_STATUS_TRUE_TOGGLE_STATES);
+  
+    
+  // Updates based on class
+  $('.flow_units_value').html(units_decode.volume[UNITS]);
+  $('.flow_units_time_value').html('day');
+  
+  // Level units
+  if (data['pump_obj']['tank_type'] > 0 || data['pump_obj']['sensor_type'] > 2) {
+    $('.level_units_value').html(units_decode.tank[UNITS]);
+  } else if (data['pump_obj']['sensor_type'] == 2) {
+    $('.level_units_value').html(units_decode.tank[PERCENT_UNITS]);
+  } else {
+    $('.level_units_value').html(units_decode.tank[UNITS]);
+  }
+  
+  // Percent Units
+  $('.percent_units_value').html(units_decode.tank[PERCENT_UNITS]);  
+  
+  // Temperature Units
+  if ((data.pump_obj.temperature == 999) || (data.pump_obj.temperature == -999)) {
+  	$('.temperature_units_value').html('');
+  }
+  else {
+  	$('.temperature_units_value').html(units_decode.temperature[UNITS]);
+ }
+  
+
+  // Flow rate
+  changeIfNotFocused('flow_rate_edit',data.pump_parsed.flow_rate);
+  
+  // Only show the analog in settings for pumps that support web-based changes.
+  if ((data.pump_obj.analog_input_mode > 0) && (data.pump_obj.ain_mA_low >= 0)) {
+  	$('#analog-mode-rows').show();
+  }
+  else {
+  	$('#analog-mode-rows').hide();
+  }
+	
+  // Show multiwell flow rates, or desired flow rate, depending on what's enabled
+  if ((data.pump_obj.analog_input_mode == 1) && (data.pump_obj.ain_mA_low == -1)) {
+    $('#flow-rate-rows').hide();
+	$('#wellsite_flow-rate-rows').hide()
+    $('#analog-flow-rate-rows').show();
+  } else if ((data.pump_obj.analog_input_mode == 2) && (data.pump_obj.ain_mA_low > -1)) {
+    $('#flow-rate-rows').hide();
+	$('#wellsite_flow-rate-rows').hide()
+    $('#analog-flow-rate-rows').show();
+  } else if (data.pump_obj.multiwell_enable > 0) {
+	$('#flow-rate-rows').hide();
+	$('#analog-flow-rate-rows').hide();
+	$('#wellsite-flow-rate-rows').show();
+  } else {
+  	$('#analog-flow-rate-rows').hide();
+	$('#wellsite-flow-rate-rows').hide();
+    $('#flow-rate-rows').show();
+  }
+  
+  // Show the multiwell totalizer rows if multiwell is enabled
+  if (data.pump_obj.multiwell_enable > 0) {
+	$('#totalizer-rows').hide();
+	$('#wellsite-totalizer-rows').show();
+	$('#well-custom-rows').show();
+  } else {
+	$('#wellsite-totalizer-rows').hide();
+	$('#totalizer-rows').show();
+	$('#well-custom-rows').hide();
+  }
+    
+  // Voltage
+  if (data.pump_obj.battery_voltage >= 0) {
+    $('.voltage_units_value').html('volts');
+    $('#battery_voltage_value').html(data.pump_parsed.battery_voltage.toFixed(1));
+  }
+  else {
+    $('.voltage_units_value').html('');
+    $('#battery_voltage_value').html('Unknown');
+  }  
+
+  // Pressure
+  if (data.pump_obj.pressure_level >= 0) {
+    $('.pressure_units_value').html(units_decode.pressure[UNITS]);
+    $('#pressure_level_value').html(data.pump_parsed.pressure_level.toFixed(1));
+  }
+  else {
+    $('.pressure_units_value').html('');
+    $('#pressure_level_value').html('Unknown');
+  } 
+
+  // Metering times
+  timeFieldUpdate('metering_on_time', data.pump_obj);
+  timeFieldUpdate('metering_on_timeout', data.pump_obj);
+  timeFieldUpdate('metering_off_time', data.pump_obj);
+   
+  // Cycle count edit field
+  changeIfNotFocused('metering_on_cycles_edit', data.pump_obj.metering_on_cycles); 
+    
+  // Show unique ID when a pretty pump name has not been set
+  if (data.pump_obj.pretty_name.length > 0) {  
+    $('#pretty_name_value').html(data.pump_obj.pretty_name);
+    $('#heading_subtext').html(data.pump_obj.pretty_name);
+  } else {
+    $('#pretty_name_value').html('&lt;Not set>');
+    $('#heading_subtext').html(data.pump_obj.unique_id);
+  }
+
+  changeIfNotFocused('pretty_name_edit', data['pump_obj']['pretty_name']);
+  changeIfNotFocused('location_name_edit', data['pump_obj']['location_name']);
+  changeIfNotFocused('high_pressure_trigger_edit', data['pump_parsed']['high_pressure_trigger'].toFixed(0));
+  changeIfNotFocused('low_pressure_trigger_edit', data['pump_parsed']['low_pressure_trigger'].toFixed(0));
+  changeIfNotFocused('low_battery_trigger_edit', data['pump_parsed']['low_battery_trigger'].toFixed(1));
+  changeIfNotFocused('battery_warning_trigger_edit', data['pump_parsed']['battery_warning_trigger'].toFixed(1));
+  changeIfNotFocused('tank_level_notify_trigger', data['pump_parsed']['tank_level_notify_trigger']);
+  changeIfNotFocused('tank_level_shutoff_trigger', data['pump_parsed']['tank_level_shutoff_trigger']);
+  changeIfNotFocused('flow_verify_percentage', data['pump_obj']['flow_verify_percentage']);
+  changeIfNotFocused('temperature_control', data['pump_obj']['temperature_control']);
+  changeIfNotFocused('temperature_setpoint', data['pump_obj']['temperature_setpoint']);
+  changeIfNotFocused('notes_field_edit', data['pump_obj']['notes_field']);
+   
+  var customer_link = '<a href="{% url 'customer_settings_default' %}' + 
+    data.pump_obj.customer + '/">' + 
+    data.pump_parsed.customer + '</a>';
+  $('#customer_value').html(customer_link);
+{% if is_admin or is_manager %}
+  changeIfNotFocused('customer_combo', data.pump_obj.customer);
+{% endif %}    
+  
+  // No need to show the alarm-reset button if no alarms are active
+  if (data.pump_obj.alarms_status != 0) {
+    $('#alarms_status_reset_container').show();
+  } else {
+    $('#alarms_status_reset_container').hide();
+  } 
+  
+  //
+  // Location
+  //
+  
+  var location_displayed = data.pump_obj.location_marked
+    
+  // If the pump reported something that resembles a location, offer a Google Maps link to it
+  if (location_displayed != '') {
+    var location_url_template = '<a href="https://maps.google.com/?q=%LATLONG%">%LATLONG_DISPLAY%</a>';
+    var location_no_spacing = location_displayed.replace(/\s/g, '')
+    var location_link = location_url_template.replace(/%LATLONG%/g, location_no_spacing);
+    location_link = location_link.replace(/%LATLONG_DISPLAY%/g, location_displayed);
+    $('#location_marked_value').html(location_link);
+  } 
+  else {
+    $('#location_marked_value').html('&lt;Not set>');
+  }
+  changeIfNotFocused('location_marked_edit', location_displayed);
+  
+  //
+  // Temperature
+  //
+  
+  if (parseFloat(data.pump_obj.temperature) == -999) {
+  	$('#temperature_value').html('&lt;Not set>');
+  }
+  else if (parseFloat(data.pump_obj.temperature) == 999) {
+  	$('#temperature_value').html('Disconnected')
+  }
+  else {
+  	$('#temperature_value').html(data.pump_parsed.temperature.toFixed(0));
+  }
+  
+  //
+  // Temperature Control
+  //
+  
+  $('#temperature_control_value').html(data.pump_parsed.temperature_control);
+  changeIfNotFocused('temperature_combo', data.pump_parsed.temperature_control);
+  
+  // Only display the temperature rows on pumps that support temperature control & have it enabled
+  // 0 = Unknown (ie: pumps w/o temp probe firmware), 1 = Disabled, 2 = Display, 3 = On Below, 4 = On Above
+  if (data['pump_obj']['temperature_control'] > 2) {
+  	$('#temperature-rows').show();
+  	$('#temperature-setpoint-rows').show();
+  }
+  else if (data['pump_obj']['temperature_control'] == 2) {
+  	$('#temperature-rows').show();
+  	$('#temperature-setpoint-rows').hide();
+  	}
+  else {
+  	$('#temperature-rows').hide();
+  	$('#temperature-setpoint-rows').hide();
+  }
+  
+  //
+  // Temperature Setpoint
+  //
+  
+  if (parseFloat(data.pump_obj.temperature_setpoint) == -999) {
+  	$('#temperature_setpoint_value').html('&lt;Not set>');
+  }
+  else {
+  	$('#temperature_setpoint_value').html(data.pump_parsed.temperature_setpoint.toFixed(0));
+  }
+  
+  // 
+  // Metering modes
+  //
+
+  // Not all fields are valid for all metering modes  
+  if (data['pump_obj']['metering_mode'] == 1) {
+    $('#volume-dependent-rows').show();
+    $('#metering-on-time-rows').hide();
+    $('#cycle-count-rows').hide();
+    $('#metering-off-time-rows').hide();
+  } else if (data['pump_obj']['metering_mode'] == 2) {
+    $('#volume-dependent-rows').hide();
+    $('#metering-on-time-rows').show();
+    $('#cycle-count-rows').hide();
+    $('#metering-off-time-rows').show();
+  } else if (data['pump_obj']['metering_mode'] == 3) {
+    $('#volume-dependent-rows').hide();
+    $('#metering-on-time-rows').hide();
+    $('#cycle-count-rows').show();
+    $('#metering-off-time-rows').show();
+  } else {
+    $('#volume-dependent-rows').hide();
+    $('#metering-on-time-rows').hide();
+    $('#cycle-count-rows').hide();
+    $('#metering-off-time-rows').hide();
+  }
+
+  //
+  // Sensor types
+  //
+
+  // Not all fields are valid for all sensor types and all tank_types, default to pressure if type unknown
+  if (data['pump_obj']['tank_type'] > 0) {
+    $('#sensor-type-pressure-rows').show();
+    $('#sensor-type-tank-divider-row').show();
+    $('#sensor-type-tank-rows').show();
+    if (data.pump_obj.flow_verify_enable == 1) {
+    	$('#tank-type-tank-rows').show();
+    }
+  } else if (data['pump_obj']['sensor_type'] > 1) {
+    $('#sensor-type-pressure-rows').hide();
+    $('#sensor-type-tank-divider-row').hide();
+    $('#sensor-type-tank-rows').show();
+    $('#tank-type-tank-rows').hide();
+  } else {
+    $('#sensor-type-pressure-rows').show();
+    $('#sensor-type-tank-divider-row').hide();    
+    $('#sensor-type-tank-rows').hide();
+    $('#tank-type-tank-rows').hide();    
+  }
+
+  tigerStripe();
+  
+  // Make text pulse when the value changes
+  if (PREVIOUS_JSON) {
+    jQuery.each(FIELDS_TO_PULSE, function(index, element) {
+      pulseIf(element, PREVIOUS_JSON.data.pump_obj, data.pump_obj);
+    });
+  }
+}
+
+{% if is_admin %}
+function successfulDelete(data) {
+  // Redirect in such a manner that reposting is not going to be an issue
+  var url = "{% url 'pump_list' %}";
+  location.replace(url);
+}
+
+{% endif %}
+
+function populateLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) { 
+      var lat = position.coords.latitude.toFixed(5);
+      var long = position.coords.longitude.toFixed(5);
+      var locationStr = lat + ', ' + long;
+      $('#location_marked_edit').val(locationStr);
+    },
+    function(error) {
+      showNotice('Error getting location');
+    }
+    );
+  }
+  return false;
+}
+
+// Some setup needs to wait until support JS has loaded
+function pageSetup() {
+  // URL for getting and posting pump data
+  AJAX_URL = '{% url 'pumps_spec_api_1_0' pump_id %}';
+  
+  POLL_PERIOD_LONG_SEC = 15;
+  
+  if (navigator.geolocation) {
+    $('#location_marked_mark_loc_btn').click(function() { 
+      return populateLocation();
+    });
+    $('#location_marked_mark_loc_btn').show();
+  }
+  
+  // Enable automatic updates of the page
+  poll(); 
+}
+
+</script>
+{% endblock %}

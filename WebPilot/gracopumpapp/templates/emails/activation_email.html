@@ -1,0 +1,19 @@
+{% autoescape off %}
+{% if first_name|length > 0 %}
+<p>Hi {{ first_name }},</p>
+{% else %}
+<p>Hi,</p>
+{% endif %}
+<p>Thank you for registering for a Graco Harrier account!</p>
+<p>Before you can use your account, you must activate it by going to the following link:</p>
+<p>{{ confirmation_url }}</p>
+
+<p>Once you have activated your account at the above page, you will be able to log in.</p>
+
+<p>Thanks!</p>
+
+<p>Graco</p>
+
+<p><small>(This is an automated email. For support, please email <a href="mailto:oilandgas@graco.com">oilandgas@graco.com</a>.)</small></p>
+
+{% endautoescape %}

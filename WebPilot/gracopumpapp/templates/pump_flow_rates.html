@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load pump_layout_extras %}
+
+{% block head_data %}
+{% endblock %}
+
+{% block title %}
+Flow Rates | Pumps
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title"><a href="{% url 'pump_list' %}">Pumps</a> <small>&raquo; <span id="heading_subtext"><a href="{% url 'pump_details' pump_obj.unique_id %}">{% if pump_obj.pretty_name %}{{pump_obj.pretty_name}}{% else %}{{ pump_obj.unique_id }}{%endif%}</a> &raquo; Flow Rates</span></small></h3>
+      
+<div id="loading_mask">
+<p>Loading...</p>
+</div>
+<div class="details-container">
+  
+  <div id="flow-rate-1-rows" style="display:none;">
+    {% if point_names.custom_injection_point_names.point_0_custom %}
+	  {% row_standard 'well_flow_rate_1' pretty_name=point_names.custom_injection_point_names.point_0_custom|add:' Flow Rate' edit_type='text' size=6 units='flow_units,flow_units_time' %}
+    {% else %}
+      {% row_standard 'well_flow_rate_1' pretty_name='1. Flow Rate' edit_type='text' size=6 units='flow_units,flow_units_time' %}
+    {% endif %}
+	{% row_standard 'well_status_1' pretty_name='1. Status' button_type='toggle' %}
+  </div>
+  
+  {% row_divider %}
+  
+  <div id="flow-rate-2-rows" style="display:none;">
+    {% if point_names.custom_injection_point_names.point_1_custom %}
+	  {% row_standard 'well_flow_rate_2' pretty_name=point_names.custom_injection_point_names.point_1_custom|add:' Flow Rate' edit_type='text' size=6 units='flow_units,flow_units_time' %}
+    {% else %}
+      {% row_standard 'well_flow_rate_2' pretty_name='2. Flow Rate' edit_type='text' size=6 units='flow_units,flow_units_time' %}
+    {% endif %}
+	{% row_standard 'well_status_2' pretty_name='2. Status' button_type='toggle' %}
+  </div>
+  
+  {% row_divider %}
+  
+  <div id="flow-rate-3-rows" style="display:none;">
+    {% if point_names.custom_injection_point_names.point_2_custom %}
+	  {% row_standard 'well_flow_rate_3' pretty_name=point_names.custom_injection_point_names.point_2_custom|add:' Flow Rate' edit_type='text' size=6 units='flow_units,flow_units_time' %}
+    {% else %}
+      {% row_standard 'well_flow_rate_3' pretty_name='3. Flow Rate' edit_type='text' size=6 units='flow_units,flow_units_time' %}
+    {% endif %}
+	{% row_standard 'well_status_3' pretty_name='3. Status' button_type='toggle' %}
+  </div>
+  
+  {% row_divider %}
+  
+  <div id="flow-rate-4-rows" style="display:none;">
+    {% if point_names.custom_injection_point_names.point_3_custom %}
+	  {% row_standard 'well_flow_rate_4' pretty_name=point_names.custom_injection_point_names.point_3_custom|add:' Flow Rate' edit_type='text' size=6 units='flow_units,flow_units_time' %}
+    {% else %}
+      {% row_standard 'well_flow_rate_4' pretty_name='4. Flow Rate' edit_type='text' size=6 units='flow_units,flow_units_time' %}
+    {% endif %}
+	{% row_standard 'well_status_4' pretty_name='4. Status' button_type='toggle' %}
+  </div>
+  
+  {% row_divider %}
+  
+  <div id="flow-rate-5-rows" style="display:none;">
+    {% if point_names.custom_injection_point_names.point_4_custom %}
+	  {% row_standard 'well_flow_rate_5' pretty_name=point_names.custom_injection_point_names.point_4_custom|add:' Flow Rate' edit_type='text' size=6 units='flow_units,flow_units_time' %}
+    {% else %}
+      {% row_standard 'well_flow_rate_5' pretty_name='5. Flow Rate' edit_type='text' size=6 units='flow_units,flow_units_time' %}
+    {% endif %}
+	{% row_standard 'well_status_5' pretty_name='5. Status' button_type='toggle' %}
+	</div>
+	
+	{% row_divider %}
+  
+  <div id="flow-rate-6-rows" style="display:none;">
+    {% if point_names.custom_injection_point_names.point_5_custom %}
+	  {% row_standard 'well_flow_rate_6' pretty_name=point_names.custom_injection_point_names.point_5_custom|add:' Flow Rate' edit_type='text' size=6 units='flow_units,flow_units_time' %}
+    {% else %}
+      {% row_standard 'well_flow_rate_6' pretty_name='6. Flow Rate' edit_type='text' size=6 units='flow_units,flow_units_time' %}
+    {% endif %}
+	{% row_standard 'well_status_6' pretty_name='6. Status' button_type='toggle' %}
+  </div>
+  
+  {% row_divider %}
+  
+  <div id="flow-rate-7-rows" style="display:none;">
+    {% if point_names.custom_injection_point_names.point_6_custom %}
+	  {% row_standard 'well_flow_rate_7' pretty_name=point_names.custom_injection_point_names.point_6_custom|add:' Flow Rate' edit_type='text' size=6 units='flow_units,flow_units_time' %}
+    {% else %}
+      {% row_standard 'well_flow_rate_7' pretty_name='7. Flow Rate' edit_type='text' size=6 units='flow_units,flow_units_time' %}
+    {% endif %}
+	{% row_standard 'well_status_7' pretty_name='7. Status' button_type='toggle' %}
+  </div>
+  
+  {% row_divider %}
+  
+  <div id="flow-rate-8-rows" style="display:none;">
+    {% if point_names.custom_injection_point_names.point_7_custom %}
+	  {% row_standard 'well_flow_rate_8' pretty_name=point_names.custom_injection_point_names.point_7_custom|add:' Flow Rate' edit_type='text' size=6 units='flow_units,flow_units_time' %}
+    {% else %}
+      {% row_standard 'well_flow_rate_8' pretty_name='8. Flow Rate' edit_type='text' size=6 units='flow_units,flow_units_time' %}
+    {% endif %}
+	{% row_standard 'well_status_8' pretty_name='8. Status' button_type='toggle' %}
+  </div>
+  
+</div>
+
+<script>
+
+// Edit-row buttons
+var FIELD_LIST = [{% for rate in flow_rates %}'{{ rate.0 }}',{% endfor %} 'well_status_1', 'well_status_2', 'well_status_3', 'well_status_4', 'well_status_5', 'well_status_6', 'well_status_7', 'well_status_8'];
+var BUTTON_LIST = FIELD_LIST;
+ 
+var WELL_STATUS_OPTIONS = [{% for well_status_name in well_status_names %}'{{ well_status_name }}',{% endfor %}];
+var WELL_STATUS_TRUE_TOGGLE_STATES = [{% for well_status_true_id in well_status_true_ids%}{{ well_status_true_id }},{% endfor %}];
+ 
+// Populate the page with the AJAX data
+function pageSpecificPopulate(data) {
+  NOTICE_WAITING_FOR_PUMP = false;
+  hideNotice();
+  
+  UNITS = data.prefs.display_units;
+  var units_decode = {{ units_decode|safe }};
+   
+  // Update the fields that need no special formatting or handling
+  // Use jQuery's each instead of forEach because IE8 doesn't support forEach
+  jQuery.each(FIELD_LIST, function(index, element){
+    var field_name = element + '_value';
+	var new_val = '';
+    if (data.pump_parsed[element].length <= 0 || parseFloat(data.pump_parsed[element]) < 0) {
+      $('#' + field_name).html('&lt;Not set>');
+    }
+    else {
+      $('#' + field_name).html(data.pump_parsed[element]);
+    }
+    
+    changeIfNotFocused(element + '_edit', data.pump_parsed[element]);
+        
+  });
+  
+  toggleUpdate(data.pump_parsed, 'well_status_1', WELL_STATUS_OPTIONS, WELL_STATUS_TRUE_TOGGLE_STATES);
+  toggleUpdate(data.pump_parsed, 'well_status_2', WELL_STATUS_OPTIONS, WELL_STATUS_TRUE_TOGGLE_STATES);
+  toggleUpdate(data.pump_parsed, 'well_status_3', WELL_STATUS_OPTIONS, WELL_STATUS_TRUE_TOGGLE_STATES);
+  toggleUpdate(data.pump_parsed, 'well_status_4', WELL_STATUS_OPTIONS, WELL_STATUS_TRUE_TOGGLE_STATES);
+  toggleUpdate(data.pump_parsed, 'well_status_5', WELL_STATUS_OPTIONS, WELL_STATUS_TRUE_TOGGLE_STATES);
+  toggleUpdate(data.pump_parsed, 'well_status_6', WELL_STATUS_OPTIONS, WELL_STATUS_TRUE_TOGGLE_STATES);
+  toggleUpdate(data.pump_parsed, 'well_status_7', WELL_STATUS_OPTIONS, WELL_STATUS_TRUE_TOGGLE_STATES);
+  toggleUpdate(data.pump_parsed, 'well_status_8', WELL_STATUS_OPTIONS, WELL_STATUS_TRUE_TOGGLE_STATES);
+  
+  // Consider an injection point disabled if flow rate = 0 & don't show it
+  $('#flow-rate-1-rows').show();
+  $('#flow-rate-2-rows').show();
+  $('#flow-rate-3-rows').show();
+  $('#flow-rate-4-rows').show();
+  $('#flow-rate-5-rows').show();
+  $('#flow-rate-6-rows').show();
+  $('#flow-rate-7-rows').show();
+  $('#flow-rate-8-rows').show();
+  
+  tigerStripe();
+  
+  // Updates based on class
+  $('.flow_units_value').html(units_decode.volume[UNITS]);
+  $('.flow_units_time_value').html('day');
+
+}
+
+// Some setup needs to wait until support JS has loaded
+function pageSetup() {
+  // URL for getting and posting pump data
+  AJAX_URL = '{% url 'pumps_spec_api_1_0' pump_obj.unique_id %}';
+  
+  POLL_COUNT_FOR_LONG = 2;
+  POLL_PERIOD_LONG_SEC = 15;
+  
+  // Enable automatic updates of the page
+  poll(); 
+}
+
+</script>
+{% endblock %}

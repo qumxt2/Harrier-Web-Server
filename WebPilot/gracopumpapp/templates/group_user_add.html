@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load pump_layout_extras %}
+
+{% block head_data %}
+{% endblock %}
+
+{% block title %}
+Add | User | Group
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title"><a href="{% url 'customer_list' %}">Groups</a> <small>
+&raquo; <a href="{% url 'customer_settings_default' %}{{ customer.id }}/">{{ customer.organization_name }}</a> 
+&raquo; <a href="{% url 'customer_users' customer.id %}">Users</a>
+&raquo; <span id="heading_subtext">Add</span></small></h3>
+
+<div class="details-container">
+<p>Add people to this group,  <a href="{% url 'customer_settings_default' %}{{ customer.id }}/">{{ customer.organization_name }}</a>. </p>
+<p><strong>This is an administrative tool only.</strong> Users will not be notified when they are added, and only existing users can be added. Users are added to the group immediately without requiring them to agree to the association with the group.</p>
+<p>Normal account managers would use the <a href="{% url 'customer_invite' customer.id %}">Invite User</a> interface instead, which does send email notifications and allows users without accounts to be invited.</p>
+
+{% row_standard 'user_add' pretty_name='User email' edit_type='text' mode='create' %}
+
+</div>
+<div class="float-right">
+    <button type="button" class="btn btn-primary pull-right lone-button create-submit">Add user</button>
+</div>
+
+<script>
+
+// What to do if the user add succeeded
+function simpleSubmitSuccess(data) {
+  // Redirect in such a manner that reposting is not going to be an issue
+  var url = "{% url 'customer_users' customer.id%}";
+  location.replace(url);
+}
+
+// Some setup needs to wait until support JS has loaded
+function pageSetup() {
+  // URL for getting and posting pump data
+  AJAX_URL = '{% url 'customers_spec_api_1_0' customer.id %}';
+  $('.details-container').show();
+  
+  // Hide the elements meant for updates pages
+  $('.read-container').hide();
+  $('.not-for-create').hide();
+  $('.ok-button').hide();
+  
+  $('.write-container').show();
+  
+  // Unlink the code meant for update pages instead of create pages
+  $('.ajax_submit').attr('onClick', 'return false;');
+  $('.ajax_submit').addClass("ajax_field");
+  $('.ajax_submit').removeClass("ajax_submit");
+  
+  $('.toggle-button').attr('onClick', 'toggleClick(this);return false;');
+  
+  $('.create-submit').attr('onClick', 'submitSimple(this, $(".accept-button").attr("name"), $("#user_add_edit").val()); return false;');
+  
+  // Clean up the rightmost column for the text rows
+  $('.edit_row_text_right').css('min-width', 'inherit');
+  $('.edit_row_text_write').css('padding-right', 0);
+  $('.edit_row_dropdown_right').css('min-width', 'inherit');
+  $('.edit_row_dropdown_write').css('padding-right', 0);
+}
+
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load pump_layout_extras %}
+
+
+{% block title %}
+Admin
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title">Admin<small><span id="heading_subtext"></span></small></h3>
+<h4>Tools</h4>
+<dl class="dl-horizontal">
+<dt><a href="{% url 'admin_event_log' %}">Event log</a></dt>
+<dd>The event log shows various system events that might be useful for debugging</dd>
+<dt><a href="{% url 'admin_history_log_download' %}">History log</a></dt>
+<dd>The history log is a downloadable .CSV-format file that contains every status update ever submitted by a pump</dd>
+<dt><a href="{% url 'notification_list_all' %}">All reminders</a></dt>
+<dd>All active maintenance reminders for all users and pumps</dd>
+<dt><a href="#" onClick="confirmForceDisconnect();return false;">Reset connections</a></dt>
+<dd>Force all currently connected pumps to disconnect</dd>
+<dt><a href="#" onClick="confirmDownloadBackup();return false;">Download backup</a></dt>
+<dd>Download a backup of the database</dd>
+</dl>
+<h4>Statistics</h4>
+<dl class="dl-horizontal">
+<dt>Pump activity</dt>
+<dd>{{ mqtt_db_status }}</dd>
+<dt>Pumps known</dt>
+<dd>{{ stats.pumps_known }} pumps</dd>
+<dt>Pumps connected</dt>
+<dd>{{ stats.pumps_connected }} pumps</dd>
+
+{% modal_generic_dialog 'resetModel' 'Reset connections' 'Are you sure you want to force all currently connected pumps to disconnect? They will be unavailable until they reconnect on their own (probably 5 to 15 minutes).' 'Yes' 'No' 'doDisconnect(this)' %}
+{% modal_generic_dialog 'backupDownloadModal' 'Download backup' 'Are you sure you want to generate a database backup? This might take a few minutes.' 'Yes' 'No' 'doBackUpDownload(this)' %}
+
+<script>
+
+function confirmForceDisconnect() {
+  $('#resetModel').modal();
+}
+
+function confirmDownloadBackup() {
+  $('#backupDownloadModal').modal();
+}
+
+function doDisconnect(obj) {
+  // Prevent double-clicks
+  if ($(obj).hasClass('disabled')) {
+    return;
+  }
+  $(obj).addClass('disabled');
+  
+  NOTICE_WAITING_FOR_PUMP = true
+  showNotice('Disconnecting...');
+  NOTICE_WAITING_FOR_PUMP = false
+  
+  var submit_data = {attr_name: 'force_pump_disconnect', 
+                     new_value: 'all',
+                     units: UNITS};
+    
+  $.ajax({
+    url: '{% url 'admin_api_1_0' %}',
+    data: submit_data,
+    timeout: CONNECTION_TIMEOUT,
+    error: function(data) { 
+        NOTICE_WAITING_FOR_PUMP = false;
+        if (data.status == 500) {
+          showNotice('Error: server error');
+        } else if (data.responseJSON['message']) {
+          showNotice(data.responseJSON['message']);
+        } else {
+          showNotice('Error: disconnect failed');
+        }
+        $(obj).removeClass('disabled'); 
+      },
+    success: function(data) { 
+        showNotice(data.message);
+        $(obj).removeClass('disabled'); // to allow next removal
+        if (typeof successfulDisconnect == 'function') {
+          successfulDisconnect(data);
+        }
+      },
+    type: 'POST',
+    });
+}
+
+function successfulDisconnect(data) {
+  // nop
+}
+
+function doBackUpDownload(obj) {
+  // Prevent double-clicks
+  if ($(obj).hasClass('disabled')) {
+    return;
+  }
+  $(obj).addClass('disabled');
+
+  // File downloads can't be done via AJAX, so use a browser redirect
+  window.location = '{% url 'admin_database_backup_download' %}';
+}
+
+</script>
+
+
+
+{% endblock %}

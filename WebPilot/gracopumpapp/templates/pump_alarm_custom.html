@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load pump_layout_extras %}
+
+{% block head_data %}
+{% endblock %}
+
+{% block title %}
+Alarm customization | Pumps
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title"><a href="{% url 'pump_list' %}">Pumps</a> <small>&raquo; <span id="heading_subtext"><a href="{% url 'pump_details' pump_obj.unique_id %}">{% if pump_obj.pretty_name %}{{pump_obj.pretty_name}}{% else %}{{ pump_obj.unique_id }}{%endif%}</a> &raquo; Alarm customization</span></small></h3>
+      
+<div id="loading_mask">
+<p>Loading...</p>
+</div>
+<div class="details-container">
+
+  {% row_description 'You can customize the names of several of the standard alarms. These names will appear on the web interface for all users of this pump. Note that these custom names will not appear on the pump controller screen; the default non-custom names will be displayed there.' %} 
+  
+  {% for alarm in alarms_for_custom %}
+	  {% row_standard alarm.0 pretty_name=alarm.1 edit_type='text' %}
+  {% endfor %}
+  
+</div>
+
+<script>
+
+// Edit-row buttons
+var FIELD_LIST = [{% for alarm in alarms_for_custom %}'{{ alarm.0 }}',{% endfor %}];
+var BUTTON_LIST = FIELD_LIST;
+ 
+// Populate the page with the AJAX data
+function pageSpecificPopulate(data) {
+  NOTICE_WAITING_FOR_PUMP = false;
+  hideNotice();
+   
+  // Update the fields that need no special formatting or handling
+  // Use jQuery's each instead of forEach because IE8 doesn't support forEach
+  jQuery.each(FIELD_LIST, function(index, element) {    
+	var field_name = element + '_value';
+	var new_val = '';
+	    
+    if (data.pump_parsed.custom_alarm_names) {  
+      if (data.pump_parsed.custom_alarm_names[element]) {    
+	    new_val = data.pump_parsed.custom_alarm_names[element];
+      }
+    }
+		
+	if (new_val) {
+        $('#' + field_name).html(new_val);
+    }
+    else {
+        $('#' + field_name).html('&lt;Default>');
+    }
+    
+    // Update text input fields, but only if the user doesn't appear to be trying to edit them
+    changeIfNotFocused(element + '_edit', new_val);    
+  });
+  
+  tigerStripe();
+
+}
+
+// Some setup needs to wait until support JS has loaded
+function pageSetup() {
+  // URL for getting and posting pump data
+  AJAX_URL = '{% url 'pumps_spec_api_1_0' pump_obj.unique_id %}';
+  
+  POLL_COUNT_FOR_LONG = 2;
+  POLL_PERIOD_LONG_SEC = 15;
+  
+  // Enable automatic updates of the page
+  poll(); 
+}
+
+</script>
+{% endblock %}

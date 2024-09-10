@@ -1,0 +1,11 @@
+{% if first_name|length > 0 %}
+<p>Hello {{ first_name }},</p>
+{% else %}
+<p>Hello,</p>
+{% endif %}
+<p>This is a friendly reminder that your pump, {{ pump_name }}, is due for the following item:</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>{{ notification_subject }}</strong></p>
+<p>You are receiving this message because you signed up for maintenance reminders for your pump. If you no longer wish to receive these notifications, you can disable them on <a href="{{ notification_setup_url }}">your settings page</a>.
+<p>Thanks!</p>
+<p>Graco</p>
+<p><small>(This is an automated email. For support, please email <a href="mailto:oilandgas@graco.com">oilandgas@graco.com</a>.)</small></p>

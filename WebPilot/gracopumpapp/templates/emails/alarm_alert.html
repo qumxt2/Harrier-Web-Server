@@ -1,0 +1,35 @@
+{% if first_name|length > 0 %}
+<p>Hello {{ first_name }},</p>
+{% else %}
+<p>Hello,</p>
+{% endif %}
+<p>A pump in your group "{{ group_name }}" called "{{ pump_name }}" just had the following alarm occur:</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<strong>{{ alarm_name }}</strong></p>
+{%if alarm_name == 'Flow Accuracy' %}
+<p>Possible causes include:</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1. Unintended flow</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Root Causes:</p>
+<ul>
+	<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Leak</li>
+	<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Theft</li>
+</ul>	
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2. No flow detected</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Root Causes:</p>
+<ul>
+	<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pump lost prime</li>
+	<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Shutoff valve closed</li>
+	<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Plugged lines</li>	
+</ul>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3. Efficiency loss - tank does not match pump totalizer</p>
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Root Causes:</p>
+<ul>
+	<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Inaccurate calibration of pump or tank level sensor</li>
+	<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pump seal leak</li>
+	<li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Check valve seal leak</li>	
+</ul>
+{% endif %}
+<p>Additional information might be available on <a href="{{ pump_details_url }}">that pump's page</a>.</p>
+<p>You are receiving this message because you have alarm alerts enabled. If you no longer wish to receive these alerts, you can disable them on <a href="{{ user_settings_url }}">your settings page</a>.
+<p>Thanks!</p>
+<p>Graco</p>
+<p><small>(This is an automated email. For support, please email <a href="mailto:oilandgas@graco.com">oilandgas@graco.com</a>.)</small></p>

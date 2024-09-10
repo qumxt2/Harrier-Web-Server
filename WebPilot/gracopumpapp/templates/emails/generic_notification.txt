@@ -1,0 +1,18 @@
+{% if first_name|length > 0 %}
+Hello {{ first_name }},
+{% else %}
+Hello,
+{% endif %}
+This is a friendly reminder that your pump, {{ pump_name }}, is due for the following item:
+
+{{ notification_subject }}
+
+You are receiving this message because you signed up for maintenance reminders for your pump. If you no longer wish to receive these notifications, you can disable them on your settings page at:
+
+{{ notification_setup_url }}
+
+Thanks!
+
+Graco
+
+(This is an automated email. For support, please email oilandgas@graco.com )

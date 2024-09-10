@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load pump_layout_extras %}
+
+{% block head_data %}
+{% endblock %}
+
+{% block title %}
+Create | Maintenance Reminders
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title">
+<a href="{% url 'pump_list' %}">Pumps</a> <small>&raquo; <a href="{% url 'pump_details' pump_id %}">{{ pump_name }}</a> &raquo; <a href="{% url 'notification_pump' pump_id %}">Maintenance Reminders</a> &raquo; <span id="heading_subtext">Create</span></small>
+</h3>
+<div class="details-container">
+
+{% row_standard 'pump_name' default_value=pump_name %}
+
+{% row_standard 'subject' edit_type='dropdown' dropdown_options_name='subject_options' mode='create' %}
+
+{% row_standard 'subject_other' pretty_name='Custom subject' edit_type='text' mode='create' %}
+
+{% row_standard 'period' edit_type='dropdown' dropdown_options_name='period_options' dropdown_selected=period_default units='period_units' %}
+
+{% row_standard 'period_other' edit_type='text' pretty_name='Custom period' mode='create' units='period_units'%}
+
+<input type="hidden" name="pump_id" value="{{ pump_id }}" class="ajax_supplemental" />
+<input type="hidden" name="user_id" value="{{ user_id }}" class="ajax_supplemental" />
+
+</div>
+<button type="button" class="btn btn-primary pull-right lone-button create-submit">Save</button>
+
+<script>
+
+// What to do if the notification creation succeeded
+function successfulCreate(data) {
+  // Redirect in such a manner that reposting is not going to be an issue
+  var url = "{% url 'notification_pump' pump_id %}";
+  location.replace(url);
+}
+
+// Some setup needs to wait until support JS has loaded
+function pageSetup() {
+  // URL for getting and posting pump data
+  AJAX_URL = '{% url 'notifications_api_1_0' %}';
+  $('.details-container').show();
+  
+  // Hide the elements meant for updates pages
+  $('.read-container').hide();
+  $('.not-for-create').hide();
+  $('.ok-button').hide();
+  
+  // ...but show the edit fields
+  $('.write-container').show();
+  
+  // ...and special-case the pump name
+  $('#pump_name_read_container').show();
+  
+  $('.period_units_value').html('months');
+  
+  // Unlink the code meant for update pages instead of create pages
+  $('.ajax_submit').attr('onClick', 'return false;');
+  $('.ajax_submit').addClass("ajax_field");
+  $('.ajax_submit').removeClass("ajax_submit");
+  
+  // Only show the "other" fields if the appropriate combo box option has been selected
+  $('#subject_other_row_outer').hide();
+  $('#period_other_row_outer').hide();
+  
+  $('.toggle-button').attr('onClick', 'toggleClick(this);return false;');
+  
+  $('.create-submit').attr('onClick', 'submitCreate(this); return false;');
+  
+  $('#subject_combo').change(onSubjectChange);
+  $('#period_combo').change(onPeriodChange);
+    
+}
+
+function onSubjectChange() {
+  if ($('#subject_combo').val() == '{{ subject_other_value }}') {
+    $('#subject_other_row_outer').show();
+  }
+  else {
+    $('#subject_other_row_outer').hide();
+  }
+}
+
+function onPeriodChange() {
+  if ($('#period_combo').val() == '{{ period_other_value }}') {
+    $('#period_other_row_outer').show();
+  }
+  else {
+    $('#period_other_row_outer').hide();
+  }
+}
+
+</script>
+
+
+{% endblock %}

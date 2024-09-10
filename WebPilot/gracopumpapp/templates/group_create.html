@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load pump_layout_extras %}
+
+{% block head_data %}
+{% endblock %}
+
+{% block title %}
+Settings | Group
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title"><a href="{% url 'customer_list' %}">Groups</a> <small>&raquo; <span id="heading_subtext">Create new</span></small></h3>
+
+<div class="details-container">
+
+{% row_standard 'organization_name' pretty_name='Name' edit_type='text' mode='create' %}
+
+{% if is_admin %}
+  {% row_standard 'manager' edit_type='text' mode='create' %}
+  {% row_standard 'override_subscription' button_type='toggle' mode='create' default='0' %}
+{% endif %}
+
+
+</div>
+<button type="button" class="btn btn-primary pull-right lone-button create-submit">Save</button>
+
+<script>
+
+// What to do if the user creation succeeded
+function successfulCreate(data) {
+  // Extract the customer ID for the URL from the data object
+  var customerId = data.data.customer_id;
+  
+  // Redirect in such a manner that reposting is not going to be an issue
+  var url = "{% url 'customer_settings_default'%}" + customerId + "/";
+  location.replace(url);
+}
+
+// Some setup needs to wait until support JS has loaded
+function pageSetup() {
+  // URL for getting and posting pump data
+  AJAX_URL = '{% url 'customers_api_1_0' %}';
+  $('.details-container').show();
+  
+  // Hide the elements meant for updates pages
+  $('.read-container').hide();
+  $('.not-for-create').hide();
+  $('.ok-button').hide();
+  
+  $('.write-container').show();
+  
+  // Unlink the code meant for update pages instead of create pages
+  $('.ajax_submit').attr('onClick', 'return false;');
+  $('.ajax_submit').addClass("ajax_field");
+  $('.ajax_submit').removeClass("ajax_submit");
+  
+  $('.toggle-button').attr('onClick', 'toggleClick(this);return false;');
+  
+  $('.create-submit').attr('onClick', 'submitCreate(this); return false;');
+  
+  // Clean up the rightmost column for the text rows
+  $('.edit_row_text_right').css('min-width', 'inherit');
+  $('.edit_row_text_write').css('padding-right', 0);
+  $('.edit_row_dropdown_right').css('min-width', 'inherit');
+  $('.edit_row_dropdown_write').css('padding-right', 0);
+}
+
+</script>
+
+
+{% endblock %}

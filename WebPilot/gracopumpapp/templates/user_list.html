@@ -1,0 +1,265 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load pump_layout_extras %}
+
+{% block head_data %}
+{% endblock %}
+
+{% block title %}
+{% if mode and mode == 'customer' %}
+Users | Group
+{% else %}
+Users
+{% endif %}
+{% endblock %}
+
+{% block content %}
+{% if mode and mode == 'customer' %}
+<h3 class="pump-title"><a href="{% url 'customer_list' %}">Groups</a> <small>&raquo; <span id="heading_subtext"><a href="{% url 'customer_settings' customer_id %}">{{ customer_name }}</a></span> &raquo; Users</small></h3>
+{% else %}
+<h3 class="pump-title">Users</h3>
+{% endif %}
+<div id="loading_mask">
+<p>Loading...</p>
+</div>
+<div class="details-container">
+  <table id="user_list_table" class="table list-table pump-list-table">
+    <thead>
+      <tr>
+        <th>Username</th>
+        {% if not mode or mode != 'customer' %}
+          {% if is_admin %}
+            <th class="align-center" style="width:20%;">Admin</th>
+          {% endif %}
+        {% else %}
+          {% if not is_none_customer %}
+            {% if is_manager or is_admin %}
+              <th class="align-center" style="width:20%;">Remove</th>
+            {% endif %}
+          {% endif %}
+        {% endif %}
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
+</div>
+<div class="float-left">
+  <div id="user_list_empty" style="display:none;">
+    <p><small>No users available</small></p>
+  </div>
+</div>
+{% if is_admin %}
+  {% if not mode or mode != 'customer' %}
+    <div class="float-right">
+      <a href="{% url 'user_create' %}" type="button" class="btn btn-default pull-right">Create user</a>
+    </div>
+  {% endif %}
+{% endif %}
+{% if is_admin and not is_none_customer %}
+  {% if mode and mode == 'customer' %}
+    <div class="float-right">
+        <a href="{% url 'customer_user_add' customer_id %}" type="button" class="btn btn-default pull-right">Add user to group</a>
+    </div>
+  {% endif %}
+{% endif %}
+{% if is_manager and not is_none_customer and not is_admin %}
+    <div class="float-right">
+        <a href="{% url 'customer_invite' customer_id %}" type="button" class="btn btn-primary btn-a pull-right">Invite user to group</a>
+    </div>
+{% endif %}
+
+
+{% if mode and mode == 'customer' and not is_none_customer %}
+    {% if is_manager or is_admin %}    
+        {% modal_remove_dialog 'user' 'removeUser(this)' %}
+    {% endif %}
+{% endif %}
+
+<script>
+
+var BUTTON_REMOVE_TEMPLATE = '<button class="btn btn-default btn-sm pump-details-button ajax_submit user_remove" key="%UNIQUE_ID%" id="btn_%UNIQUE_ID%_remove"><i class="fa fa-ban fa-lg"></i></button>';
+
+{% if is_admin %}
+var USER_LINK_TEMPLATE = '<a href="{% url 'user_settings_default'%}%UNIQUE_ID%/">%NAME%</a>';
+{% else %}
+var USER_LINK_TEMPLATE = '%NAME%';
+{% endif %}
+
+// Build a row for a user
+function makeRow(user_id, name, is_admin) {
+  var row_template = '<tr id="row_%UNIQUE_ID%">' +
+  '<td class="truncate align-middle">%USER_LINK%</td>' +
+{% if not mode or mode != 'customer' %}
+  {% if is_admin %}
+    '<td class="align-center align-middle">%ADMIN%</td>' +
+  {% endif %}
+{% elif not is_none_customer %}
+  {% if is_manager or is_admin %}
+    '<td class="align-middle align-center">%REMOVE_BUTTON%</td>' +
+  {% endif %}
+{% endif %} 
+  '</tr>';
+  var row_html = row_template;
+  
+{% if not mode or mode != 'customer' %}
+  {% if is_admin %}
+      var admin_print = (is_admin) ? 'Y' : 'N';
+  {% endif %}
+{% endif %}
+  
+  row_html = row_html.replace(/%USER_LINK%/, USER_LINK_TEMPLATE);
+  row_html = row_html.replace(/%UNIQUE_ID%/g, user_id);
+  row_html = row_html.replace(/%NAME%/, name);
+{% if not mode or mode != 'customer' %}
+  {% if is_admin %}
+    row_html = row_html.replace(/%ADMIN%/, admin_print);
+  {% endif %}
+{% else %}
+  {% if is_manager or is_admin %}
+    var button_remove_html = BUTTON_REMOVE_TEMPLATE;
+    button_remove_html = button_remove_html.replace(/%UNIQUE_ID%/g, user_id);
+  
+    row_html = row_html.replace(/%REMOVE_BUTTON%/, button_remove_html);
+  {% endif %}
+{% endif %}
+
+  return row_html;
+}
+
+// Loop through the new json and regenerate the table
+function pageSpecificPopulate(data){
+  var users = data.users;
+  var num_users = users.length;
+  var user_id, username, is_admin, new_row_html, row_id, row_name;
+  var found_rows = [];
+  
+  for (var i = 0; i < num_users; i++) { 
+    user_id = users[i]['user_id'];
+    username = users[i]['username'];
+{% if not mode or mode != 'customer' %}
+  {% if is_admin %}
+    is_admin = users[i]['is_admin'];
+  {% endif %}
+{% endif %}
+    
+    new_row_html = makeRow(user_id, username, is_admin);
+    
+    // Replace the row if it already exists
+    row_name = 'row_' + user_id;
+    row_id = '#' + row_name;
+    
+    found_rows.push(row_name);
+    
+    if ($(row_id).length) {
+      $(row_id).replaceWith(new_row_html);
+    } else {
+      $('#user_list_table > tbody:last').append(new_row_html);
+    }
+  
+  
+  {% if mode and mode == 'customer' %}
+    {% if is_manager or is_admin %}
+      // Hook up the remove button
+      var button_name = '#btn_' + user_id + '_remove';
+      $(button_name).attr('onClick', 'confirmRemove(this); return false;');      
+    {% endif %}
+  {% endif %}
+  
+  }
+  
+  
+  // Delete all rows that don't appear in the data
+  $('#user_list_table > tbody').find('tr').each(function(i, el){
+    var id = $(el).attr('id');
+    // IE8 doesn't support indexOf()
+    if (jQuery.inArray(id, found_rows) < 0) {
+      // Data for row no longer exists
+      $(el).remove();
+    }
+  });
+  
+  
+  if (data.users.length > 0) {
+    $('#user_list_empty').hide();
+  }
+  else {
+    $('#user_list_empty').show();
+  }
+}
+
+{% if mode and mode == 'customer' %}
+  {% if is_manager or is_admin %}
+// Confirm the removal
+function confirmRemove(obj) {
+  $('#modal_remove_button').data('user_id', $(obj).attr("key"));
+  $('#removeModal').modal();
+}
+
+function removeUser(obj) {
+  // Prevent double-clicks
+  if ($(obj).hasClass('disabled')) {
+    return;
+  }
+  $(obj).addClass('disabled');
+  
+  NOTICE_WAITING_FOR_PUMP = true
+  showNotice('Removing...');
+  NOTICE_WAITING_FOR_PUMP = false
+  
+  var submit_data = {attr_name: 'user_remove', 
+                     new_value: $(obj).data('user_id'),
+                     units: UNITS};
+    
+  $.ajax({
+    url: '{% url 'customers_spec_api_1_0' customer_id %}',
+    data: submit_data,
+    timeout: CONNECTION_TIMEOUT,
+    error: function(data) { 
+        NOTICE_WAITING_FOR_PUMP = false;
+        if (data.status == 500) {
+          showNotice('Error: server error');
+        } else if (data.responseJSON['message']) {
+          showNotice(data.responseJSON['message']);
+        } else {
+          showNotice('Error: removal failed');
+        }
+        $(obj).removeClass('disabled'); 
+      },
+    success: function(data) { 
+        showNotice(data.message);
+        $(obj).removeClass('disabled'); // to allow next removal
+        if (typeof successfulRemove == 'function') {
+          successfulRemove(data);
+        }
+      },
+    type: 'POST',
+    });
+}
+
+function successfulRemove(data) {
+  REFRESH_COUNTER = 0;
+  POLL_PERIOD_MS = 1;
+  poll();
+}
+
+  {% endif %}
+{% endif %}
+
+// Some setup needs to wait until support JS has loaded
+function pageSetup() {
+  // URL for getting and posting pump data
+{% if mode and mode == 'customer' %}
+  AJAX_URL = '{% url 'users_customer_api_1_0' customer_id %}';
+{% else %}
+  AJAX_URL = '{% url 'users_api_1_0' %}';
+{% endif %}
+
+  POLL_PERIOD_SHORT_SEC = 1;
+  POLL_PERIOD_LONG_SEC = 60;
+  POLL_COUNT_FOR_LONG = 0;
+  poll(); 
+}
+
+</script>
+{% endblock %}

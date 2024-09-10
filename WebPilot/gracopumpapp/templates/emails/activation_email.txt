@@ -1,0 +1,21 @@
+{% autoescape off %}
+{% if first_name|length > 0 %}
+Hi {{ first_name }},
+{% else %}
+Hi,
+{% endif %}
+Thank you for registering for a Graco Harrier account!
+
+Before you can use your account, you must activate it by going to the following link:
+
+{{ confirmation_url }}
+
+Once you have activated your account at the above page, you will be able to log in.
+
+Thanks!
+
+Graco
+
+(This is an automated email. For support, please email oilandgas@graco.com )
+
+{% endautoescape %}

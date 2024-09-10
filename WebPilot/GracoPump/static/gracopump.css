@@ -1,0 +1,541 @@
+/* Overrides */
+.bs-callout {
+  margin: 20px 0;
+  padding: 15px 30px 15px 15px;
+  border-left: 5px solid #eee;
+}
+.bs-callout h4 {
+  margin-top: 0;
+}
+.bs-callout p:last-child {
+  margin-bottom: 0;
+}
+.bs-callout code,
+.bs-callout .highlight {
+  background-color: #fff;
+}
+ 
+/* Themes for different contexts */
+.bs-callout-danger {
+  background-color: #fcf2f2;
+  border-color: #dFb5b4;
+}
+.bs-callout-warning {
+  background-color: #fefbed;
+  border-color: #f1e7bc;
+}
+.bs-callout-info {
+  background-color: #f0f7fd;
+  border-color: #d0e3f0;
+}
+
+/* For pump details */
+
+.no-margin {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.no-padding {
+  padding: 0;
+} 
+
+.float-right {
+  float: right;
+}
+
+.float-left {
+  float: left;
+}
+
+.row-generic {
+  padding: 5px 0px 5px 0px;
+  margin-left: 0px;
+  margin-right: 0px;
+  min-height: 4em;
+  border-top: 1px solid #EEE;
+}
+
+.row-divider {
+  min-height: 0.5em;
+  background-color: #F8F8F8;  
+}
+
+.content-wrapper {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 800px;
+}
+
+.clear-max-width {
+  max-width: none;
+}
+
+.row-last {
+  border-bottom: 2px solid #CCC;
+}
+
+.row-selected {
+  border-top: 1px solid #AAA;
+  border-bottom: 1px solid #AAA;
+  background-color: #EEE;
+}
+
+.row-name {
+  text-transform: uppercase;
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
+.edit-button-container {
+}
+
+.sortable-header:hover {
+  cursor:pointer;
+}
+
+.row-left-content {
+  display: table-cell;
+  width: 100%;
+}
+
+.row-right-content {
+  min-width: 8em;
+  width: 9em;
+  display: table-cell;
+  align: right;
+  vertical-align: middle;
+}
+
+.row-inner-container {
+  display: table;
+  width: 100%;
+}
+
+.row-table-row {
+  display: table-row;
+}
+
+.align-middle {
+  vertical-align: middle !important;
+}
+
+.align-center {
+  text-align: center;
+}
+
+.details-container {
+  display:none;
+  padding: 0px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  border-bottom: 2px solid #EEE;
+}
+
+.block {
+  display: block;
+}
+
+.detail-dropdown {
+  /* Needed for the time zone dropdown on iPhone screens... but screws up lots of other ones, like the payment plans */
+  /* max-width: 150px; */
+}
+
+.pump-details-button {
+  width: 4em;
+}
+
+.link-white {
+  color: #FFF !important;
+}
+
+.btn-show {
+  display: block!important;
+  visibility: visible!important;
+}
+
+.accept-button {
+  display:none;
+  visibility: hidden;
+  margin-right: 1em;
+}
+
+.write-container {
+  display: none;
+  width: 100%;
+  padding-right: 0.75em;
+}
+
+.read-container {
+  display: block;
+  width: 100%;
+}
+
+.space-below-field {
+  width: 100%;
+  margin-bottom: 5px;
+}
+
+.text-edit-field {
+  width: 100%;
+}
+
+.reset-input-width {
+  width: initial;
+}
+
+.inline-element {
+  display: inline;
+}
+
+.header-graco {
+  background-color: #FFF;
+  border-bottom: 5px solid #3c4b6f;
+  padding: 5px;
+  min-height: 0;
+  display:table;
+  width: 100%;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.header-graco a:link, a:visited {
+  color: #0033ab;
+}
+
+.header-background {
+  background-color: #FFF;
+  width: 100%;
+}
+
+.header-table-row {
+  display:table-row;
+}
+
+.header-left {
+  display:table-cell;
+}
+
+.header-right {
+  display:table-cell;
+  vertical-align: middle;
+  text-align: right;
+}
+
+.top-menu li a {
+  font-weight: bold;
+}
+
+.top-menu li a:hover {
+  border-bottom: 3px solid;
+  text-decoration: none;
+}
+
+/* Hack for IE8 */
+.img-responsive {
+  width/*\**/: auto\9;
+}
+
+
+.sublist {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.list-table {
+  margin-bottom: 0;
+  background-color: #F0F0F0;
+}
+
+.pump-list-table {
+  table-layout: fixed;
+}
+
+.event-list-table {
+  font-size: x-small;
+}
+
+.list-table-cell-container {
+  position: relative;
+}
+
+.list-table-cell-content {
+  position: absolute;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.list-table-cell-spacer {
+  height: 0;
+  overflow: hidden;
+}
+
+.list-table tr:nth-of-type(2n) {
+  background-color: #EEE;
+}
+
+.list-table tr:nth-of-type(2n+1) {
+  background-color: #F9F9F9;
+}
+
+.list-table thead tr {
+  background-color: #FFF !important;
+}
+
+.row-like-link tr:hover {
+  background-color: rgba(0, 51, 171, 0.1);
+  cursor: pointer;
+}
+
+.light-gray {
+  color: #AAA;
+}
+
+.run-label {
+  color: #015333;
+}
+
+.standby-label {
+  color: #8a6800;
+}
+
+.alert-label {
+  color: red;
+}
+
+#main-content {
+  margin-left: 2px;
+  margin-right: 2px; 
+}
+
+.login-group {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 400px;
+}
+
+.navbar {
+  margin-bottom: 0;
+}
+
+body {
+  background-color: #3c4b6f;
+}
+
+.main-body {
+  background-color: #FFF;
+  padding-bottom: 15px;
+  border-bottom: 0;
+}
+
+.main-body h2 {
+  margin-top: 0;
+  padding-top: 10px;
+}
+
+.main-body a:link, a:visited {
+  color: #0033ab;
+}
+
+.detail-col {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.pump-edit-row {
+  display: none;
+}
+
+.initially-hidden {
+  display: none;
+}
+
+.status-footer {
+  display: none;
+  position: fixed;
+  bottom: 0; 
+  left:0;
+  width: 100%;
+  background-color: #BBB;
+  color: #333;
+  text-align: center;
+  border-top: 2px solid #333;
+  padding-top: 0.3em;
+  padding-bottom: 0.3em;
+  font-size: 1.3em;
+  font-weight: bold;
+  
+} 
+
+.green {
+  color: green;
+}
+
+.red {
+  color: red;
+}
+
+.lone-button {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.ok-button {
+  font-size: 16px;
+}
+
+/* Prevent zoom when input is selected on mobile */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  select, 
+  select:focus,
+  textarea, 
+  textarea:focus,
+  input[type="text"], 
+  input[type="password"], 
+  input[type="datetime"], 
+  input[type="datetime-local"], 
+  input[type="date"], 
+  input[type="month"], 
+  input[type="time"], 
+  input[type="week"], 
+  input[type="number"], 
+  input[type="email"], 
+  input[type="url"], 
+  input[type="search"], 
+  input[type="tel"], 
+  input[type="color"],
+  input:focus {
+    font-size: 16px;
+  }
+}
+
+/* Animation for showing when data changes */
+
+@-webkit-keyframes pulse {
+    0% {    text-shadow:none; } 
+    25% {     text-shadow:0px 0px 5px #000; }
+    75% {     text-shadow:0px 0px 15px #FFF; }
+    100% {  text-shadow:none; }
+}
+@-moz-keyframes pulse {
+    0% { -moz-transform: scale(1); }  
+  50% { -moz-transform: scale(1.1); }
+    100% { -moz-transform: scale(1); }
+}
+@-ms-keyframes pulse {
+    0% { -ms-transform: scale(1); } 
+  50% { -ms-transform: scale(1.1); }
+    100% { -ms-transform: scale(1); }
+}
+@-o-keyframes pulse {
+    0% { -o-transform: scale(1); }  
+  50% { -o-transform: scale(1.1); }
+    100% { -o-transform: scale(1); }
+}
+@keyframes pulse {
+    0% {    text-shadow:none; } 
+    25% {     text-shadow:0px 0px 5px #000; }
+    75% {     text-shadow:0px 0px 15px #FFF; }
+    100% {  text-shadow:none; }
+}
+
+/* We need a second, identical, animation to be able to animate the same element again. 
+Remarkably, this appears to be the canonical way to accomplish that */ 
+
+@-webkit-keyframes pulseAgain {
+    0% {    text-shadow:none; } 
+    25% {     text-shadow:0px 0px 5px #000; }
+    75% {     text-shadow:0px 0px 15px #FFF; }
+    100% {  text-shadow:none; }
+}
+@-moz-keyframes pulseAgain {
+    0% { -moz-transform: scale(1); }  
+  50% { -moz-transform: scale(1.1); }
+    100% { -moz-transform: scale(1); }
+}
+@-ms-keyframes pulseAgain {
+    0% { -ms-transform: scale(1); } 
+  50% { -ms-transform: scale(1.1); }
+    100% { -ms-transform: scale(1); }
+}
+@-o-keyframes pulseAgain {
+    0% { -o-transform: scale(1); }  
+  50% { -o-transform: scale(1.1); }
+    100% { -o-transform: scale(1); }
+}
+@keyframes pulseAgain {
+    0% {    text-shadow:none; } 
+    25% {     text-shadow:0px 0px 5px #000; }
+    75% {     text-shadow:0px 0px 15px #FFF; }
+    100% {  text-shadow:none; }
+}
+
+.pulse {
+  -webkit-animation: pulse 1s;
+  -moz-animation: pulse 1s;
+  -ms-animation: pulse 1s;
+  -o-animation: pulse 1s;
+  animation: pulse 1s;
+}
+
+.pulseAgain {
+  -webkit-animation: pulseAgain 1s;
+  -moz-animation: pulseAgain 1s;
+  -ms-animation: pulseAgain 1s;
+  -o-animation: pulseAgain 1s;
+  animation: pulseAgain 1s;
+}
+
+.no-right-margin {
+  margin-right: 0;
+}
+
+.truncate {
+  width: 250px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tos-content {
+  width: 100%;
+  font-size: 0.8em;
+}
+
+.tos-content:focus {
+  font-size: 0.8em;
+}
+
+.status-offline {
+  color: #888;
+}
+
+.alert {
+  margin-top: 1em;
+}
+
+.btn-a:link, .btn-a:visited, .btn-a:hover, .btn-a:active  {
+  color: white !important;
+}
+
+.dropdown-text {
+  font-size:16px;
+}
+
+/* Extend Bootstrap */
+.alert-error {
+  color: #a94442;
+  background-color: #f2dede;
+  border-color: #ebccd1;
+}
+.alert-error hr {
+  border-top-color: #e4b9c0;
+}
+.alert-error .alert-link {
+  color: #843534;
+}
+/* End Bootstrap extension */

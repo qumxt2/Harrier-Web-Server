@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load pump_layout_extras %}
+
+{% block head_data %}
+{% endblock %}
+
+{% block title %}
+Register | Users
+{% endblock %}
+
+{% block content %}
+<h3 class="pump-title">Register <small>&raquo; <span id="heading_subtext"><span id="username_header">New account</span></span></small></h3>
+
+{% if invite_mode and not invitation %}
+<p>Sorry, that invitation code is invalid or has already been used.</p>
+
+{% else %}
+<div class="details-container">
+<p>All fields are required.</p>
+
+{% row_standard 'email' edit_type='text' mode='create' %}
+{% row_standard 'first_name' edit_type='text' mode='create' %}
+{% row_standard 'last_name' edit_type='text' mode='create' %}
+
+{% row_standard 'password' edit_type='password' mode='create' %}
+
+{% load tz %}
+{% row_standard 'time_zone' edit_type='dropdown' dropdown_options_name='timezones' dropdown_selected=TIME_ZONE mode='create' %}
+
+{% row_standard 'display_units' edit_type='dropdown' dropdown_options_name='unit_options' mode='create' dropdown_selected=unit_default%}
+
+{% row_divider %}
+
+{% if invitation %}
+  {% row_display 'invitation_code' pretty_name='Invitation code' text=invitation.code %}
+  <input type="hidden" name="invitation_code" value="{{ invitation.code }}" class="ajax_supplemental" />
+{% else %}
+  {% row_description 'The pump activation key is displayed on the pump controller\'s network configuration screen. Choose "cell" from the drop-down menu on the controller to display the key.' %} 
+  {% row_standard 'association_key' pretty_name='Pump activation key' edit_type='text' mode='create' %}
+{% endif %}
+
+{% row_divider %}
+
+{% if invitation %}
+  {% row_display 'group' pretty_name='Group' text=invitation.customer_invited.organization_name %}
+{% else %}
+  {% row_description 'Choose a name for your group below. This will create a new group. Good choices could include your company or your division. If you want to join an existing group, have the group manager send you an invitation from the group\'s page.' %} 
+  {% row_standard 'customer_name' pretty_name='Group' edit_type='text' mode='create' %}
+{% endif %} 
+
+</div>
+<button type="button" class="btn btn-primary pull-right lone-button create-submit">Register</button>
+
+<script>
+
+// What to do if the user creation succeeded
+function successfulCreate(data) {
+  // Redirect in such a manner that reposting is not going to be an issue
+  var url = "{% url 'user_register_done' %}";
+  location.replace(url);
+}
+
+// Some setup needs to wait until support JS has loaded
+function pageSetup() {
+  // URL for getting and posting pump data
+  AJAX_URL = '{% url 'registration_api_1_0' %}';
+  
+  $('.details-container').show();
+  
+  // Hide the elements meant for updates pages
+  $('.read-container').hide();
+  $('.not-for-create').hide();
+  $('.ok-button').hide();
+  
+  $('.write-container').show();
+  
+  // Unlink the code meant for update pages instead of create pages
+  $('.ajax_submit').attr('onClick', 'return false;');
+  $('.ajax_submit').addClass("ajax_field");
+  $('.ajax_submit').removeClass("ajax_submit");
+  
+  $('.toggle-button').attr('onClick', 'toggleClick(this); return false;');
+  
+  $('.create-submit').attr('onClick', 'submitCreate(this); return false;');
+  
+  // Clean up the rightmost column for the text rows
+  $('.edit_row_text_right').css('min-width', 'inherit');
+  $('.edit_row_text_write').css('padding-right', 0);
+  $('.edit_row_password_right').css('min-width', 'inherit');
+  $('.edit_row_password_write').css('padding-right', 0);
+  $('.edit_row_dropdown_right').css('min-width', 'inherit');
+  $('.edit_row_dropdown_write').css('padding-right', 0);
+}
+
+</script>
+{% endif %}
+
+{% endblock %}

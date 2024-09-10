@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block title %}
+{% if verification_successs %}
+Email verified
+{% else %}
+Email verification error
+{% endif %}
+{% endblock %}
+
+{% block content %}
+{% if verification_successs %}
+<h3 class="pump-title">Email verified</h3>
+
+<p>Thank you for verifying your email address. You may now use it to receive email notifications and reminders.</p>
+
+<p><strong>IMPORTANT:</strong> If you previously logged in with a non-email-address username or a different email address, you will need to switch to using your newly configured email address. You will no longer be able to log in with your old username or email address.</p> 
+
+{% else %}
+<h3 class="pump-title">Email verification error</h3>
+
+<p>Sorry, that verification code is either invalid or has expired. Perhaps you've already verified your address?</p>
+<p>If you believe you have reached this message in error, please contact us at <a href="mailto:oilandgas@graco.com">oilandgas@graco.com</a>.</p>
+{% endif %}
+{% endblock %}

@@ -1,1 +1,0 @@
-The programs in this folder are developed in TestSystems repository, folder $/Support/LabVIEW/.  Copies of the executables and their support files are placed here for use in GCA2 repository.
